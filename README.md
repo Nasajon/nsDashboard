@@ -1,3 +1,66 @@
+# FORK DO REDASH
+
+Este repositório contém um fork do Redash (referências abaixo), criado com os seguintes propósitos:
+
+1. Implementar suporte ao modelo de arquitetura multitenant utilizada pela Nasajon
+2. Implementar um mecanismo de "portlet" que permita "colar" gráficos e tabelas do redash, em aplicações diversas da Nasajon (ocultando do cliente a edição da query, por exemplo).
+3. Alterar o tema visual do redash, para refletir o padrão da Nasajon.
+
+Além disto, outros benefícios podem ser pensados a longo prazo, como:
+
+* Alterar interface de administração do redash, para ter suporte multitenant, ao ponto que se possa customizar queries para um único cliente.
+* Adicionar suporte a um conjunto de variáveis (que façam sentido no contexto da Nasajon), de modo que se possa utilizar nas queries estas variáveis, sem se preocupar com o preenchimento de seus valores (ex: C_GRUPO_EMPRESARIAL, seria automaticamente trocado pelo grupo empresarial da sessão, ao se executar uma query).
+* Permitir interação com as tabelas e gráficos do redash (drill down ou mesmo caixas de seleção que permitar não apenas ver, mas recuperar as linhas selecionadas).
+
+Por fim, importa destacar que o fork tem por objetivo (ao menos inicialmente) de implementar mudanças que não impeçam posterior "rebase" com o repositório original (para que a Nasajon continue podendo utiilizar as novidades do redash.
+
+Obs.: Futuramente será decidido se estaremos contribuindo para o projeto original da ferramenta.
+
+## Montando ambiente de desenvolvimento
+
+Para preparar o ambiente de desenvolvimento, basta seguir a [documentação oficial do redash](https://redash.io/help/open-source/dev-guide/docker).
+
+## Suporte Multi-Tenant
+
+A implementação do suporte ao multi-tenant de acordo com a arquitetura da Nasajon, se deu por meio da ideia da criação de uma variável chamada ```C_TENANT```, que passa a estar disponível na contrução das queries. Isto é, o programador pode simplemente adicionar uma condição ```and tenant = C_TENANT``` na cláusula _where_ de suas queries, sem se preocupar com o preenchimento desta variável.
+
+Isto foi possível por meio da criação de novos executores de query, conforme [documentação](https://discuss.redash.io/t/creating-a-new-query-runner-data-source-in-redash/347) do redash.
+
+---
+Obs.: É importante observar que foltou na documentação do redash o passo abaixo, para que o novo executor de query fique de fato disponível para uso na interface do redash:
+
+* Adicione o nome do módulo do novo executor de queries, no arquivo ```redash/settings/__init__.py```, como parte do vetor ```default_query_runners```.
+---
+
+Além disto (por hora) o tenant utilizado por cada usuário está sendo persisitdo no _Redis_, numa chave denominada ```USER_TENANT_<USER_ID>```, onde o id do usuário é a chave primária do redash, para um usuário do mesmo (que também pode ser identificado por seu e-mail).
+
+Foram criados os seguintes artefatos:
+
+* **multi_tenant_util.py:** Módulo que contém os métodos necessários para gravação e recuperação do tenant no *Redis*, além de um método para tratamento de uma query antes de sua execução (substituindo a contante do tenant na query).
+* **pg_multi_tenant.py:** Extensão do executor de queries para PostgreSQL padrão do Redash, onde uma query é tratada (com relação ao tenant) antes de sua execução.
+* **mysql_multi_tenant.py:** TODO
+
+Para testar a solução, siga os passos a seguir:
+
+1. Inicie o redash
+2. Crie uma nova conexão a um banco de dados Postgre, utilizando o conector denominado *PostgreSQLMultiTenant*.
+3. Construa uma query qualquer com uma condição filtrando por ```tenant = C_TENANT```
+4. Execute a query
+
+*Obs.: Por enquanto o tenant está fixo no valor 47. O modo pelo qual será comunicado o tenant ao redash (por usuário), ainda estará sendo decidido.*
+
+## Mecanismo de Portlet
+
+TODO
+
+##  Tema Visual
+
+TODO
+
+---
+
+## README.MD ORIGINAL DO REDASH
+
 <p align="center">
   <img title="Redash" src='https://redash.io/assets/images/logo.png' width="200px"/>
 </p>

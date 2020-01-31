@@ -347,6 +347,7 @@ default_query_runners = [
     "redash.query_runner.exasol",
     "redash.query_runner.cloudwatch",
     "redash.query_runner.cloudwatch_insights",
+    "redash.query_runner.pg_multi_tenant",
 ]
 
 enabled_query_runners = array_from_string(
