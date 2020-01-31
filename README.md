@@ -16,8 +16,8 @@ Por fim, importa destacar que o fork tem por objetivo (ao menos inicialmente) de
 
 *Obs. 1: Futuramente será decidido se estaremos contribuindo para o projeto original da ferramenta.*
 
-*Obs. 2: A saber, foi realizado um [estudo prévio](https://drive.google.com/open?id=1m7sSPUbGNAnSw18DBCB_SXfYpzTP7XnDRTFt9_epXsQ) antes da decisão por realizar um fork do Redash.
-*
+*Obs. 2: A saber, foi realizado um [estudo prévio](https://drive.google.com/open?id=1m7sSPUbGNAnSw18DBCB_SXfYpzTP7XnDRTFt9_epXsQ) antes da decisão por realizar um fork do Redash.*
+
 ## Montando ambiente de desenvolvimento
 
 Para preparar o ambiente de desenvolvimento, basta seguir a [documentação oficial do redash](https://redash.io/help/open-source/dev-guide/docker).
