@@ -12,7 +12,7 @@ Além disto, outros benefícios podem ser pensados a longo prazo, como:
 * Adicionar suporte a um conjunto de variáveis (que façam sentido no contexto da Nasajon), de modo que se possa utilizar nas queries estas variáveis, sem se preocupar com o preenchimento de seus valores (ex: C_GRUPO_EMPRESARIAL, seria automaticamente trocado pelo grupo empresarial da sessão, ao se executar uma query).
 * Permitir interação com as tabelas e gráficos do redash (drill down ou mesmo caixas de seleção que permitar não apenas ver, mas recuperar as linhas selecionadas).
 
-Por fim, importa destacar que o fork tem por objetivo (ao menos inicialmente) de implementar mudanças que não impeçam posterior "rebase" com o repositório original (para que a Nasajon continue podendo utiilizar as novidades do redash.
+Por fim, importa destacar que o fork tem por objetivo (ao menos inicialmente) de implementar mudanças que não impeçam posterior "rebase" com o repositório original (para que a Nasajon continue podendo utilizar as novidades do redash.
 
 *Obs. 1: Futuramente será decidido se estaremos contribuindo para o projeto original da ferramenta.*
 
@@ -29,12 +29,12 @@ A implementação do suporte ao multi-tenant de acordo com a arquitetura da Nasa
 Isto foi possível por meio da criação de novos executores de query, conforme [documentação](https://discuss.redash.io/t/creating-a-new-query-runner-data-source-in-redash/347) do redash.
 
 ---
-Obs.: É importante observar que foltou na documentação do redash o passo abaixo, para que o novo executor de query fique de fato disponível para uso na interface do redash:
+Obs.: É importante observar que faltou na documentação do redash o passo abaixo, para que o novo executor de query fique de fato disponível para uso na interface do redash:
 
 * Adicione o nome do módulo do novo executor de queries, no arquivo ```redash/settings/__init__.py```, como parte do vetor ```default_query_runners```.
 ---
 
-Além disto (por hora) o tenant utilizado por cada usuário está sendo persisitdo no _Redis_, numa chave denominada ```USER_TENANT_<USER_ID>```, onde o id do usuário é a chave primária do redash, para um usuário do mesmo (que também pode ser identificado por seu e-mail).
+Além disto (por hora) o tenant utilizado por cada usuário está sendo persistido no _Redis_, numa chave denominada ```USER_TENANT_<USER_ID>```, onde o id do usuário é a chave primária do redash, para um usuário do mesmo (que também pode ser identificado por seu e-mail).
 
 Foram criados os seguintes artefatos:
 
