@@ -17,7 +17,9 @@ from redash.handlers import routes
 from redash.handlers.base import json_response, org_scoped_rule
 from redash.version_check import get_latest_version
 from sqlalchemy.orm.exc import NoResultFound
-
+import requests
+import json
+from redash.query_runner.multi_tenant_util import MultiTenantUtil
 logger = logging.getLogger(__name__)
 
 
@@ -206,6 +208,16 @@ def login(org_slug=None):
                 and not user.is_disabled
                 and user.verify_password(request.form["password"])
             ):
+                # Código de exemplo para pegar o access_token logando no keycloak e depois para coletar o tenant de um projeto com o login bundle
+                # keycloak_url = 'https://auth.nasajon.com.br/auth/realms/QA/protocol/openid-connect/token'
+                # params = 'client_id=meucondominio_api' + '&username=' + request.form["email"] + '&password=' + str(request.form["password"]) + '&grant_type=password' + '&scope=offline_access'
+                # response = requests.post(
+                #     keycloak_url, data=params, headers={'Content-Type': 'application/x-www-form-urlencoded'})
+                # access_token = json.loads(response.text)["access_token"]
+                # response = requests.get(
+                #     "http://192.168.1.102:81/profile", headers={'Authorization': access_token})
+                # tenant = json.loads(response.text)["organizacoes"][0]["id"]
+                # MultiTenantUtil.set_current_tenant(user, 48)
                 remember = "remember" in request.form
                 login_user(user, remember=remember)
                 return redirect(next_path)

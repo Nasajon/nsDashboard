@@ -16,14 +16,15 @@ class MultiTenantUtil:
 
     @staticmethod
     def set_current_tenant(user, tenant):
-        redis_connection.set(MultiTenantUtil.REDIS_TENANT_KEY + user.id, tenant)
+        redis_connection.set(MultiTenantUtil.REDIS_TENANT_KEY + str(user.id), tenant)
 
     @staticmethod
     def prepare_query(query, user):
-        tenant = MultiTenantUtil.get_current_tenant(user)
+        if user != None:
+            tenant = MultiTenantUtil.get_current_tenant(user)
 
-        # Substituindo o tenant na query
-        query = query.replace(MultiTenantUtil.TENANT_PLACEHOLDER, tenant)
+            # Substituindo o tenant na query
+            query = query.replace(MultiTenantUtil.TENANT_PLACEHOLDER, tenant)
 
         # with open('/app/a.txt', 'a') as f:
         #     f.write(query + '\n')

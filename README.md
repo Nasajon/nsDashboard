@@ -51,6 +51,10 @@ Para testar a solução, siga os passos a seguir:
 
 *Obs.: Por enquanto o tenant está fixo no valor 47. O modo pelo qual será comunicado o tenant ao redash (por usuário), ainda estará sendo decidido.*
 
+Para coletar os tenants de um usuário, decidimos alterar o método login no arquivo authorization.py para fazer login no keycloak e coletar o access_token do usuário. Com o token podemos fazer uma requisição para coletar os tenants do usuário e salvar no usuário do redash.
+
+*Obs.: Foi adicionado um código comentado ao login para mostrar como é feita a chamada para o keycloak e a coleta dos tenants. Depois será removido e ajustado.*
+
 ## Mecanismo de Portlet
 
 TODO
