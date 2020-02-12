@@ -49,11 +49,8 @@ Para testar a solução, siga os passos a seguir:
 3. Construa uma query qualquer com uma condição filtrando por ```tenant = C_TENANT```
 4. Execute a query
 
-*Obs.: Por enquanto o tenant está fixo no valor 47. O modo pelo qual será comunicado o tenant ao redash (por usuário), ainda estará sendo decidido.*
+Para coletar o tenant de um usuário, decidimos alterar o método login para fazer login no keycloak e coletar o access_token do usuário. Com o token podemos fazer uma requisição para coletar os tenants do usuário e salvar no usuário do redash. Também alteramos o tempo máximo de sessão do usuário através de uma variável de ambiente, para podermos configurar para ser igual ao tempo de expiração do token.
 
-Para coletar os tenants de um usuário, decidimos alterar o método login no arquivo authorization.py para fazer login no keycloak e coletar o access_token do usuário. Com o token podemos fazer uma requisição para coletar os tenants do usuário e salvar no usuário do redash.
-
-*Obs.: Foi adicionado um código comentado ao login para mostrar como é feita a chamada para o keycloak e a coleta dos tenants. Depois será removido e ajustado.*
 
 ## Mecanismo de Portlet
 
@@ -61,7 +58,7 @@ TODO
 
 ##  Tema Visual
 
-TODO
+Por padrão o redash usa arquivos do tipo less para o tema, sendo less uma extensão do css. Para alterar o tema, o recomendado é criar ou alterar arquivos em cliente/app/assets/less/redash. Caso seja adicionado um novo arquivo, é necessário importá-lo no main.less.
 
 ---
 

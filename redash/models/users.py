@@ -76,7 +76,7 @@ class PermissionsCheckMixin(object):
         return has_permissions
 
 
-@generic_repr("id", "name", "email")
+@generic_repr("id", "name", "email", "tenant")
 class User(
     TimestampMixin, db.Model, BelongsToOrgMixin, UserMixin, PermissionsCheckMixin
 ):
@@ -85,6 +85,7 @@ class User(
     org = db.relationship("Organization", backref=db.backref("users", lazy="dynamic"))
     name = Column(db.String(320))
     email = Column(EmailType)
+    tenant = Column(db.Integer, nullable=True)
     _profile_image_url = Column("profile_image_url", db.String(320), nullable=True)
     password_hash = Column(db.String(128), nullable=True)
     group_ids = Column(

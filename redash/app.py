@@ -2,6 +2,8 @@ from flask import Flask
 from werkzeug.contrib.fixers import ProxyFix
 
 from . import settings
+import datetime
+import os
 
 
 class Redash(Flask):
@@ -44,7 +46,8 @@ def create_app():
 
     # Check and update the cached version for use by the client
     app.before_first_request(reset_new_version_status)
-
+    expire_time = os.getenv("expire_time", 86400)
+    app.permanent_session_lifetime = datetime.timedelta(seconds=expire_time)
     security.init_app(app)
     request_metrics.init_app(app)
     db.init_app(app)
