@@ -323,6 +323,26 @@ class QueryResult {
     return queryResult;
   }
 
+  static getById(queryId, id, tenant) {
+    const queryResult = new QueryResult();
+
+    queryResult.isLoadingResult = true;
+    axios
+      .get(`api/queries/${queryId}/tenant/${tenant}/results/${id}.json`)
+      .then(response => {
+        // Success handler
+        queryResult.isLoadingResult = false;
+        queryResult.update(response);
+      })
+      .catch(error => {
+        // Error handler
+        queryResult.isLoadingResult = false;
+        handleErrorResponse(queryResult, error);
+      });
+
+    return queryResult;
+  }
+
   loadLatestCachedResult(queryId, parameters) {
     axios
       .post(`api/queries/${queryId}/results`, { queryId, parameters })

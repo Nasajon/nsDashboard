@@ -207,12 +207,12 @@ def login(org_slug=None):
                 and not user.is_disabled
                 and user.verify_password(request.form["password"])
             ):
-                # access_token = MultiTenantUtil.request_access_token(request.form["email"], str(request.form["password"]))
+                access_token = MultiTenantUtil.request_access_token(request.form["email"], str(request.form["password"]))
 
-                # tenant = MultiTenantUtil.request_tenant(access_token)
+                tenant = MultiTenantUtil.request_tenant(access_token)
 
-                # user.tenant = tenant
-                # models.db.session.commit()
+                user.tenant = tenant
+                models.db.session.commit()
 
                 remember = "remember" in request.form
 

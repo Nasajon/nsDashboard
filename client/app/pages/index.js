@@ -19,6 +19,7 @@ import homeRoutes from "./home/Home";
 import querySourceRoutes from "./queries/QuerySource";
 import queryViewRoutes from "./queries/QueryView";
 import visualizationEmbedRoutes from "./queries/VisualizationEmbed";
+import visualizationEmbedTenantRoutes from "./queries/VisualizationEmbedTenant";
 import queriesListRoutes from "./queries-list/QueriesList";
 import querySnippetsRoutes from "./query-snippets/QuerySnippetsList";
 import organizationSettingsRoutes from "./settings/OrganizationSettings";
@@ -46,6 +47,7 @@ export default flatten([
   queryViewRoutes,
   querySourceRoutes,
   visualizationEmbedRoutes,
+  visualizationEmbedTenantRoutes,
   querySnippetsRoutes,
   organizationSettingsRoutes,
   usersListRoutes,

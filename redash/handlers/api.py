@@ -65,6 +65,9 @@ from redash.handlers.query_results import (
     QueryResultListResource,
     QueryResultResource,
 )
+from redash.handlers.query_results_tenant import (
+    QueryResultTenantResource,
+)
 from redash.handlers.query_snippets import (
     QuerySnippetListResource,
     QuerySnippetResource,
@@ -254,6 +257,15 @@ api.add_org_resource(
     "/api/queries/<query_id>/results.<filetype>",
     "/api/queries/<query_id>/results/<query_result_id>.<filetype>",
     endpoint="query_result",
+)
+api.add_org_resource(
+    QueryResultTenantResource,
+    "/api/query_results/tenant/<tenant>/<query_result_id>.<filetype>",
+    "/api/query_results/tenant/<tenant>/<query_result_id>",
+    "/api/queries/<query_id>/tenant/<tenant>/results",
+    "/api/queries/<query_id>/tenant/<tenant>/results.<filetype>",
+    "/api/queries/<query_id>/tenant/<tenant>/results/<query_result_id>.<filetype>",
+    endpoint="query_result_tenant",
 )
 api.add_org_resource(
     JobResource,

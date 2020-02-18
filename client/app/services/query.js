@@ -120,9 +120,57 @@ export class Query {
     return this.queryResult;
   }
 
+  prepareQueryResultExecution(execute, maxAge, tenant) {
+    const parameters = this.getParameters();
+    const missingParams = parameters.getMissing();
+
+    if (missingParams.length > 0) {
+      let paramsWord = "parameter";
+      let valuesWord = "value";
+      if (missingParams.length > 1) {
+        paramsWord = "parameters";
+        valuesWord = "values";
+      }
+
+      return new QueryResult({
+        job: {
+          error: `missing ${valuesWord} for ${missingParams.join(", ")} ${paramsWord}.`,
+          status: 4,
+        },
+      });
+    }
+
+    if (parameters.isRequired()) {
+      // Need to clear latest results, to make sure we don't use results for different params.
+      this.latest_query_data = null;
+      this.latest_query_data_id = null;
+    }
+
+    if (this.latest_query_data && maxAge !== 0) {
+      if (!this.queryResult) {
+        this.queryResult = new QueryResult({
+          query_result: this.latest_query_data,
+        });
+      }
+    } else if (this.latest_query_data_id && maxAge !== 0) {
+      if (!this.queryResult) {
+        this.queryResult = QueryResult.getById(this.id, this.latest_query_data_id, tenant);
+      }
+    } else {
+      this.queryResult = execute();
+    }
+
+    return this.queryResult;
+  }
+
   getQueryResult(maxAge) {
     const execute = () => QueryResult.getByQueryId(this.id, this.getParameters().getExecutionValues(), maxAge);
     return this.prepareQueryResultExecution(execute, maxAge);
+  }
+
+  getQueryResult(tenant, maxAge) {
+    const execute = () => QueryResult.getByQueryId(this.id, this.getParameters().getExecutionValues(), maxAge);
+    return this.prepareQueryResultExecution(execute, maxAge, tenant);
   }
 
   getQueryResultByText(maxAge, selectedQueryText) {
@@ -165,6 +213,10 @@ export class Query {
 
   getQueryResultPromise() {
     return this.getQueryResult().toPromise();
+  }
+
+  getQueryResultPromise(tenant) {
+    return this.getQueryResult(tenant).toPromise();
   }
 
   getParameters() {
