@@ -54,7 +54,9 @@ Para coletar o tenant de um usuário, decidimos alterar o método login para faz
 
 ## Mecanismo de Portlet
 
-TODO
+Para poder acessar uma query de fora do redash, basta acessar a rota http://xxxxx.nasajon.com.br/embed/query/{query_id}/visualization/{visualization_id}/tenant/{tenant}?api_key={api_key}. A query_id, visualization_id e api_key podem ser obtidos pelo redash na página da query. O tenant tem que ser obtido a partir do usuário logado no site que está usando o portlet.
+
+Para esse suporte tivemos que criar um novo endereço no frontend e backend. O frontend fica na classe VisualizationEmbedTenant e o backend fica na classe QueryResultTenantResource.
 
 ##  Tema Visual
 
