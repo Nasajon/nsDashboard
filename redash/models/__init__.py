@@ -51,7 +51,7 @@ from .types import (
     MutableList,
     PseudoJSON,
 )
-from .users import AccessPermission, AnonymousUser, ApiUser, Group, User  # noqa
+from .users import AccessPermission, AnonymousUser, ApiUser, Group, User, TenantGroup  # noqa
 
 logger = logging.getLogger(__name__)
 

@@ -315,6 +315,24 @@ class Group(db.Model, BelongsToOrgMixin):
         return list(result)
 
 
+@generic_repr("id", "tenant", "group_id")
+class TenantGroup(db.Model):
+
+    id = Column(db.Integer, primary_key=True)
+    tenant = Column(db.Integer)
+    group_id = Column(db.Integer, db.ForeignKey("groups.id"))
+
+    __tablename__ = "tenantgroups"
+
+    def __str__(self):
+        return str(self.id)
+
+    @classmethod
+    def find_by_tenant(cls, tenant):
+        result = cls.query.filter(cls.tenant == tenant)
+        return list(result)
+
+
 @generic_repr(
     "id", "object_type", "object_id", "access_type", "grantor_id", "grantee_id"
 )
