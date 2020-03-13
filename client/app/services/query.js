@@ -120,7 +120,7 @@ export class Query {
     return this.queryResult;
   }
 
-  prepareQueryResultExecution(execute, maxAge, tenant) {
+  prepareQueryResultExecutionTenant(execute, maxAge, tenant) {
     const parameters = this.getParameters();
     const missingParams = parameters.getMissing();
 
@@ -154,7 +154,7 @@ export class Query {
       }
     } else if (this.latest_query_data_id && maxAge !== 0) {
       if (!this.queryResult) {
-        this.queryResult = QueryResult.getById(this.id, this.latest_query_data_id, tenant);
+        this.queryResult = QueryResult.getByIdTenant(this.id, this.latest_query_data_id, tenant);
       }
     } else {
       this.queryResult = execute();
@@ -168,9 +168,9 @@ export class Query {
     return this.prepareQueryResultExecution(execute, maxAge);
   }
 
-  getQueryResult(tenant, maxAge) {
+  getQueryResultTenant(tenant, maxAge) {
     const execute = () => QueryResult.getByQueryId(this.id, this.getParameters().getExecutionValues(), maxAge);
-    return this.prepareQueryResultExecution(execute, maxAge, tenant);
+    return this.prepareQueryResultExecutionTenant(execute, maxAge, tenant);
   }
 
   getQueryResultByText(maxAge, selectedQueryText) {
@@ -215,8 +215,8 @@ export class Query {
     return this.getQueryResult().toPromise();
   }
 
-  getQueryResultPromise(tenant) {
-    return this.getQueryResult(tenant).toPromise();
+  getQueryResultTenantPromise(tenant) {
+    return this.getQueryResultTenant(tenant).toPromise();
   }
 
   getParameters() {

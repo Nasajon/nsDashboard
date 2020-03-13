@@ -323,7 +323,7 @@ class QueryResult {
     return queryResult;
   }
 
-  static getById(queryId, id, tenant) {
+  static getByIdTenant(queryId, id, tenant) {
     const queryResult = new QueryResult();
 
     queryResult.isLoadingResult = true;
