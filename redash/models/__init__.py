@@ -304,6 +304,7 @@ class QueryResult(db.Model, QueryResultPersistence, BelongsToOrgMixin):
     _data = Column("data", db.Text)
     runtime = Column(postgresql.DOUBLE_PRECISION)
     retrieved_at = Column(db.DateTime(True))
+    tenant = Column(db.Integer)
 
     __tablename__ = "query_results"
 
@@ -353,7 +354,7 @@ class QueryResult(db.Model, QueryResultPersistence, BelongsToOrgMixin):
 
     @classmethod
     def store_result(
-        cls, org, data_source, query_hash, query, data, run_time, retrieved_at
+        cls, org, data_source, query_hash, query, data, run_time, retrieved_at, tenant=None
     ):
         query_result = cls(
             org_id=org,
@@ -363,6 +364,7 @@ class QueryResult(db.Model, QueryResultPersistence, BelongsToOrgMixin):
             data_source=data_source,
             retrieved_at=retrieved_at,
             data=data,
+            tenant=tenant
         )
 
         db.session.add(query_result)
@@ -373,6 +375,10 @@ class QueryResult(db.Model, QueryResultPersistence, BelongsToOrgMixin):
     @property
     def groups(self):
         return self.data_source.groups
+
+    @classmethod
+    def get_by_query_hash_and_tenant(cls, query_hash, tenant):
+        return cls.query.filter(cls.query_hash == query_hash, cls.tenant == tenant).order_by(cls.retrieved_at.desc()).first()
 
 
 def should_schedule_next(

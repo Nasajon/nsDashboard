@@ -202,6 +202,7 @@ class QueryExecutor(object):
                 data,
                 run_time,
                 utcnow(),
+                self.user.tenant
             )
 
             updated_query_ids = models.Query.update_latest_result(query_result)
