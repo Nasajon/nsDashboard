@@ -18,7 +18,9 @@ from redash.handlers.base import json_response, org_scoped_rule
 from redash.version_check import get_latest_version
 from sqlalchemy.orm.exc import NoResultFound
 import datetime
+import os
 from redash.query_runner.multi_tenant_util import MultiTenantUtil
+from sqlalchemy.exc import IntegrityError
 logger = logging.getLogger(__name__)
 
 
@@ -210,20 +212,37 @@ def login(org_slug=None):
                 access_token = MultiTenantUtil.request_access_token(request.form["email"], str(request.form["password"]))
 
                 tenant = MultiTenantUtil.request_tenant(access_token)
+                if user.tenant != int(tenant):
+                    user.tenant = tenant
+                    models.db.session.commit()
 
-                user.tenant = tenant
-                models.db.session.commit()
+                tenant_groups = models.TenantGroup.find_by_tenant(tenant)
+                group_ids = [tenant_group.group_id for tenant_group in tenant_groups]
 
-                remember = "remember" in request.form
+                # O grupo 1 é o grupo dos admins e o grupo 2 é o grupo default criado pelo redash
+                if 1 in user.group_ids:
+                    group_ids += [1]
+                if 2 in user.group_ids:
+                    group_ids += [2]
+
+                if user.group_ids != group_ids:
+                    user.group_ids = group_ids
+                    models.db.session.commit()
 
                 login_user(user)
                 return redirect(next_path)
             else:
                 flash("Wrong email or password.")
         except NoResultFound:
-            flash("Wrong email or password.")
+            user = create_user(request)
+            if user != None:
+                login_user(user)
+                return redirect(next_path)
         except Exception as e:
-            flash(str(e))
+            if "Unauthorized" in str(e):
+                flash("Wrong email or password.")
+            else:
+                flash(str(e))
 
     google_auth_url = get_google_auth_url(next_path)
 
@@ -239,6 +258,39 @@ def login(org_slug=None):
         show_remote_user_login=settings.REMOTE_USER_LOGIN_ENABLED,
         show_ldap_login=settings.LDAP_LOGIN_ENABLED,
     )
+
+
+def create_user(request):
+    try:
+        access_token = MultiTenantUtil.request_access_token(request.form["email"], str(request.form["password"]))
+        tenant = MultiTenantUtil.request_tenant(access_token)
+        tenant_groups = models.TenantGroup.find_by_tenant(tenant)
+        group_ids = [tenant_group.group_id for tenant_group in tenant_groups]
+        user = models.User(
+            org=current_org,
+            name=request.form["email"],
+            email=request.form["email"],
+            is_invitation_pending=False,
+            group_ids=group_ids,
+        )
+
+        user.hash_password(request.form["password"])
+        user.tenant = tenant
+        try:
+            models.db.session.add(user)
+            models.db.session.commit()
+        except IntegrityError as e:
+            if "email" in str(e):
+                flash("Email already taken.")
+            else:
+                flash(str(e))
+
+        return user
+    except Exception as e:
+        if "Unauthorized" in str(e):
+            flash("Wrong email or password.")
+        else:
+            flash(str(e))
 
 
 @routes.route(org_scoped_rule("/logout"))

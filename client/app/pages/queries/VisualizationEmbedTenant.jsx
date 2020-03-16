@@ -176,7 +176,7 @@ function VisualizationEmbedTenant({ queryId, visualizationId, tenant, apiKey, on
       setError(null);
       setRefreshStartedAt(moment());
       query
-        .getQueryResultPromise(tenant)
+        .getQueryResultTenantPromise(tenant)
         .then(result => {
           setQueryResults(result);
         })
