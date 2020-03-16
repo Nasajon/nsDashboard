@@ -7,7 +7,6 @@ import Button from "antd/lib/button";
 import Dropdown from "antd/lib/dropdown";
 import Icon from "antd/lib/icon";
 import Menu from "antd/lib/menu";
-import Tooltip from "antd/lib/tooltip";
 import routeWithApiKeySession from "@/components/ApplicationArea/routeWithApiKeySession";
 import { Query } from "@/services/query";
 import location from "@/services/location";
@@ -17,7 +16,7 @@ import Parameters from "@/components/Parameters";
 import { Moment } from "@/components/proptypes";
 import TimeAgo from "@/components/TimeAgo";
 import Timer from "@/components/Timer";
-import QueryResultsLink from "@/components/EditVisualizationButton/QueryResultsLink";
+import QueryResultsTenantLink from "@/components/EditVisualizationButton/QueryResultsTenantLink";
 import VisualizationName from "@/visualizations/components/VisualizationName";
 import VisualizationRenderer from "@/visualizations/components/VisualizationRenderer";
 import { VisualizationType } from "@/visualizations/prop-types";
@@ -27,7 +26,6 @@ function VisualizationEmbedHeader({ queryName, queryDescription, visualization }
   return (
     <div className="embed-heading p-b-10 p-r-15 p-l-15">
       <h3>
-        <img src={logoUrl} alt="Redash Logo" style={{ height: "24px", verticalAlign: "text-bottom" }} />
         <VisualizationName visualization={visualization} /> {queryName}
         {queryDescription && (
           <small>
@@ -59,7 +57,7 @@ function VisualizationEmbedFooter({
   const downloadMenu = (
     <Menu>
       <Menu.Item>
-        <QueryResultsLink
+        <QueryResultsTenantLink
           fileType="csv"
           query={query}
           queryResult={queryResults}
@@ -67,10 +65,10 @@ function VisualizationEmbedFooter({
           disabled={!queryResults || !queryResults.getData || !queryResults.getData()}
           embed>
           <Icon type="file" /> Download as CSV File
-        </QueryResultsLink>
+        </QueryResultsTenantLink>
       </Menu.Item>
       <Menu.Item>
-        <QueryResultsLink
+        <QueryResultsTenantLink
           fileType="tsv"
           query={query}
           queryResult={queryResults}
@@ -78,10 +76,10 @@ function VisualizationEmbedFooter({
           disabled={!queryResults || !queryResults.getData || !queryResults.getData()}
           embed>
           <Icon type="file" /> Download as TSV File
-        </QueryResultsLink>
+        </QueryResultsTenantLink>
       </Menu.Item>
       <Menu.Item>
-        <QueryResultsLink
+        <QueryResultsTenantLink
           fileType="xlsx"
           query={query}
           queryResult={queryResults}
@@ -89,7 +87,7 @@ function VisualizationEmbedFooter({
           disabled={!queryResults || !queryResults.getData || !queryResults.getData()}
           embed>
           <Icon type="file-excel" /> Download as Excel File
-        </QueryResultsLink>
+        </QueryResultsTenantLink>
       </Menu.Item>
     </Menu>
   );
@@ -109,11 +107,6 @@ function VisualizationEmbedFooter({
       )}
       {queryUrl && (
         <span className="hidden-print">
-          <Tooltip title="Open in Redash">
-            <Button className="icon-button" href={queryUrl} target="_blank">
-              <i className="fa fa-external-link" />
-            </Button>
-          </Tooltip>
           {!query.hasParameters() && (
             <Dropdown overlay={downloadMenu} disabled={!queryResults} trigger={["click"]} placement="topLeft">
               <Button loading={!queryResults && !!refreshStartedAt} className="m-l-5">
@@ -185,7 +178,7 @@ function VisualizationEmbedTenant({ queryId, visualizationId, tenant, apiKey, on
         })
         .finally(() => setRefreshStartedAt(null));
     }
-  }, [query]);
+  }, [query, tenant]);
 
   useEffect(() => {
     document.querySelector("body").classList.add("headless");
