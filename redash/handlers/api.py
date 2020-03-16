@@ -260,10 +260,6 @@ api.add_org_resource(
 )
 api.add_org_resource(
     QueryResultTenantResource,
-    "/api/query_results/tenant/<tenant>/<query_result_id>.<filetype>",
-    "/api/query_results/tenant/<tenant>/<query_result_id>",
-    "/api/queries/<query_id>/tenant/<tenant>/results",
-    "/api/queries/<query_id>/tenant/<tenant>/results.<filetype>",
     "/api/queries/<query_id>/tenant/<tenant>/results/<query_result_id>.<filetype>",
     endpoint="query_result_tenant",
 )
