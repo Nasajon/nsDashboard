@@ -20,7 +20,6 @@ import QueryResultsTenantLink from "@/components/EditVisualizationButton/QueryRe
 import VisualizationName from "@/visualizations/components/VisualizationName";
 import VisualizationRenderer from "@/visualizations/components/VisualizationRenderer";
 import { VisualizationType } from "@/visualizations/prop-types";
-import logoUrl from "@/assets/images/redash_icon_small.png";
 
 function VisualizationEmbedHeader({ queryName, queryDescription, visualization }) {
   return (
