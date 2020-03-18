@@ -221,7 +221,8 @@ const config = {
     stats: {
       modules: false,
       chunkModules: false
-    }
+    },
+    public: process.env.DEV_SERVER_ADDRESS ? process.env.DEV_SERVER_ADDRESS : "localhost:8080"
   },
   performance: {
     hints: false
