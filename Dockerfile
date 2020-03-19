@@ -20,23 +20,24 @@ RUN useradd --create-home redash
 # Ubuntu packages
 RUN apt-get update && \
   apt-get install -y \
-    curl \
-    gnupg \
-    build-essential \
-    pwgen \
-    libffi-dev \
-    sudo \
-    git-core \
-    wget \
-    # Postgres client
-    libpq-dev \
-    # for SAML
-    xmlsec1 \
-    # Additional packages required for data sources:
-    libssl-dev \
-    default-libmysqlclient-dev \
-    freetds-dev \
-    libsasl2-dev && \
+  curl \
+  gnupg \
+  build-essential \
+  pwgen \
+  libffi-dev \
+  sudo \
+  git-core \
+  wget \
+  # Postgres client
+  libpq-dev \
+  # for SAML
+  xmlsec1 \
+  # Additional packages required for data sources:
+  libssl-dev \
+  default-libmysqlclient-dev \
+  freetds-dev \
+  nginx \
+  libsasl2-dev && \
   apt-get clean && \
   rm -rf /var/lib/apt/lists/*
 
@@ -45,6 +46,7 @@ WORKDIR /app
 # We first copy only the requirements file, to avoid rebuilding on every file
 # change.
 COPY requirements.txt requirements_bundles.txt requirements_dev.txt requirements_all_ds.txt ./
+COPY nginx/nginx.conf /etc/nginx/conf.d/default.conf
 RUN pip install -r requirements.txt -r requirements_dev.txt
 RUN if [ "x$skip_ds_deps" = "x" ] ; then pip install -r requirements_all_ds.txt ; else echo "Skipping pip install -r requirements_all_ds.txt" ; fi
 
