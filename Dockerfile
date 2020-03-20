@@ -15,8 +15,6 @@ EXPOSE 5000
 # Controls whether to install extra dependencies needed for all data sources.
 ARG skip_ds_deps
 
-RUN useradd --create-home redash
-
 # Ubuntu packages
 RUN apt-get update && \
   apt-get install -y \
@@ -53,8 +51,6 @@ RUN if [ "x$skip_ds_deps" = "x" ] ; then pip install -r requirements_all_ds.txt 
 
 COPY . /app
 COPY --from=frontend-builder /frontend/client/dist /app/client/dist
-RUN chown -R redash /app
-USER redash
 
 ENTRYPOINT ["/app/bin/docker-entrypoint"]
 CMD ["server"]
