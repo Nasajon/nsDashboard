@@ -31,6 +31,29 @@ def embed(query_id, visualization_id, org_slug=None):
     return render_index()
 
 
+@routes.route(
+    org_scoped_rule("/embed/query/<query_id>/visualization/<visualization_id>/tenant/<tenant>"),
+    methods=["GET"],
+)
+@login_required
+@csp_allows_embeding
+def embed_tenant(query_id, visualization_id, tenant, org_slug=None):
+    record_event(
+        current_org,
+        current_user._get_current_object(),
+        {
+            "action": "view",
+            "object_id": visualization_id,
+            "object_type": "visualization",
+            "query_id": query_id,
+            "tenant": tenant,
+            "embed": True,
+            "referer": request.headers.get("Referer"),
+        },
+    )
+    return render_index()
+
+
 @routes.route(org_scoped_rule("/public/dashboards/<token>"), methods=["GET"])
 @login_required
 @csp_allows_embeding

@@ -185,7 +185,7 @@ function VisualizationEmbedTenant({ queryId, visualizationId, tenant, apiKey, on
         })
         .finally(() => setRefreshStartedAt(null));
     }
-  }, [query]);
+  }, [query, tenant]);
 
   useEffect(() => {
     document.querySelector("body").classList.add("headless");
