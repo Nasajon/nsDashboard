@@ -140,9 +140,9 @@ class QueryResultTenantResource(BaseResource):
             started_at = time.time()
             user_copy = copy.deepcopy(self.current_user)
             user_copy.tenant = tenant
-            data, _ = query_result.data_source.query_runner.run_query(query_result.query_text, user_copy)
+            data, _ = query.data_source.query_runner.run_query(query.query_text, user_copy)
             run_time = time.time() - started_at
-            query_result = models.QueryResult.store_result(self.current_org.id, query_result.data_source, query_result.query_hash, query_result.query_text, data, run_time, utcnow(), tenant)
+            query_result = models.QueryResult.store_result(self.current_org.id, query.data_source, query.query_hash, query.query_text, data, run_time, utcnow(), tenant)
             models.db.session.commit()
 
         require_access(query_result.data_source, self.current_user, view_only)
