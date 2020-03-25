@@ -77,8 +77,8 @@ services:
     command: "npm run start"
     volumes:
       - type: bind
-        source: ./client
-        target: /frontend/client
+        source: ./client/app
+        target: /frontend/client/app
     ports:
       - "8080:8080"
     environment:
