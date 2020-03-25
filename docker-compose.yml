@@ -70,17 +70,3 @@ services:
     ports:
       - "1080:80"
     restart: unless-stopped
-  frontend:
-    build: 
-      context: .    
-      dockerfile: Dockerfile_frontend
-    command: "npm run start"
-    volumes:
-      - type: bind
-        source: ./client/app
-        target: /frontend/client/app
-    ports:
-      - "8080:8080"
-    environment:
-      REDASH_BACKEND: "http://server:5000"
-      DEV_SERVER_HOST: "0.0.0.0"

@@ -1,9 +1,0 @@
-FROM node:12 as frontend-builder
-
-WORKDIR /frontend
-COPY package.json package-lock.json /frontend/
-RUN npm install
-
-COPY client /frontend/client
-COPY webpack.config.js /frontend/
-RUN npm run build
