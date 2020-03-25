@@ -39,7 +39,7 @@ class MultiTenantUtil:
 
     @staticmethod
     def request_tenant(access_token):
-        user_url = os.getenv("user_url", "http://192.168.1.102:81/profile")
+        user_url = os.getenv("user_url", "http://meucondominio.nasajonsistemas.com.br/profile")
         response = requests.get(
             user_url, headers={'Authorization': access_token})
 
