@@ -91,7 +91,7 @@ function DesktopNavbar() {
       <div>
         <Input.Search
           className="searchbar"
-          placeholder={t('SearchQueries')}
+          placeholder={t('Search Queries')}
           data-test="AppHeaderSearch"
           onSearch={onSearch}
         />

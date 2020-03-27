@@ -79,7 +79,7 @@ class DashboardList extends React.Component {
           <Layout className="m-l-15 m-r-15">
             <Layout.Sidebar className="m-b-0">
               <Sidebar.SearchInput
-                placeholder="Search Dashboards..."
+                placeholder="Search Dashboards"
                 value={controller.searchTerm}
                 onChange={controller.updateSearch}
               />
@@ -102,26 +102,26 @@ class DashboardList extends React.Component {
                       selectedTags={controller.selectedTags}
                     />
                   ) : (
-                    <div className="bg-white tiled table-responsive">
-                      <ItemsTable
-                        items={controller.pageItems}
-                        columns={this.listColumns}
-                        orderByField={controller.orderByField}
-                        orderByReverse={controller.orderByReverse}
-                        toggleSorting={controller.toggleSorting}
-                      />
-                      <Paginator
-                        totalCount={controller.totalItemsCount}
-                        itemsPerPage={controller.itemsPerPage}
-                        page={controller.page}
-                        onChange={page => controller.updatePagination({ page })}
-                      />
-                    </div>
-                  )}
+                      <div className="bg-white tiled table-responsive">
+                        <ItemsTable
+                          items={controller.pageItems}
+                          columns={this.listColumns}
+                          orderByField={controller.orderByField}
+                          orderByReverse={controller.orderByReverse}
+                          toggleSorting={controller.toggleSorting}
+                        />
+                        <Paginator
+                          totalCount={controller.totalItemsCount}
+                          itemsPerPage={controller.itemsPerPage}
+                          page={controller.page}
+                          onChange={page => controller.updatePagination({ page })}
+                        />
+                      </div>
+                    )}
                 </div>
               ) : (
-                <LoadingState />
-              )}
+                  <LoadingState />
+                )}
             </Layout.Content>
           </Layout>
         </div>
