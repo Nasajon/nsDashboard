@@ -29,14 +29,14 @@ import useEmbedDialog from "./hooks/useEmbedDialog";
 import useEditScheduleDialog from "./hooks/useEditScheduleDialog";
 import useEditVisualizationDialog from "./hooks/useEditVisualizationDialog";
 import useDeleteVisualization from "./hooks/useDeleteVisualization";
-
+import { useTranslation } from 'react-i18next';
 function QueryView(props) {
   const [query, setQuery] = useState(props.query);
   const [dataSource, setDataSource] = useState();
   const queryFlags = useQueryFlags(query, dataSource);
   const [parameters, areParametersDirty, updateParametersDirtyFlag] = useQueryParameters(query);
   const [selectedVisualization, setSelectedVisualization] = useVisualizationTabHandler(query.visualizations);
-
+  const { t } = useTranslation();
   const {
     queryResult,
     queryResultData,
@@ -90,7 +90,7 @@ function QueryView(props) {
             value={query.description}
             isEditable={queryFlags.canEdit}
             onDone={updateQueryDescription}
-            placeholder="Add description"
+            placeholder={t("Add description")}
             ignoreBlanks={false}
             editorProps={{ autosize: { minRows: 2, maxRows: 4 } }}
             multiline
@@ -155,25 +155,25 @@ function QueryView(props) {
                   openAddToDashboardForm={openAddToDashboardDialog}
                 />
                 <span className="m-l-10">
-                  <strong>{queryResultData.rows.length}</strong> {pluralize("row", queryResultData.rows.length)}
+                  <strong>{queryResultData.rows.length}</strong> {pluralize(t("row"), queryResultData.rows.length)}
                 </span>
                 <span className="m-l-10">
                   <strong>{durationHumanize(queryResult.getRuntime())}</strong>
-                  <span className="hidden-xs"> runtime</span>
+                  <span className="hidden-xs"> {t("runtime")}</span>
                 </span>
               </>
             )}
             <span className="flex-fill" />
             {queryResultData.status === "done" && (
               <span className="m-r-10 hidden-xs">
-                Updated <TimeAgo date={queryResult.query_result.retrieved_at} />
+                {t("Updated")} <TimeAgo date={queryResult.query_result.retrieved_at} />
               </span>
             )}
             <QueryViewExecuteButton
               shortcut="mod+enter, alt+enter"
               disabled={!queryFlags.canExecute || isQueryExecuting || areParametersDirty}
               onClick={doExecuteQuery}>
-              Execute
+              {t("Execute")}
             </QueryViewExecuteButton>
           </div>
         </div>

@@ -21,15 +21,17 @@ import logoUrl from "@/assets/images/redash_icon_small.png";
 
 import FavoritesDropdown from "./FavoritesDropdown";
 import "./index.less";
-
+import { useTranslation } from 'react-i18next';
 function onSearch(q) {
   navigateTo(`queries?q=${encodeURIComponent(q)}`);
 }
 
 function DesktopNavbar() {
   const showCreateDashboardDialog = useCallback(() => {
-    CreateDashboardDialog.showModal().result.catch(() => {}); // ignore dismiss
+    CreateDashboardDialog.showModal().result.catch(() => { }); // ignore dismiss
   }, []);
+
+  const { t } = useTranslation();
 
   return (
     <div className="app-header" data-platform="desktop">
@@ -43,13 +45,13 @@ function DesktopNavbar() {
           )}
           {currentUser.hasPermission("view_query") && (
             <Menu.Item key="queries" className="dropdown-menu-item">
-              <Button href="queries">Queries</Button>
+              <Button href="queries">{t("Queries")}</Button>
               <FavoritesDropdown fetch={Query.favorites} urlTemplate="queries/${id}" />
             </Menu.Item>
           )}
           {currentUser.hasPermission("list_alerts") && (
             <Menu.Item key="alerts">
-              <Button href="alerts">Alerts</Button>
+              <Button href="alerts">{t("Alerts")}</Button>
             </Menu.Item>
           )}
         </Menu>
@@ -60,23 +62,23 @@ function DesktopNavbar() {
               <Menu>
                 {currentUser.hasPermission("create_query") && (
                   <Menu.Item key="new-query">
-                    <a href="queries/new">New Query</a>
+                    <a href="queries/new">{t("New Query")}</a>
                   </Menu.Item>
                 )}
                 {currentUser.hasPermission("create_dashboard") && (
                   <Menu.Item key="new-dashboard">
-                    <a onMouseUp={showCreateDashboardDialog}>New Dashboard</a>
+                    <a onMouseUp={showCreateDashboardDialog}>{t("New Dashboard")}</a>
                   </Menu.Item>
                 )}
                 {currentUser.hasPermission("list_alerts") && (
                   <Menu.Item key="new-alert">
-                    <a href="alerts/new">New Alert</a>
+                    <a href="alerts/new">{t("New Alert")}</a>
                   </Menu.Item>
                 )}
               </Menu>
             }>
             <Button type="primary" data-test="CreateButton">
-              Create <Icon type="down" />
+              {t('Create')} <Icon type="down" />
             </Button>
           </Dropdown>
         )}
@@ -89,14 +91,14 @@ function DesktopNavbar() {
       <div>
         <Input.Search
           className="searchbar"
-          placeholder="Search queries..."
+          placeholder={t('SearchQueries')}
           data-test="AppHeaderSearch"
           onSearch={onSearch}
         />
         <Menu mode="horizontal" selectable={false}>
-          <Menu.Item key="help">
+          {/* <Menu.Item key="help">
             <HelpTrigger type="HOME" className="menu-item-button" />
-          </Menu.Item>
+          </Menu.Item> */}
           {currentUser.isAdmin && (
             <Menu.Item key="settings">
               <Tooltip title="Settings">

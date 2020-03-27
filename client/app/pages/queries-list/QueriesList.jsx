@@ -96,7 +96,7 @@ class QueriesList extends React.Component {
           <Layout className="m-l-15 m-r-15">
             <Layout.Sidebar className="m-b-0">
               <Sidebar.SearchInput
-                placeholder="Search Queries..."
+                placeholder="SearchQueries"
                 value={controller.searchTerm}
                 onChange={controller.updateSearch}
               />

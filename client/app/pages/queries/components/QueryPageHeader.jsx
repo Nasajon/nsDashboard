@@ -20,7 +20,7 @@ import useRenameQuery from "../hooks/useRenameQuery";
 import useDuplicateQuery from "../hooks/useDuplicateQuery";
 import useApiKeyDialog from "../hooks/useApiKeyDialog";
 import usePermissionsEditorDialog from "../hooks/usePermissionsEditorDialog";
-
+import { useTranslation } from 'react-i18next';
 function getQueryTags() {
   return getTags("api/queries/tags").then(tags => map(tags, t => t.name));
 }
@@ -31,7 +31,7 @@ function createMenu(menu) {
   const groups = map(menu, group =>
     filter(
       map(group, (props, key) => {
-        props = extend({ isAvailable: true, isEnabled: true, onClick: () => {} }, props);
+        props = extend({ isAvailable: true, isEnabled: true, onClick: () => { } }, props);
         if (props.isAvailable) {
           handlers[key] = props.onClick;
           return (
@@ -69,7 +69,7 @@ export default function QueryPageHeader({ query, dataSource, sourceMode, selecte
   const [isDuplicating, duplicateQuery] = useDuplicateQuery(query);
   const openApiKeyDialog = useApiKeyDialog(query, onChange);
   const openPermissionsEditorDialog = usePermissionsEditorDialog(query);
-
+  const { t } = useTranslation();
   const moreActionsMenu = useMemo(
     () =>
       createMenu([
@@ -78,7 +78,7 @@ export default function QueryPageHeader({ query, dataSource, sourceMode, selecte
             isEnabled: !queryFlags.isNew && queryFlags.canFork && !isDuplicating,
             title: (
               <React.Fragment>
-                Fork
+                {t("Fork")}
                 <i className="fa fa-external-link m-l-5" />
               </React.Fragment>
             ),
@@ -88,25 +88,25 @@ export default function QueryPageHeader({ query, dataSource, sourceMode, selecte
         {
           archive: {
             isAvailable: !queryFlags.isNew && queryFlags.canEdit && !queryFlags.isArchived,
-            title: "Archive",
+            title: t("Archive"),
             onClick: archiveQuery,
           },
           managePermissions: {
             isAvailable:
               !queryFlags.isNew && queryFlags.canEdit && !queryFlags.isArchived && clientConfig.showPermissionsControl,
-            title: "Manage Permissions",
+            title: t("Manage Permissions"),
             onClick: openPermissionsEditorDialog,
           },
           unpublish: {
             isAvailable: !queryFlags.isNew && queryFlags.canEdit && !queryFlags.isDraft,
-            title: "Unpublish",
+            title: t("Unpublish"),
             onClick: unpublishQuery,
           },
         },
         {
           showAPIKey: {
             isAvailable: !queryFlags.isNew,
-            title: "Show API Key",
+            title: t("Show API Key"),
             onClick: openApiKeyDialog,
           },
         },
@@ -119,6 +119,7 @@ export default function QueryPageHeader({ query, dataSource, sourceMode, selecte
       openPermissionsEditorDialog,
       isDuplicating,
       duplicateQuery,
+      t
     ]
   );
 
@@ -147,7 +148,7 @@ export default function QueryPageHeader({ query, dataSource, sourceMode, selecte
           <span className="flex-fill" />
           {queryFlags.isDraft && !queryFlags.isArchived && !queryFlags.isNew && queryFlags.canEdit && (
             <Button className="hidden-xs m-r-5" onClick={publishQuery}>
-              <i className="fa fa-paper-plane m-r-5" /> Publish
+              <i className="fa fa-paper-plane m-r-5" /> {t("Publish")}
             </Button>
           )}
 
@@ -155,7 +156,7 @@ export default function QueryPageHeader({ query, dataSource, sourceMode, selecte
             <span>
               {!sourceMode && (
                 <Button className="m-r-5" href={query.getUrl(true, selectedVisualization)}>
-                  <i className="fa fa-pencil-square-o m-r-5" aria-hidden="true" /> Edit Source
+                  <i className="fa fa-pencil-square-o m-r-5" aria-hidden="true" /> {t("Edit Source")}
                 </Button>
               )}
               {sourceMode && (
@@ -163,7 +164,7 @@ export default function QueryPageHeader({ query, dataSource, sourceMode, selecte
                   className="m-r-5"
                   href={query.getUrl(false, selectedVisualization)}
                   data-test="QueryPageShowDataOnly">
-                  <i className="fa fa-table m-r-5" aria-hidden="true" /> Show Data Only
+                  <i className="fa fa-table m-r-5" aria-hidden="true" /> {t("Show Data Only")}
                 </Button>
               )}
             </span>
@@ -208,5 +209,5 @@ QueryPageHeader.defaultProps = {
   dataSource: null,
   sourceMode: false,
   selectedVisualization: null,
-  onChange: () => {},
+  onChange: () => { },
 };

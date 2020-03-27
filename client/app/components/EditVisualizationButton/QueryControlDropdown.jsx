@@ -4,23 +4,24 @@ import Dropdown from "antd/lib/dropdown";
 import Menu from "antd/lib/menu";
 import Button from "antd/lib/button";
 import Icon from "antd/lib/icon";
-
+import { useTranslation } from 'react-i18next';
 import QueryResultsLink from "./QueryResultsLink";
 
 export default function QueryControlDropdown(props) {
+  const { t } = useTranslation();
   const menu = (
     <Menu>
       {!props.query.isNew() && (!props.query.is_draft || !props.query.is_archived) && (
         <Menu.Item>
           <a target="_self" onClick={() => props.openAddToDashboardForm(props.selectedTab)}>
-            <Icon type="plus-circle" theme="filled" /> Add to Dashboard
+            <Icon type="plus-circle" theme="filled" /> {t("Add to Dashboard")}
           </a>
         </Menu.Item>
       )}
       {!props.query.isNew() && (
         <Menu.Item>
           <a onClick={() => props.showEmbedDialog(props.query, props.selectedTab)} data-test="ShowEmbedDialogButton">
-            <Icon type="share-alt" /> Embed Elsewhere
+            <Icon type="share-alt" /> {t("Embed Elsewhere")}
           </a>
         </Menu.Item>
       )}
@@ -32,7 +33,7 @@ export default function QueryControlDropdown(props) {
           queryResult={props.queryResult}
           embed={props.embed}
           apiKey={props.apiKey}>
-          <Icon type="file" /> Download as CSV File
+          <Icon type="file" /> {t("Download File", { extension: "CSV" })}
         </QueryResultsLink>
       </Menu.Item>
       <Menu.Item>
@@ -43,7 +44,7 @@ export default function QueryControlDropdown(props) {
           queryResult={props.queryResult}
           embed={props.embed}
           apiKey={props.apiKey}>
-          <Icon type="file" /> Download as TSV File
+          <Icon type="file" /> {t("Download File", { extension: "TSV" })}
         </QueryResultsLink>
       </Menu.Item>
       <Menu.Item>
@@ -54,7 +55,7 @@ export default function QueryControlDropdown(props) {
           queryResult={props.queryResult}
           embed={props.embed}
           apiKey={props.apiKey}>
-          <Icon type="file-excel" /> Download as Excel File
+          <Icon type="file-excel" /> {t("Download File", { extension: "Excel" })}
         </QueryResultsLink>
       </Menu.Item>
     </Menu>

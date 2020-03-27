@@ -6,7 +6,7 @@ import Table from "antd/lib/table";
 import FavoritesControl from "@/components/FavoritesControl";
 import TimeAgo from "@/components/TimeAgo";
 import { durationHumanize, formatDate, formatDateTime } from "@/lib/utils";
-
+import { withTranslation } from 'react-i18next';
 // `this` refers to previous function in the chain (`Columns.***`).
 // Adds `sorter: true` field to column definition
 function sortable(...args) {
@@ -90,7 +90,7 @@ Columns.duration.sortable = sortable;
 Columns.timeAgo.sortable = sortable;
 Columns.custom.sortable = sortable;
 
-export default class ItemsTable extends React.Component {
+class ItemsTable extends React.Component {
   static propTypes = {
     loading: PropTypes.bool,
     // eslint-disable-next-line react/forbid-prop-types
@@ -120,13 +120,13 @@ export default class ItemsTable extends React.Component {
 
     orderByField: null,
     orderByReverse: false,
-    toggleSorting: () => {},
+    toggleSorting: () => { },
   };
 
   prepareColumns() {
-    const { orderByField, orderByReverse, toggleSorting } = this.props;
+    const { orderByField, orderByReverse, toggleSorting, t } = this.props;
     const orderByDirection = orderByReverse ? "descend" : "ascend";
-
+    // const { t } = useTranslation();
     return map(
       map(
         filter(this.props.columns, column => (isFunction(column.isAvailable) ? column.isAvailable() : true)),
@@ -135,7 +135,8 @@ export default class ItemsTable extends React.Component {
       (column, index) => {
         // Bind click events only to sortable columns
         const onHeaderCell = column.sorter ? () => ({ onClick: () => toggleSorting(column.orderByField) }) : null;
-
+        //Translate column title
+        column.title = t(column.title);
         // Wrap render function to pass correct arguments
         const render = isFunction(column.render) ? (text, row) => column.render(text, row.item) : identity;
 
@@ -157,10 +158,10 @@ export default class ItemsTable extends React.Component {
     // Bind events only if `onRowClick` specified
     const onTableRow = isFunction(this.props.onRowClick)
       ? row => ({
-          onClick: event => {
-            this.props.onRowClick(event, row.item);
-          },
-        })
+        onClick: event => {
+          this.props.onRowClick(event, row.item);
+        },
+      })
       : null;
 
     const { showHeader } = this.props;
@@ -179,3 +180,6 @@ export default class ItemsTable extends React.Component {
     );
   }
 }
+
+export default withTranslation()(ItemsTable)
+

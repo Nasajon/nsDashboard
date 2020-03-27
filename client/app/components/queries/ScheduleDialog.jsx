@@ -10,7 +10,7 @@ import moment from "moment";
 import { secondsToInterval, durationHumanize, pluralize, IntervalEnum, localizeTime } from "@/lib/utils";
 import { wrap as wrapDialog, DialogPropType } from "@/components/DialogWrapper";
 import { RefreshScheduleType, RefreshScheduleDefault, Moment } from "../proptypes";
-
+import { withTranslation } from 'react-i18next';
 import "./ScheduleDialog.css";
 
 const WEEKDAYS_SHORT = moment.weekdaysShort();
@@ -199,7 +199,7 @@ class ScheduleDialog extends React.Component {
     } = this.state;
 
     return (
-      <Modal {...dialog.props} title="Refresh Schedule" className="schedule" onOk={() => this.save()}>
+      <Modal {...dialog.props} title={this.props.t("Refresh Schedule")} className="schedule" onOk={() => this.save()}>
         <div className="schedule-component">
           <h5>Refresh every</h5>
           <div data-testid="interval">
@@ -227,8 +227,8 @@ class ScheduleDialog extends React.Component {
                 defaultValue={
                   hour
                     ? moment()
-                        .hour(hour)
-                        .minute(minute)
+                      .hour(hour)
+                      .minute(minute)
                     : null
                 }
                 onChange={this.setTime}
@@ -276,4 +276,4 @@ class ScheduleDialog extends React.Component {
   }
 }
 
-export default wrapDialog(ScheduleDialog);
+export default wrapDialog(withTranslation()(ScheduleDialog));

@@ -23,7 +23,7 @@ import { clientConfig } from "@/services/auth";
 import { policy } from "@/services/policy";
 import { durationHumanize } from "@/lib/utils";
 import useDashboard, { DashboardStatusEnum } from "./hooks/useDashboard";
-
+import { useTranslation } from 'react-i18next';
 import "./DashboardPage.less";
 
 function getDashboardTags() {
@@ -69,6 +69,7 @@ function RefreshButton({ dashboardOptions }) {
   const { refreshRate, setRefreshRate, disableRefreshRate, refreshing, refreshDashboard } = dashboardOptions;
   const allowedIntervals = policy.getDashboardRefreshIntervals();
   const refreshRateOptions = clientConfig.dashboardRefreshIntervals;
+  const { t } = useTranslation();
   const onRefreshRateSelected = ({ key }) => {
     const parsedRefreshRate = parseFloat(key);
     if (parsedRefreshRate) {
@@ -83,7 +84,7 @@ function RefreshButton({ dashboardOptions }) {
       <Tooltip title={refreshRate ? `Auto Refreshing every ${durationHumanize(refreshRate)}` : null}>
         <Button type={buttonType(refreshRate)} onClick={() => refreshDashboard()}>
           <i className={cx("zmdi zmdi-refresh m-r-5", { "zmdi-hc-spin": refreshing })} />
-          {refreshRate ? durationHumanize(refreshRate) : "Refresh"}
+          {refreshRate ? durationHumanize(refreshRate) : t("Refresh")}
         </Button>
       </Tooltip>
       <Dropdown
@@ -96,7 +97,7 @@ function RefreshButton({ dashboardOptions }) {
                 {durationHumanize(option)}
               </Menu.Item>
             ))}
-            {refreshRate && <Menu.Item key={null}>Disable auto refresh</Menu.Item>}
+            {refreshRate && <Menu.Item key={null}>{t("Disable auto refresh")}</Menu.Item>}
           </Menu>
         }>
         <Button className="icon-button hidden-xs" type={buttonType(refreshRate)}>
@@ -121,7 +122,7 @@ function DashboardMoreOptionsButton({ dashboardOptions }) {
     managePermissions,
     gridDisabled,
   } = dashboardOptions;
-
+  const { t } = useTranslation();
   const archive = () => {
     Modal.confirm({
       title: "Archive Dashboard",
@@ -141,20 +142,20 @@ function DashboardMoreOptionsButton({ dashboardOptions }) {
       overlay={
         <Menu data-test="DashboardMoreButtonMenu">
           <Menu.Item className={cx({ hidden: gridDisabled })}>
-            <a onClick={() => setEditingLayout(true)}>Edit</a>
+            <a onClick={() => setEditingLayout(true)}>{t("Edit")}</a>
           </Menu.Item>
           {clientConfig.showPermissionsControl && (
             <Menu.Item>
-              <a onClick={managePermissions}>Manage Permissions</a>
+              <a onClick={managePermissions}>{t("Manage Permissions")}</a>
             </Menu.Item>
           )}
           {!dashboard.is_draft && (
             <Menu.Item>
-              <a onClick={togglePublished}>Unpublish</a>
+              <a onClick={togglePublished}>{t("Unpublish")}</a>
             </Menu.Item>
           )}
           <Menu.Item>
-            <a onClick={archive}>Archive</a>
+            <a onClick={archive}>{t("Archive")}</a>
           </Menu.Item>
         </Menu>
       }>
@@ -183,26 +184,27 @@ function DashboardControl({ dashboardOptions }) {
   const showFullscreenButton = !dashboard.is_draft;
   const showShareButton = dashboard.publicAccessEnabled || (canEditDashboard && !dashboard.is_draft);
   const showMoreOptionsButton = canEditDashboard;
+  const { t } = useTranslation();
   return (
     <div className="col-xs-4 col-sm-5 col-lg-5 text-right dashboard-control p-r-0">
       {!dashboard.is_archived && (
         <span className="hidden-print">
           {showPublishButton && (
             <Button className="m-r-5 hidden-xs" onClick={togglePublished}>
-              <span className="fa fa-paper-plane m-r-5" /> Publish
+              <span className="fa fa-paper-plane m-r-5" /> {t("Publish")}
             </Button>
           )}
           {showRefreshButton && <RefreshButton dashboardOptions={dashboardOptions} />}
           <span className="hidden-xs">
             {showFullscreenButton && (
-              <Tooltip title="Enable/Disable Fullscreen display">
+              <Tooltip title={t("Enable/Disable Fullscreen display")}>
                 <Button type={buttonType(fullscreen)} className="icon-button m-l-5" onClick={toggleFullscreen}>
                   <i className="zmdi zmdi-fullscreen" />
                 </Button>
               </Tooltip>
             )}
             {showShareButton && (
-              <Tooltip title="Dashboard Sharing Options">
+              <Tooltip title={t("Dashboard Sharing Options")}>
                 <Button
                   className="icon-button m-l-5"
                   type={buttonType(dashboard.publicAccessEnabled)}
@@ -250,10 +252,10 @@ function DashboardEditControl({ dashboardOptions }) {
           Retry
         </Button>
       ) : (
-        <Button loading={doneBtnClickedWhileSaving} type="primary" onClick={() => setEditingLayout(false)}>
-          {!doneBtnClickedWhileSaving && <i className="fa fa-check m-r-5" />} Done Editing
-        </Button>
-      )}
+          <Button loading={doneBtnClickedWhileSaving} type="primary" onClick={() => setEditingLayout(false)}>
+            {!doneBtnClickedWhileSaving && <i className="fa fa-check m-r-5" />} Done Editing
+          </Button>
+        )}
     </div>
   );
 }
@@ -359,7 +361,7 @@ function DashboardComponent(props) {
           widgets={dashboard.widgets}
           filters={filters}
           isEditing={editingLayout}
-          onLayoutChange={editingLayout ? saveDashboardLayout : () => {}}
+          onLayoutChange={editingLayout ? saveDashboardLayout : () => { }}
           onBreakpointChange={setGridDisabled}
           onLoadWidget={loadWidget}
           onRefreshWidget={refreshWidget}

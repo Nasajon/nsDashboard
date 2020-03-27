@@ -8,13 +8,13 @@ import { wrap as wrapDialog, DialogPropType } from "@/components/DialogWrapper";
 import navigateTo from "@/components/ApplicationArea/navigateTo";
 import recordEvent from "@/services/recordEvent";
 import { policy } from "@/services/policy";
-
+import { useTranslation } from 'react-i18next';
 function CreateDashboardDialog({ dialog }) {
   const [name, setName] = useState("");
   const [isValid, setIsValid] = useState(false);
   const [saveInProgress, setSaveInProgress] = useState(false);
   const isCreateDashboardEnabled = policy.isCreateDashboardEnabled();
-
+  const { t } = useTranslation();
   function handleNameChange(event) {
     const value = trim(event.target.value);
     setName(value);
@@ -37,9 +37,9 @@ function CreateDashboardDialog({ dialog }) {
     <Modal
       {...dialog.props}
       {...(isCreateDashboardEnabled ? {} : { footer: null })}
-      title="New Dashboard"
-      okText="Save"
-      cancelText="Close"
+      title={t("New Dashboard")}
+      okText={t("Save")}
+      cancelText={t("Close")}
       okButtonProps={{
         disabled: !isValid || saveInProgress,
         loading: saveInProgress,
@@ -59,7 +59,7 @@ function CreateDashboardDialog({ dialog }) {
           defaultValue={name}
           onChange={handleNameChange}
           onPressEnter={save}
-          placeholder="Dashboard Name"
+          placeholder={t("Dashboard Name")}
           disabled={saveInProgress}
           autoFocus
         />
