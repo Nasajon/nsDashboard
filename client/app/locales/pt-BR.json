@@ -97,7 +97,19 @@
             "Enable/Disable Fullscreen display": "Habilitar/Desabilitar Tela Cheia",
             "Save": "Salvar",
             "Close": "Fechar",
-            "Dashboard Name": "Nome do Dashboard"
+            "Dashboard Name": "Nome do Dashboard",
+            "Refresh every": "Atualizar a cada",
+            "On time": "Na hora",
+            "On day": "No dia",
+            "Ends": "Termina",
+            "On": "Em",
+            "S_Sunday": "D",
+            "S_Saturday": "S",
+            "M_Monday": "S",
+            "T_Tuesday": "T",
+            "W_Wednesday": "Q",
+            "T_Thursday": "Q",
+            "F_Friday": "S"
         }
     }
 }

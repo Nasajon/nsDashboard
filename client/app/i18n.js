@@ -4,7 +4,7 @@ import { initReactI18next } from 'react-i18next'
 import pt from '@/locales/pt-BR.json'
 i18n.use(LanguageDetector).use(initReactI18next)
     .init({
-        debug: true,
+        fallbackLng: "pt-BR",
         resources: pt
     });
 
