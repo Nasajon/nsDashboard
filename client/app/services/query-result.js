@@ -223,6 +223,10 @@ class QueryResult {
     return this.query_result.data ? this.query_result.data.rows : null;
   }
 
+  getTenant() {
+    return this.query_result.tenant ? this.query_result.tenant : null;
+  }
+
   isEmpty() {
     return this.getData() === null || this.getData().length === 0;
   }

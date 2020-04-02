@@ -320,6 +320,7 @@ class QueryResult(db.Model, QueryResultPersistence, BelongsToOrgMixin):
             "data_source_id": self.data_source_id,
             "runtime": self.runtime,
             "retrieved_at": self.retrieved_at,
+            "tenant": self.tenant,
         }
 
     @classmethod
