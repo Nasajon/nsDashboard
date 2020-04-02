@@ -19,7 +19,7 @@ import {
   find,
 } from "lodash";
 import location from "@/services/location";
-
+import i18n from "@/i18n"
 import { Parameter, createParameter } from "./parameters";
 import { currentUser } from "./auth";
 import QueryResult from "./query-result";
@@ -434,7 +434,7 @@ const QueryService = {
 QueryService.newQuery = function newQuery() {
   return new Query({
     query: "",
-    name: "New Query",
+    name: i18n.t("New Query"),
     schedule: null,
     user: currentUser,
     options: {},

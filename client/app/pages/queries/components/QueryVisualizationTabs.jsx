@@ -6,26 +6,28 @@ import Tabs from "antd/lib/tabs";
 import VisualizationRenderer from "@/visualizations/components/VisualizationRenderer";
 import Button from "antd/lib/button";
 import Modal from "antd/lib/modal";
-
+import { useTranslation } from 'react-i18next';
 import "./QueryVisualizationTabs.less";
 
 const { TabPane } = Tabs;
 
 function TabWithDeleteButton({ visualizationName, canDelete, onDelete, ...props }) {
+  const { t } = useTranslation();
   const handleDelete = useCallback(
     e => {
       e.stopPropagation();
       Modal.confirm({
-        title: "Delete Visualization",
-        content: "Are you sure you want to delete this visualization?",
-        okText: "Delete",
+        title: t("Delete Visualization"),
+        content: t("Are you sure you want to delete this visualization?"),
+        okText: t("Delete"),
+        cancelText: t("Cancel"),
         okType: "danger",
         onOk: onDelete,
         maskClosable: true,
         autoFocusButton: null,
       });
     },
-    [onDelete]
+    [onDelete, t]
   );
 
   return (
@@ -45,7 +47,7 @@ TabWithDeleteButton.propTypes = {
   canDelete: PropTypes.bool,
   onDelete: PropTypes.func,
 };
-TabWithDeleteButton.defaultProps = { canDelete: false, onDelete: () => {} };
+TabWithDeleteButton.defaultProps = { canDelete: false, onDelete: () => { } };
 
 const defaultVisualizations = [
   {
@@ -70,7 +72,7 @@ export default function QueryVisualizationTabs({
     () => (props.visualizations.length > 0 ? props.visualizations : defaultVisualizations),
     [props.visualizations]
   );
-
+  const { t } = useTranslation();
   const tabsProps = {};
   if (find(visualizations, { id: selectedTab })) {
     tabsProps.activeKey = `${selectedTab}`;
@@ -80,7 +82,7 @@ export default function QueryVisualizationTabs({
     tabsProps.tabBarExtraContent = (
       <Button data-test="NewVisualization" onClick={() => onAddVisualization()}>
         <i className="fa fa-plus" />
-        <span className="m-l-5 hidden-xs">New Visualization</span>
+        <span className="m-l-5 hidden-xs">{t("New Visualization")}</span>
       </Button>
     );
   }
@@ -136,7 +138,7 @@ QueryVisualizationTabs.defaultProps = {
   selectedTab: null,
   showNewVisualizationButton: false,
   canDeleteVisualizations: false,
-  onChangeTab: () => {},
-  onAddVisualization: () => {},
-  onDeleteVisualization: () => {},
+  onChangeTab: () => { },
+  onAddVisualization: () => { },
+  onDeleteVisualization: () => { },
 };

@@ -3,10 +3,10 @@ import PropTypes from "prop-types";
 import Tooltip from "antd/lib/tooltip";
 import { localizeTime, durationHumanize } from "@/lib/utils";
 import { RefreshScheduleType, RefreshScheduleDefault } from "../proptypes";
-
+import { withTranslation } from 'react-i18next';
 import "./ScheduleDialog.css";
 
-export default class SchedulePhrase extends React.Component {
+class SchedulePhrase extends React.Component {
   static propTypes = {
     schedule: RefreshScheduleType,
     isNew: PropTypes.bool.isRequired,
@@ -17,26 +17,26 @@ export default class SchedulePhrase extends React.Component {
   static defaultProps = {
     schedule: RefreshScheduleDefault,
     isLink: false,
-    onClick: () => {},
+    onClick: () => { },
   };
 
   get content() {
     const { interval: seconds } = this.props.schedule || SchedulePhrase.defaultProps.schedule;
     if (!seconds) {
-      return ["Never"];
+      return [this.props.t("Never")];
     }
     const humanized = durationHumanize(seconds, {
       omitSingleValueNumber: true,
     });
-    const short = `Every ${humanized}`;
-    let full = `Refreshes every ${humanized}`;
+    const short = this.props.t("EveryTime", { time: humanized });
+    let full = this.props.t("RefreshesEvery", { time: humanized });
 
     const { time, day_of_week: dayOfWeek } = this.props.schedule;
     if (time) {
-      full += ` at ${localizeTime(time)}`;
+      full += " " + this.props.t("at") + " " + localizeTime(time);
     }
     if (dayOfWeek) {
-      full += ` on ${dayOfWeek}`;
+      full += " " + this.props.t("on", { context: dayOfWeek === "Sunday" || dayOfWeek === "Saturday" ? "male" : "female" }) + " " + this.props.t(dayOfWeek);
     }
 
     return [short, full];
@@ -44,7 +44,7 @@ export default class SchedulePhrase extends React.Component {
 
   render() {
     if (this.props.isNew) {
-      return "Never";
+      return this.props.t("Never");
     }
 
     const [short, full] = this.content;
@@ -55,7 +55,9 @@ export default class SchedulePhrase extends React.Component {
         {content}
       </a>
     ) : (
-      content
-    );
+        content
+      );
   }
 }
+
+export default withTranslation()(SchedulePhrase)

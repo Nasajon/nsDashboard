@@ -5,18 +5,19 @@ import Input from "antd/lib/input";
 import AntdMenu from "antd/lib/menu";
 import Select from "antd/lib/select";
 import TagsList from "@/components/TagsList";
-
+import { useTranslation } from 'react-i18next';
 /*
     SearchInput
  */
 
 export function SearchInput({ placeholder, value, showIcon, onChange }) {
   const InputControl = showIcon ? Input.Search : Input;
+  const { t } = useTranslation();
   return (
     <div className="m-b-10">
       <InputControl
         className="form-control"
-        placeholder={placeholder}
+        placeholder={t(placeholder)}
         defaultValue={value}
         onChange={event => onChange(event.target.value)}
         autoFocus
@@ -42,10 +43,12 @@ SearchInput.defaultProps = {
  */
 
 export function Menu({ items, selected }) {
+  const { t } = useTranslation();
   items = filter(items, item => (isFunction(item.isAvailable) ? item.isAvailable() : true));
   if (items.length === 0) {
     return null;
   }
+
   return (
     <div className="m-b-10 tags-list tiled">
       <AntdMenu className="invert-stripe-position" mode="inline" selectable={false} selectedKeys={[selected]}>
@@ -58,7 +61,7 @@ export function Menu({ items, selected }) {
                 </span>
               )}
               {isFunction(item.icon) && (item.icon(item) || null)}
-              {item.title}
+              {t(item.title)}
             </a>
           </AntdMenu.Item>
         ))}
@@ -144,12 +147,13 @@ Tags.propTypes = {
  */
 
 export function PageSizeSelect({ options, value, onChange, ...props }) {
+  const { t } = useTranslation();
   return (
     <div {...props}>
       <Select className="w-100" defaultValue={value} onChange={onChange}>
         {map(options, option => (
           <Select.Option key={option} value={option}>
-            {option} results
+            {option} {t("results")}
           </Select.Option>
         ))}
       </Select>

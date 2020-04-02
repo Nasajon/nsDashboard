@@ -10,7 +10,7 @@ import moment from "moment";
 import { secondsToInterval, durationHumanize, pluralize, IntervalEnum, localizeTime } from "@/lib/utils";
 import { wrap as wrapDialog, DialogPropType } from "@/components/DialogWrapper";
 import { RefreshScheduleType, RefreshScheduleDefault, Moment } from "../proptypes";
-
+import { withTranslation } from 'react-i18next';
 import "./ScheduleDialog.css";
 
 const WEEKDAYS_SHORT = moment.weekdaysShort();
@@ -199,13 +199,13 @@ class ScheduleDialog extends React.Component {
     } = this.state;
 
     return (
-      <Modal {...dialog.props} title="Refresh Schedule" className="schedule" onOk={() => this.save()}>
+      <Modal {...dialog.props} title={this.props.t("Refresh Schedule")} className="schedule" onOk={() => this.save()} cancelText={this.props.t("Cancel")}>
         <div className="schedule-component">
-          <h5>Refresh every</h5>
+          <h5>{this.props.t("Refresh every")}</h5>
           <div data-testid="interval">
             <Select className="input" value={seconds} onChange={this.setInterval} dropdownMatchSelectWidth={false}>
               <Option value={null} key="never">
-                Never
+                {this.props.t("Never")}
               </Option>
               {Object.keys(this.intervals).map(int => (
                 <OptGroup label={capitalize(pluralize(int))} key={int}>
@@ -221,14 +221,14 @@ class ScheduleDialog extends React.Component {
         </div>
         {[IntervalEnum.DAYS, IntervalEnum.WEEKS].indexOf(interval) !== -1 ? (
           <div className="schedule-component">
-            <h5>On time</h5>
+            <h5>{this.props.t("On time")}</h5>
             <div data-testid="time">
               <TimeEditor
                 defaultValue={
                   hour
                     ? moment()
-                        .hour(hour)
-                        .minute(minute)
+                      .hour(hour)
+                      .minute(minute)
                     : null
                 }
                 onChange={this.setTime}
@@ -238,12 +238,12 @@ class ScheduleDialog extends React.Component {
         ) : null}
         {IntervalEnum.WEEKS === interval ? (
           <div className="schedule-component">
-            <h5>On day</h5>
+            <h5>{this.props.t("On day")}</h5>
             <div data-testid="weekday">
               <Radio.Group size="medium" defaultValue={this.state.dayOfWeek} onChange={this.setWeekday}>
                 {WEEKDAYS_SHORT.map(day => (
                   <Radio.Button value={day} key={day} className="input">
-                    {day[0]}
+                    {this.props.t(day[0], { context: WEEKDAYS_FULL[WEEKDAYS_SHORT.indexOf(day)] })}
                   </Radio.Button>
                 ))}
               </Radio.Group>
@@ -252,11 +252,11 @@ class ScheduleDialog extends React.Component {
         ) : null}
         {interval !== IntervalEnum.NEVER ? (
           <div className="schedule-component">
-            <h5>Ends</h5>
+            <h5>{this.props.t("Ends")}</h5>
             <div className="ends" data-testid="ends">
               <Radio.Group size="medium" value={!!until} onChange={this.setUntilToggle}>
-                <Radio value={false}>Never</Radio>
-                <Radio value>On</Radio>
+                <Radio value={false}>{this.props.t("Never")}</Radio>
+                <Radio value>{this.props.t("On")}</Radio>
               </Radio.Group>
               {until ? (
                 <DatePicker
@@ -276,4 +276,4 @@ class ScheduleDialog extends React.Component {
   }
 }
 
-export default wrapDialog(ScheduleDialog);
+export default wrapDialog(withTranslation()(ScheduleDialog));

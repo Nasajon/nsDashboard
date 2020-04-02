@@ -13,6 +13,9 @@ import { messages } from "@/services/auth";
 import notification from "@/services/notification";
 import { Dashboard } from "@/services/dashboard";
 import { Query } from "@/services/query";
+import { useTranslation, Trans } from 'react-i18next';
+
+
 
 function DeprecatedEmbedFeatureAlert() {
   return (
@@ -64,7 +67,7 @@ function EmailNotVerifiedAlert() {
 function FavoriteList({ title, resource, itemUrl, emptyState }) {
   const [items, setItems] = useState([]);
   const [loading, setLoading] = useState(true);
-
+  const { t } = useTranslation();
   useEffect(() => {
     setLoading(true);
     resource
@@ -87,7 +90,7 @@ function FavoriteList({ title, resource, itemUrl, emptyState }) {
                 <i className="fa fa-star" aria-hidden="true" />
               </span>
               {item.name}
-              {item.is_draft && <span className="label label-default m-l-5">Unpublished</span>}
+              {item.is_draft && <span className="label label-default m-l-5">{t("Unpublished")}</span>}
             </a>
           ))}
         </div>
@@ -106,13 +109,14 @@ FavoriteList.propTypes = {
 FavoriteList.defaultProps = { emptyState: null };
 
 function DashboardAndQueryFavoritesList() {
+  const { t } = useTranslation();
   return (
     <div className="tile">
       <div className="t-body tb-padding">
         <div className="row">
           <div className="col-sm-6">
             <FavoriteList
-              title="Favorite Dashboards"
+              title={t("FavoriteDashboards")}
               resource={Dashboard}
               itemUrl={dashboard => `dashboard/${dashboard.slug}`}
               emptyState={
@@ -120,14 +124,16 @@ function DashboardAndQueryFavoritesList() {
                   <span className="btn-favourite m-r-5">
                     <i className="fa fa-star" aria-hidden="true" />
                   </span>
-                  Favorite <a href="dashboards">Dashboards</a> will appear here
+                  <Trans i18nKey="FavoriteDashboardsText">
+                    Favorite <a href="dashboards">Dashboards</a> will appear here
+                  </Trans>
                 </p>
               }
             />
           </div>
           <div className="col-sm-6">
             <FavoriteList
-              title="Favorite Queries"
+              title={t("FavoriteQueries")}
               resource={Query}
               itemUrl={query => `queries/${query.id}`}
               emptyState={
@@ -135,7 +141,9 @@ function DashboardAndQueryFavoritesList() {
                   <span className="btn-favourite m-r-5">
                     <i className="fa fa-star" aria-hidden="true" />
                   </span>
-                  Favorite <a href="queries">Queries</a> will appear here
+                  <Trans i18nKey="FavoriteQueriesText">
+                    Favorite <a href="queries">Queries</a> will appear here
+                  </Trans>
                 </p>
               }
             />
@@ -150,7 +158,6 @@ function Home() {
   useEffect(() => {
     recordEvent("view", "page", "personal_homepage");
   }, []);
-
   return (
     <div className="home-page">
       <div className="container">

@@ -3,7 +3,7 @@ import React from "react";
 import PropTypes from "prop-types";
 import Tooltip from "antd/lib/tooltip";
 import EditTagsDialog from "./EditTagsDialog";
-
+import { useTranslation } from 'react-i18next';
 export class TagsControl extends React.Component {
   static propTypes = {
     tags: PropTypes.arrayOf(PropTypes.string),
@@ -18,17 +18,17 @@ export class TagsControl extends React.Component {
     tags: [],
     canEdit: false,
     getAvailableTags: () => Promise.resolve([]),
-    onEdit: () => {},
+    onEdit: () => { },
     className: "",
-    children: null,
+    children: null
   };
 
   editTags = (tags, getAvailableTags) => {
     EditTagsDialog.showModal({ tags, getAvailableTags })
       .result.then(this.props.onEdit)
-      .catch(() => {}); // ignore dismiss
+      .catch(() => { }); // ignore dismiss
   };
-
+  // {this.props.t("Add tag")}
   renderEditButton() {
     const tags = map(this.props.tags, trim);
     return (
@@ -36,7 +36,7 @@ export class TagsControl extends React.Component {
         {tags.length === 0 && (
           <React.Fragment>
             <i className="zmdi zmdi-plus m-r-5" />
-            Add tag
+            {this.props.t("Add tag")}
           </React.Fragment>
         )}
         {tags.length > 0 && <i className="zmdi zmdi-edit" />}
@@ -63,12 +63,14 @@ function modelTagsControl({ archivedTooltip }) {
   // See comment for `propTypes`/`defaultProps`
   // eslint-disable-next-line react/prop-types
   function ModelTagsControl({ isDraft, isArchived, ...props }) {
+    const { t } = useTranslation()
+    props.t = t
     return (
       <TagsControl {...props}>
-        {!isArchived && isDraft && <span className="label label-tag-unpublished">Unpublished</span>}
+        {!isArchived && isDraft && <span className="label label-tag-unpublished">{t("Unpublished")}</span>}
         {isArchived && (
-          <Tooltip placement="right" title={archivedTooltip}>
-            <span className="label label-tag-archived">Archived</span>
+          <Tooltip placement="right" title={t(archivedTooltip)}>
+            <span className="label label-tag-archived">{t("Archived")}</span>
           </Tooltip>
         )}
       </TagsControl>
@@ -89,9 +91,9 @@ function modelTagsControl({ archivedTooltip }) {
 }
 
 export const QueryTagsControl = modelTagsControl({
-  archivedTooltip: "This query is archived and can't be used in dashboards, or appear in search results.",
+  archivedTooltip: "ArchivedQuery",
 });
 
 export const DashboardTagsControl = modelTagsControl({
-  archivedTooltip: "This dashboard is archived and won't be listed in dashboards nor search results.",
+  archivedTooltip: "ArchivedDashboard",
 });

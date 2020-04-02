@@ -1,6 +1,6 @@
 import moment from "moment";
 import { clientConfig } from "@/services/auth";
-
+import i18n from "@/i18n";
 export const IntervalEnum = {
   NEVER: "Never",
   SECONDS: "second",
@@ -86,7 +86,7 @@ export function durationHumanize(duration, options = {}) {
   if (rounded !== 1 || !options.omitSingleValueNumber) {
     ret = `${rounded} `;
   }
-  ret += pluralize(interval, rounded);
+  ret += i18n.t(pluralize(interval, rounded));
   return ret;
 }
 
