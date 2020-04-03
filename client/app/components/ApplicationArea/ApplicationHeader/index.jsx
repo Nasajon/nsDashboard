@@ -194,7 +194,7 @@ function MobileNavbar() {
     <div className="app-header" data-platform="mobile" ref={ref}>
       <div className="header-logo">
         <a href="./">
-          <img src="https://s3-us-west-2.amazonaws.com/static.nasajon/img/logo-reduzida.png" alt="Redash" />
+          <img src="https://s3-sa-east-1.amazonaws.com/imagens.nasajon/logos/nasajon/versao-padrao/logo-nasajon_horizontal.svg" alt="Redash" />
         </a>
       </div>
       <div>
