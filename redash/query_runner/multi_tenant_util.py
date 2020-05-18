@@ -11,18 +11,18 @@ class MultiTenantUtil:
     REDIS_TENANT_KEY = "USER_TENANT_"
     TENANT_PLACEHOLDER = "C_TENANT"
 
-    @staticmethod
-    def get_current_tenant(user):
-        # Recuperando o tenant do Redis
-        tenant = redis_connection.get(MultiTenantUtil.REDIS_TENANT_KEY + str(user.id))
-        if (tenant is None):
-            tenant = 'null'
+    # @staticmethod
+    # def get_current_tenant(user):
+    #     # Recuperando o tenant do Redis
+    #     tenant = redis_connection.get(MultiTenantUtil.REDIS_TENANT_KEY + str(user.id))
+    #     if (tenant is None):
+    #         tenant = 'null'
 
-        return tenant
+    #     return tenant
 
-    @staticmethod
-    def set_current_tenant(user, tenant):
-        redis_connection.set(MultiTenantUtil.REDIS_TENANT_KEY + str(user.id), tenant)
+    # @staticmethod
+    # def set_current_tenant(user, tenant):
+    #     redis_connection.set(MultiTenantUtil.REDIS_TENANT_KEY + str(user.id), tenant)
 
     @staticmethod
     def request_access_token(email, password):
