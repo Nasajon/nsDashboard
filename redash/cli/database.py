@@ -7,6 +7,7 @@ import sqlalchemy
 from sqlalchemy.exc import DatabaseError
 from sqlalchemy.sql import select
 from sqlalchemy_utils.types.encrypted.encrypted_type import FernetEngine
+from sqlalchemy import event, DDL
 
 from redash.models.base import Column
 from redash.models.types import EncryptedConfiguration
@@ -35,6 +36,8 @@ def create_tables():
     _wait_for_db_connection(db)
     # To create triggers for searchable models, we need to call configure_mappers().
     sqlalchemy.orm.configure_mappers()
+    # Suporte para criar schema antes de criar as tabelas
+    event.listen(db.metadata, 'before_create', DDL("CREATE SCHEMA IF NOT EXISTS {}".format(db.metadata.schema)))
     db.create_all()
 
     # Need to mark current DB as up to date

@@ -209,25 +209,25 @@ def login(org_slug=None):
                 and not user.is_disabled
                 and user.verify_password(request.form["password"])
             ):
-                access_token = MultiTenantUtil.request_access_token(request.form["email"], str(request.form["password"]))
+                # access_token = MultiTenantUtil.request_access_token(request.form["email"], str(request.form["password"]))
 
-                tenant = MultiTenantUtil.request_tenant(access_token)
-                if user.tenant != int(tenant):
-                    user.tenant = tenant
-                    models.db.session.commit()
+                # tenant = MultiTenantUtil.request_tenant(access_token)
+                # if user.tenant != int(tenant):
+                #     user.tenant = tenant
+                #     models.db.session.commit()
 
-                tenant_groups = models.TenantGroup.find_by_tenant(tenant)
-                group_ids = [tenant_group.group_id for tenant_group in tenant_groups]
+                # tenant_groups = models.TenantGroup.find_by_tenant(tenant)
+                # group_ids = [tenant_group.group_id for tenant_group in tenant_groups]
 
-                # O grupo 1 é o grupo dos admins e o grupo 2 é o grupo default criado pelo redash
-                if 1 in user.group_ids:
-                    group_ids += [1]
-                if 2 in user.group_ids:
-                    group_ids += [2]
+                # # O grupo 1 é o grupo dos admins e o grupo 2 é o grupo default criado pelo redash
+                # if 1 in user.group_ids:
+                #     group_ids += [1]
+                # if 2 in user.group_ids:
+                #     group_ids += [2]
 
-                if user.group_ids != group_ids:
-                    user.group_ids = group_ids
-                    models.db.session.commit()
+                # if user.group_ids != group_ids:
+                #     user.group_ids = group_ids
+                #     models.db.session.commit()
 
                 login_user(user)
                 return redirect(next_path)

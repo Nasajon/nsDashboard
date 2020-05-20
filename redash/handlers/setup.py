@@ -42,6 +42,7 @@ def create_org(org_name, user_name, email, password):
         name=user_name,
         email=email,
         group_ids=[admin_group.id, default_group.id],
+        tenant=47
     )
     user.hash_password(password)
 
