@@ -209,6 +209,7 @@ def login(org_slug=None):
                 and not user.is_disabled
                 and user.verify_password(request.form["password"])
             ):
+                # Código para acessar dados do cliente cadastrados no diretório e passar para o redash
                 # access_token = MultiTenantUtil.request_access_token(request.form["email"], str(request.form["password"]))
 
                 # tenant = MultiTenantUtil.request_tenant(access_token)
@@ -234,10 +235,12 @@ def login(org_slug=None):
             else:
                 flash("Wrong email or password.")
         except NoResultFound:
-            user = create_user(request)
-            if user != None:
-                login_user(user)
-                return redirect(next_path)
+            # Código para criar um usuário do diretório no redash e logar com ele
+            # user = create_user(request)
+            # if user != None:
+            #     login_user(user)
+            #     return redirect(next_path)
+            flash("Wrong email or password.")
         except Exception as e:
             if "Unauthorized" in str(e):
                 flash("Wrong email or password.")
