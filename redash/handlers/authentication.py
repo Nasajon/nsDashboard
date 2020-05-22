@@ -233,7 +233,7 @@ def login(org_slug=None):
                 modulos = json.loads(licenciamento.valor)["Modulos"]
                 licenciamento_aprovado = False
                 for modulo in modulos:
-                    if modulo["Codigo"] == "nsRelatorios":
+                    if modulo["Codigo"] == "nsDash":
                         licenciamento_aprovado = True
                         break
                 

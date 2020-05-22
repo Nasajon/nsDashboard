@@ -57,6 +57,7 @@ def grant_admin(email, organization="default"):
 @manager.command()
 @argument("email")
 @argument("name")
+@argument("tenant")
 @option(
     "--org",
     "organization",
@@ -86,6 +87,7 @@ def grant_admin(email, organization="default"):
 def create(
     email,
     name,
+    tenant,
     groups,
     is_admin=False,
     google_auth=False,
@@ -102,7 +104,7 @@ def create(
     org = models.Organization.get_by_slug(organization)
     groups = build_groups(org, groups, is_admin)
 
-    user = models.User(org=org, email=email, name=name, group_ids=groups)
+    user = models.User(org=org, email=email, name=name, group_ids=groups, tenant=tenant)
     if not password and not google_auth:
         password = prompt("Password", hide_input=True, confirmation_prompt=True)
     if not google_auth:
