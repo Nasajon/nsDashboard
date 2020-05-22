@@ -22,7 +22,7 @@ import os
 from redash.query_runner.multi_tenant_util import MultiTenantUtil
 from sqlalchemy.exc import IntegrityError
 logger = logging.getLogger(__name__)
-
+import json
 
 def get_google_auth_url(next_path):
     if settings.MULTI_ORG:
@@ -209,7 +209,7 @@ def login(org_slug=None):
                 and not user.is_disabled
                 and user.verify_password(request.form["password"])
             ):
-                # C骴igo para acessar dados do cliente cadastrados no diret髍io e passar para o redash
+                # C贸digo para acessar dados do cliente cadastrados no diret贸rio e passar para o redash
                 # access_token = MultiTenantUtil.request_access_token(request.form["email"], str(request.form["password"]))
 
                 # tenant = MultiTenantUtil.request_tenant(access_token)
@@ -229,13 +229,23 @@ def login(org_slug=None):
                 # if user.group_ids != group_ids:
                 #     user.group_ids = group_ids
                 #     models.db.session.commit()
-
-                login_user(user)
-                return redirect(next_path)
+                licenciamento = models.Configuracao.find_by_campo_aplicacao(43, 0)
+                modulos = json.loads(licenciamento.valor)["Modulos"]
+                licenciamento_aprovado = False
+                for modulo in modulos:
+                    if modulo["Codigo"] == "nsRelatorios":
+                        licenciamento_aprovado = True
+                        break
+                
+                if licenciamento_aprovado:
+                    login_user(user)
+                    return redirect(next_path)
+                else:
+                    flash("Sem permiss茫o para acessar o Relat贸rios. Entre em contato com o suporte da Nasajon.")
             else:
                 flash("Wrong email or password.")
         except NoResultFound:
-            # C骴igo para criar um usu醨io do diret髍io no redash e logar com ele
+            # C贸digo para criar um usu谩rio do diret贸rio no redash e logar com ele
             # user = create_user(request)
             # if user != None:
             #     login_user(user)

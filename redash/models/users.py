@@ -323,6 +323,7 @@ class TenantGroup(db.Model):
     group_id = Column(db.Integer, db.ForeignKey("groups.id"))
 
     __tablename__ = "tenantgroups"
+    
 
     def __str__(self):
         return str(self.id)
@@ -332,6 +333,23 @@ class TenantGroup(db.Model):
         result = cls.query.filter(cls.tenant == tenant)
         return list(result)
 
+@generic_repr("configuracao", "campo", "aplicacao")
+class Configuracao(db.Model):
+
+    configuracao = Column(db.String, primary_key=True)
+    campo = Column(db.Integer)
+    aplicacao = Column(db.Integer)
+    valor = Column(db.String)
+
+    __tablename__ = "configuracoes"
+    __table_args__= {"schema":"ns"}
+
+    def __str__(self):
+        return self.configuracao
+
+    @classmethod
+    def find_by_campo_aplicacao(cls, campo, aplicacao):
+        return cls.query.filter(cls.campo == campo).filter(cls.aplicacao==aplicacao).one()
 
 @generic_repr(
     "id", "object_type", "object_id", "access_type", "grantor_id", "grantee_id"
