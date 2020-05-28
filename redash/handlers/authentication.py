@@ -22,7 +22,7 @@ import os
 from redash.query_runner.multi_tenant_util import MultiTenantUtil
 from sqlalchemy.exc import IntegrityError
 logger = logging.getLogger(__name__)
-
+import json
 
 def get_google_auth_url(next_path):
     if settings.MULTI_ORG:
@@ -209,35 +209,48 @@ def login(org_slug=None):
                 and not user.is_disabled
                 and user.verify_password(request.form["password"])
             ):
-                access_token = MultiTenantUtil.request_access_token(request.form["email"], str(request.form["password"]))
+                # Código para acessar dados do cliente cadastrados no diretório e passar para o redash
+                # access_token = MultiTenantUtil.request_access_token(request.form["email"], str(request.form["password"]))
 
-                tenant = MultiTenantUtil.request_tenant(access_token)
-                if user.tenant != int(tenant):
-                    user.tenant = tenant
-                    models.db.session.commit()
+                # tenant = MultiTenantUtil.request_tenant(access_token)
+                # if user.tenant != int(tenant):
+                #     user.tenant = tenant
+                #     models.db.session.commit()
 
-                tenant_groups = models.TenantGroup.find_by_tenant(tenant)
-                group_ids = [tenant_group.group_id for tenant_group in tenant_groups]
+                # tenant_groups = models.TenantGroup.find_by_tenant(tenant)
+                # group_ids = [tenant_group.group_id for tenant_group in tenant_groups]
 
-                # O grupo 1 é o grupo dos admins e o grupo 2 é o grupo default criado pelo redash
-                if 1 in user.group_ids:
-                    group_ids += [1]
-                if 2 in user.group_ids:
-                    group_ids += [2]
+                # # O grupo 1 é o grupo dos admins e o grupo 2 é o grupo default criado pelo redash
+                # if 1 in user.group_ids:
+                #     group_ids += [1]
+                # if 2 in user.group_ids:
+                #     group_ids += [2]
 
-                if user.group_ids != group_ids:
-                    user.group_ids = group_ids
-                    models.db.session.commit()
-
-                login_user(user)
-                return redirect(next_path)
+                # if user.group_ids != group_ids:
+                #     user.group_ids = group_ids
+                #     models.db.session.commit()
+                licenciamento = models.Configuracao.find_by_campo_aplicacao(43, 0)
+                modulos = json.loads(licenciamento.valor)["Modulos"]
+                licenciamento_aprovado = False
+                for modulo in modulos:
+                    if modulo["Codigo"] == "nsDash":
+                        licenciamento_aprovado = True
+                        break
+                
+                if licenciamento_aprovado:
+                    login_user(user)
+                    return redirect(next_path)
+                else:
+                    flash("Sem permissão para acessar o Relatórios. Entre em contato com o suporte da Nasajon.")
             else:
                 flash("Wrong email or password.")
         except NoResultFound:
-            user = create_user(request)
-            if user != None:
-                login_user(user)
-                return redirect(next_path)
+            # Código para criar um usuário do diretório no redash e logar com ele
+            # user = create_user(request)
+            # if user != None:
+            #     login_user(user)
+            #     return redirect(next_path)
+            flash("Wrong email or password.")
         except Exception as e:
             if "Unauthorized" in str(e):
                 flash("Wrong email or password.")

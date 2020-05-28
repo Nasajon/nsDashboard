@@ -62,6 +62,15 @@ Para esse suporte tivemos que criar um novo endereço no frontend e backend. O f
 
 Por padrão o redash usa arquivos do tipo less para o tema, sendo less uma extensão do css. Para alterar o tema, o recomendado é criar ou alterar arquivos em cliente/app/assets/less/redash. Caso seja adicionado um novo arquivo, é necessário importá-lo no main.less.
 
+## Adicionar Usuários por Query no Banco
+
+Para adicionar um usuário usar o seguinte comando, substituindo email, nome, tenant e senha pelos valores do usuário:
+
+```
+python3 manage.py users create email nome tenant --password senha
+```
+
+Obs: Esse comando só funciona através da imagem docker que vem com o redash ou se o redash for instalado no linux conforme https://redash.io/help/open-source/dev-guide/setup
 ---
 
 ## README.MD ORIGINAL DO REDASH
