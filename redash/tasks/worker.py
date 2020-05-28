@@ -6,7 +6,7 @@ from rq import Worker as BaseWorker, Queue as BaseQueue, get_current_job
 from rq.utils import utcnow
 from rq.timeouts import UnixSignalDeathPenalty, HorseMonitorTimeoutException
 from rq.job import Job as BaseJob, JobStatus
-
+from rq_win import WindowsWorker
 
 class CancellableJob(BaseJob):
     def cancel(self, pipeline=None):
@@ -26,7 +26,7 @@ class CancellableQueue(BaseQueue):
     job_class = CancellableJob
 
 
-class HardLimitingWorker(BaseWorker):
+class HardLimitingWorker(WindowsWorker):
     """
     RQ's work horses enforce time limits by setting a timed alarm and stopping jobs
     when they reach their time limits. However, the work horse may be entirely blocked

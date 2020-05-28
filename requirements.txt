@@ -39,7 +39,8 @@ rq-scheduler==0.9.1
 jsonschema==3.1.1
 RestrictedPython==5.0
 pysaml2==4.8.0
-pycrypto==2.6.1
+# pycrypto==2.6.1
+pycryptodome==3.9.7
 funcy==1.13
 sentry-sdk>=0.12.2,<0.13.0
 semver==2.8.1
@@ -58,6 +59,7 @@ gevent==1.4.0
 supervisor==4.1.0
 supervisor_checks==0.8.1
 werkzeug==0.16.0
+git+https://github.com/michaelbrooks/rq-win.git#egg=rq-win
 # Install the dependencies of the bin/bundle-extensions script here.
 # It has its own requirements file to simplify the frontend client build process
 -r requirements_bundles.txt
