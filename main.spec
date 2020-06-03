@@ -3,12 +3,12 @@
 block_cipher = None
 
 
-a = Analysis(['redash\\main.py'],
-             pathex=['F:\\Trabalho\\redash'],
+a = Analysis(['main.py'],
+             pathex=['.'],
              binaries=[],
-             datas=[],
-             hiddenimports=['pkg_resources.py2_warn','werkzeug'],
-             hookspath=[],
+             datas=[( 'client', 'client' ), ( 'redash/app.py', '.' ), ( 'redis-server.exe', '.' )],
+             hiddenimports=['pkg_resources.py2_warn', 'sqlalchemy.ext.baked'],
+             hookspath=['.'],
              runtime_hooks=[],
              excludes=[],
              win_no_prefer_redirects=False,
