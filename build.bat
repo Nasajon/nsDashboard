@@ -4,7 +4,6 @@
  -p %PYTHONPATH%^
  --name "nsDash"^
  --add-data "client;client"^
- --add-data "redash/app.py;."^
  --add-data "redis-server.exe;."^
  --additional-hooks-dir "."^
  --hidden-import "pkg_resources.py2_warn"^
