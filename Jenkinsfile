@@ -3,11 +3,9 @@ node('master') {
 		properties([disableConcurrentBuilds()])
 
 		stage('Checkout') {
-			dir("${dirArtifactName}") {
-			    timeout(time: 300, unit: 'SECONDS') {
-                	checkout scm
-          		}
-			}
+            timeout(time: 300, unit: 'SECONDS') {
+                checkout scm
+            }
 		}
 
 		stage('Build') {
