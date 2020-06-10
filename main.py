@@ -32,6 +32,7 @@ def run_process(process, ds_options):
 
 
 if __name__ == '__main__':
+    freeze_support()
     program_up = False
     for conn in psutil.net_connections():
         if conn.status == psutil.CONN_LISTEN and conn.laddr[1] == 5000:
@@ -65,13 +66,13 @@ if __name__ == '__main__':
 
             if path:
                 dotenv.load_dotenv(path)
-                ds_options = {"host":os.getenv("DB_HOST","localhost"),"port":int(os.getenv("DB_PORT","5432")),"user":os.getenv("DB_USER","postgres"),"password":os.getenv("DB_PASSWORD","postgres"),"dbname": os.getenv("DB_NAME","nasajon")}
+                ds_options = {"host":os.getenv("DB_HOST","localhost"),"port":int(os.getenv("DB_PORT","5432")),"user":os.getenv("DB_USER","postgres"),"password":os.getenv("DB_PASSWORD","postgres"),"dbname": os.getenv("DB_NAME","integratto2")}
             else:
                 print("Arquivo env nao encontrado")
-                sys.exit(1)
 
-        os.system('powershell -executionPolicy bypass "Start-Process -WindowStyle hidden -FilePath redis-server.exe"')
-        freeze_support()
+        bundle_dir = getattr(sys, '_MEIPASS', os.path.abspath(os.path.dirname(__file__)))
+        path_to_redis = os.path.join(bundle_dir, 'redis-server.exe')
+        os.system('powershell -executionPolicy bypass "Start-Process -WindowStyle hidden -FilePath {}"'.format(path_to_redis))
         pool = Pool(5)
         pool.map(partial(run_process, ds_options=ds_options), range(5))
     else:

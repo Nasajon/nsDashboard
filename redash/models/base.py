@@ -23,7 +23,7 @@ class RedashSQLAlchemy(SQLAlchemy):
 
 
 db = RedashSQLAlchemy(session_options={"expire_on_commit": False})
-db.metadata.schema = "dashboard"
+db.metadata.schema = "nsdash"
 # Make sure the SQLAlchemy mappers are all properly configured first.
 # This is required by SQLAlchemy-Searchable as it adds DDL listeners
 # on the configuration phase of models.
