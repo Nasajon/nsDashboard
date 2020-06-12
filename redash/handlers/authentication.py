@@ -202,7 +202,7 @@ def login(org_slug=None):
     if request.method == "POST":
         try:
             org = current_org._get_current_object()
-            user = models.User.get_by_email_and_org(request.form["email"], org)
+            user = models.User.get_by_email_and_org(request.form["email"].strip(), org)
             if (
                 user
                 and not user.is_disabled
