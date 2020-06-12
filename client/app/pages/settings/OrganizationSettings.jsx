@@ -5,7 +5,6 @@ import { isEmpty, join, get } from "lodash";
 import Alert from "antd/lib/alert";
 import Button from "antd/lib/button";
 import Form from "antd/lib/form";
-import Input from "antd/lib/input";
 import Select from "antd/lib/select";
 import Checkbox from "antd/lib/checkbox";
 import Tooltip from "antd/lib/tooltip";
@@ -47,7 +46,7 @@ class OrganizationSettings extends React.Component {
       .catch(error => this.props.onError(error));
   }
 
-  disablePasswordLoginToggle = () => !(clientConfig.googleLoginEnabled || this.state.formValues.auth_saml_enabled);
+  disablePasswordLoginToggle = () => !(clientConfig.googleLoginEnabled);
 
   handleSubmit = e => {
     e.preventDefault();
@@ -98,45 +97,6 @@ class OrganizationSettings extends React.Component {
             />
           )}
         </Form.Item>
-      </React.Fragment>
-    );
-  }
-
-  renderSAMLOptions() {
-    const { formValues } = this.state;
-    return (
-      <React.Fragment>
-        <h4>SAML</h4>
-        <Form.Item>
-          <Checkbox
-            name="auth_saml_enabled"
-            checked={formValues.auth_saml_enabled}
-            onChange={e => this.handleChange("auth_saml_enabled", e.target.checked)}>
-            SAML Enabled
-          </Checkbox>
-        </Form.Item>
-        {formValues.auth_saml_enabled && (
-          <div>
-            <Form.Item label="SAML Metadata URL">
-              <Input
-                value={formValues.auth_saml_metadata_url}
-                onChange={e => this.handleChange("auth_saml_metadata_url", e.target.value)}
-              />
-            </Form.Item>
-            <Form.Item label="SAML Entity ID">
-              <Input
-                value={formValues.auth_saml_entity_id}
-                onChange={e => this.handleChange("auth_saml_entity_id", e.target.value)}
-              />
-            </Form.Item>
-            <Form.Item label="SAML NameID Format">
-              <Input
-                value={formValues.auth_saml_nameid_format}
-                onChange={e => this.handleChange("auth_saml_nameid_format", e.target.value)}
-              />
-            </Form.Item>
-          </div>
-        )}
       </React.Fragment>
     );
   }
@@ -243,7 +203,6 @@ class OrganizationSettings extends React.Component {
           </Checkbox>
         </Form.Item>
         {clientConfig.googleLoginEnabled && this.renderGoogleLoginOptions()}
-        {this.renderSAMLOptions()}
       </React.Fragment>
     );
   }

@@ -9,7 +9,6 @@ import Menu from "antd/lib/menu";
 import Input from "antd/lib/input";
 import Tooltip from "antd/lib/tooltip";
 
-import HelpTrigger from "@/components/HelpTrigger";
 import CreateDashboardDialog from "@/components/dashboards/CreateDashboardDialog";
 import navigateTo from "@/components/ApplicationArea/navigateTo";
 
@@ -17,7 +16,6 @@ import { currentUser, Auth, clientConfig } from "@/services/auth";
 import { Dashboard } from "@/services/dashboard";
 import { Query } from "@/services/query";
 import frontendVersion from "@/version.json";
-import logoUrl from "@/assets/images/redash_icon_small.png";
 
 import FavoritesDropdown from "./FavoritesDropdown";
 import "./index.less";
@@ -96,9 +94,6 @@ function DesktopNavbar() {
           onSearch={onSearch}
         />
         <Menu mode="horizontal" selectable={false}>
-          {/* <Menu.Item key="help">
-            <HelpTrigger type="HOME" className="menu-item-button" />
-          </Menu.Item> */}
           {currentUser.isAdmin && (
             <Menu.Item key="settings">
               <Tooltip title="Settings">

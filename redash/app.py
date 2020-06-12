@@ -1,7 +1,7 @@
 from flask import Flask
 from werkzeug.contrib.fixers import ProxyFix
 
-from . import settings
+from redash import settings
 import datetime
 import os
 
@@ -25,7 +25,7 @@ class Redash(Flask):
 
 
 def create_app():
-    from . import (
+    from redash import (
         authentication,
         extensions,
         handlers,
@@ -35,11 +35,11 @@ def create_app():
         security,
         tasks,
     )
-    from .handlers.webpack import configure_webpack
-    from .metrics import request as request_metrics
-    from .models import db, users
-    from .utils import sentry
-    from .version_check import reset_new_version_status
+    from redash.handlers.webpack import configure_webpack
+    from redash.metrics import request as request_metrics
+    from redash.models import db, users
+    from redash.utils import sentry
+    from redash.version_check import reset_new_version_status
 
     sentry.init()
     app = Redash()

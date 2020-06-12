@@ -243,7 +243,6 @@ def logout_and_redirect_to_index():
 def init_app(app):
     from redash.authentication import (
         google_oauth,
-        saml_auth,
         remote_user_auth,
         ldap_auth,
     )
@@ -252,7 +251,6 @@ def init_app(app):
     login_manager.anonymous_user = models.AnonymousUser
 
     app.register_blueprint(google_oauth.blueprint)
-    app.register_blueprint(saml_auth.blueprint)
     app.register_blueprint(remote_user_auth.blueprint)
     app.register_blueprint(ldap_auth.blueprint)
 

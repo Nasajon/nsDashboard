@@ -244,7 +244,7 @@ class DataSource(BelongsToOrgMixin, db.Model):
 
     @classmethod
     def get_by_name(cls, name):
-        return cls.query.filter(cls.name == name).one()
+        return cls.query.filter(cls.name == name).one_or_none()
 
     # XXX examine call sites to see if a regular SQLA collection would work better
     @property
