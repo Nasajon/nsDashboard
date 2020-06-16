@@ -64,13 +64,14 @@ Por padrão o redash usa arquivos do tipo less para o tema, sendo less uma exten
 
 ## Adicionar Usuários por Query no Banco
 
-Para adicionar um usuário usar o seguinte comando, substituindo email, nome, tenant e senha pelos valores do usuário:
+Para adicionar um usuário usar o seguinte comando:
 
 ```
-python3 manage.py users create email nome tenant --password senha
+python3 create_user.py -u usuario_banco -s senha_banco -i localhost -p porta -b nome_banco --user_name nome --user_email email --user_tenant tenant --user_password senha_usuario --admin
 ```
 
-Obs: Esse comando só funciona através da imagem docker que vem com o redash ou se o redash for instalado no linux conforme https://redash.io/help/open-source/dev-guide/setup
+O pârametro admin só precisa ser adicionado se o usuário precisar ser um admin do redash.
+
 ---
 
 ## README.MD ORIGINAL DO REDASH
