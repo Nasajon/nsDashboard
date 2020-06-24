@@ -17,6 +17,8 @@ node('master') {
 		}
 
 		stage('Build') {
+			bat 'C:\Program Files\nodejs\npm install'
+
 			dir("${nasajonCIBaseDir}\\build\\erp") {
 				bat 'init.bat'
 			}
