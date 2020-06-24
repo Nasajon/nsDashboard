@@ -4,7 +4,7 @@ node('master') {
 	def artifactId = "nsDash"
 	def artifactBuildPath = "${env.WORKSPACE}\\${dirArtifactName}\\"
 	def nasajonCIBaseDir = "${env.NASAJON_CI_BASE_DIR}"
-
+	def branchName = "${env.BRANCH_NAME}"
 	try {
 		properties([disableConcurrentBuilds()])
 
@@ -31,68 +31,69 @@ node('master') {
 				bat 'jenkins_build.bat'
 			}
 		}
+		if(!branchName.startsWith("PR")){
+			stage('Deploy') {
+				dir("${nasajonCIBaseDir}\\build\\erp") {
+					bat "sign_file.bat ${env.WORKSPACE}\\output\\bin\\${artifactId}.exe"
 
-		stage('Deploy') {
-			dir("${nasajonCIBaseDir}\\build\\erp") {
-				bat "sign_file.bat ${env.WORKSPACE}\\output\\bin\\${artifactId}.exe"
-
-				bat "deploy.bat ${artifactBuildPath} exe ${env.WORKSPACE}\\output\\bin\\${artifactId}.exe"
-			}
-
-			def subFolders = currentBuild.displayName.replace(".", "/")
-
-			withAWS(credentials: 'JENKINS_AWS_CREDENTIALS') {
-				def bucket = env.ERP_BUCKET
-
-				//Upload do artefato
-				s3Upload(
-					file: "${env.WORKSPACE}\\output\\bin\\${artifactId}.exe",
-					bucket:"${bucket}",
-					path:"erp-update/artifacts/${artifactId}/${subFolders}/${artifactId}.exe",
-					acl:'PublicRead')
-			}
-
-			def checksum = powershell(
-				returnStdout: true,
-				script: "(Get-FileHash -Algorithm MD5 -Path '${env.WORKSPACE}\\output\\bin\\${artifactId}.exe' | Select -ExpandProperty Hash).ToLower()"
-			)
-
-			def isMaster = (env.BRANCH_NAME == 'master')
-			def version = currentBuild.displayName
-			def dateTime = new Date().format("yyyy-MM-dd HH:mm")
-
-			//Registra o build na Api do diretório
-			def body = """
-				{
-					\"nome\": \"${artifactId}.exe\",
-					\"versao\": \"${version}\",
-					\"master\": ${isMaster},
-					\"datahora\": \"${dateTime}\",
-					\"checksum\":\"${checksum.trim()}\",
-					\"pathdestino\": \".\",
-					\"tipo\": \"exe\",
-					\"url\": \"artifacts/${artifactId}/${subFolders}/${artifactId}.exe\",
-					\"artefatosfilhos\": []
+					bat "deploy.bat ${artifactBuildPath} exe ${env.WORKSPACE}\\output\\bin\\${artifactId}.exe"
 				}
-			"""
 
-			println("Request Body: " + body)
+				def subFolders = currentBuild.displayName.replace(".", "/")
 
-			httpRequest(
-				acceptType: 'APPLICATION_JSON',
-				consoleLogResponseBody: true,
-				validResponseCodes: '200:201',
-				contentType: 'APPLICATION_JSON',
-				httpMode: 'POST',
-				url: "${env.URL_API_DIR}",
-				customHeaders: [
-					[
-						name: 'apiKey',
-						value: "${env.DIR_API_KEY}"
-					]
-				],
-				requestBody: body
-			)
+				withAWS(credentials: 'JENKINS_AWS_CREDENTIALS') {
+					def bucket = env.ERP_BUCKET
+
+					//Upload do artefato
+					s3Upload(
+						file: "${env.WORKSPACE}\\output\\bin\\${artifactId}.exe",
+						bucket:"${bucket}",
+						path:"erp-update/artifacts/${artifactId}/${subFolders}/${artifactId}.exe",
+						acl:'PublicRead')
+				}
+
+				def checksum = powershell(
+					returnStdout: true,
+					script: "(Get-FileHash -Algorithm MD5 -Path '${env.WORKSPACE}\\output\\bin\\${artifactId}.exe' | Select -ExpandProperty Hash).ToLower()"
+				)
+
+				def isMaster = (env.BRANCH_NAME == 'master')
+				def version = currentBuild.displayName
+				def dateTime = new Date().format("yyyy-MM-dd HH:mm")
+
+				//Registra o build na Api do diretório
+				def body = """
+					{
+						\"nome\": \"${artifactId}.exe\",
+						\"versao\": \"${version}\",
+						\"master\": ${isMaster},
+						\"datahora\": \"${dateTime}\",
+						\"checksum\":\"${checksum.trim()}\",
+						\"pathdestino\": \".\",
+						\"tipo\": \"exe\",
+						\"url\": \"artifacts/${artifactId}/${subFolders}/${artifactId}.exe\",
+						\"artefatosfilhos\": []
+					}
+				"""
+
+				println("Request Body: " + body)
+
+				httpRequest(
+					acceptType: 'APPLICATION_JSON',
+					consoleLogResponseBody: true,
+					validResponseCodes: '200:201',
+					contentType: 'APPLICATION_JSON',
+					httpMode: 'POST',
+					url: "${env.URL_API_DIR}",
+					customHeaders: [
+						[
+							name: 'apiKey',
+							value: "${env.DIR_API_KEY}"
+						]
+					],
+					requestBody: body
+				)
+			}
 		}
 
 	} catch (e) {
