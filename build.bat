@@ -6,6 +6,7 @@
  --add-data "client;client"^
  --add-data "redis-server.exe;."^
  --additional-hooks-dir "."^
+ --icon icon.ico^
  --hidden-import "pkg_resources.py2_warn"^
  --hidden-import "sqlalchemy.ext.baked"^
  --distpath "%NSBIN%"^
@@ -15,6 +16,7 @@
  -p %PYTHONPATH%^
  --name "create_user"^
  --additional-hooks-dir "."^
+ --icon icon.ico^
  --hidden-import "pkg_resources.py2_warn"^
  --hidden-import "sqlalchemy.ext.baked"^
  --distpath "%NSBIN%"^
@@ -35,4 +37,4 @@
 
 @ECHO ##### Compilando o projeto #####
 
-@CMD "/c @%CD%\venv\Scripts\activate.bat && @pip install -r requirements.txt && @pyinstaller %PARAMS% main.py && @pyinstaller %PARAMS2% create_user.py && @%CD%\venv\Scripts\deactivate.bat"
+@CMD "/c @npm install && @npm run build_windows && @%CD%\venv\Scripts\activate.bat && @pip install -r requirements.txt && @pyinstaller %PARAMS% main.py && @pyinstaller %PARAMS2% create_user.py && @%CD%\venv\Scripts\deactivate.bat"
