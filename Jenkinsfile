@@ -99,11 +99,11 @@ node('master') {
     	notifyFailed()
     	throw e
 	} finally {
-		stage('Clean') {
-			dir("${env.WORKSPACE}\\output") {
-				deleteDir()
-			}
-		}
+		// stage('Clean') {
+		// 	dir("${env.WORKSPACE}\\output") {
+		// 		deleteDir()
+		// 	}
+		// }
 	}
 }
 
