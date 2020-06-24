@@ -1,5 +1,6 @@
 node('master') {
 	def dirArtifactName = "nsDashboard"
+	def npm = "C:\\Program Files\\nodejs\\npm"
 	def artifactUrl = "github.com/Nasajon/${dirArtifactName}.git"
 	def artifactId = "nsDash"
 	def artifactBuildPath = "${env.WORKSPACE}\\${dirArtifactName}\\"
@@ -17,7 +18,7 @@ node('master') {
 		}
 
 		stage('Build') {
-			bat 'C:\\Program Files\\nodejs\\npm install'
+			bat "${npm} install"
 
 			dir("${nasajonCIBaseDir}\\build\\erp") {
 				bat 'init.bat'
