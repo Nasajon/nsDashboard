@@ -17,7 +17,7 @@ node('master') {
 		}
 
 		stage('Build') {
-			bat '"C:\\Program Files\\nodejs\\npm" install'
+			
 
 			dir("${nasajonCIBaseDir}\\build\\erp") {
 				bat 'init.bat'
@@ -26,6 +26,7 @@ node('master') {
 			generateVersionNumber()
 
 			dir("${artifactBuildPath}") {
+				bat '"C:\\Program Files\\nodejs\\npm" install'
 				bat 'jenkins_build.bat'
 			}
 		}
