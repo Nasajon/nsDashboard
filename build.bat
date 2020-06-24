@@ -37,4 +37,4 @@
 
 @ECHO ##### Compilando o projeto #####
 
-@CMD "/c @npm install && @npm run build_windows && @%CD%\venv\Scripts\activate.bat && @pip install -r requirements.txt && @pyinstaller %PARAMS% main.py && @pyinstaller %PARAMS2% create_user.py && @%CD%\venv\Scripts\deactivate.bat"
+@CMD "/c @C:\Program Files\nodejs\npm install && @C:\Program Files\nodejs\npm run build_windows && @%CD%\venv\Scripts\activate.bat && @pip install -r requirements.txt && @pyinstaller %PARAMS% main.py && @pyinstaller %PARAMS2% create_user.py && @%CD%\venv\Scripts\deactivate.bat"
