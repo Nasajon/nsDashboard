@@ -27,6 +27,7 @@ node('master') {
 
 			dir("${artifactBuildPath}") {
 				bat '"C:\\Program Files\\nodejs\\npm" install'
+				bat '"C:\\Program Files\\nodejs\\npm" build_windows'
 				bat 'jenkins_build.bat'
 			}
 		}
