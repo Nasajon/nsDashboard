@@ -22,7 +22,7 @@
  --distpath "%NSBIN%"^
  --workpath "%NSDCU%"
 
-             
+@SET NPM="C:\Program Files\nodejs\npm"             
 @IF DEFINED JENKINS_HOME (
 	@SET PARAMS=%PARAMS% --version-file "%WORKSPACE%\output\VersionInfo2"
 )
@@ -37,4 +37,4 @@
 
 @ECHO ##### Compilando o projeto #####
 
-@CMD "/c @C:\Program Files\nodejs\npm install && @C:\Program Files\nodejs\npm run build_windows && @%CD%\venv\Scripts\activate.bat && @pip install -r requirements.txt && @pyinstaller %PARAMS% main.py && @pyinstaller %PARAMS2% create_user.py && @%CD%\venv\Scripts\deactivate.bat"
+@CMD "/c @%NPM% install && @%NPM% run build_windows && @%CD%\venv\Scripts\activate.bat && @pip install -r requirements.txt && @pyinstaller %PARAMS% main.py && @pyinstaller %PARAMS2% create_user.py && @%CD%\venv\Scripts\deactivate.bat"
