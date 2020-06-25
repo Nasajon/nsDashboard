@@ -16,7 +16,7 @@ import AceEditorInput from "@/components/AceEditorInput";
 import { toHuman } from "@/lib/utils";
 import { Field, Action, AntdForm } from "../proptypes";
 import helper from "./dynamicFormHelper";
-
+import { withTranslation } from 'react-i18next';
 import "./DynamicForm.less";
 
 const fieldRules = ({ type, required, minLength }) => {
@@ -221,7 +221,7 @@ class DynamicForm extends React.Component {
     return fields.map(field => {
       const FormItem = Form.Item;
       const { name, title, type, readOnly, autoFocus, contentAfter } = field;
-      const fieldLabel = title || toHuman(name);
+      const fieldLabel = this.props.t(title || toHuman(name));
       const { feedbackIcons, form } = this.props;
 
       const formItemProps = {
@@ -312,4 +312,4 @@ class DynamicForm extends React.Component {
   }
 }
 
-export default Form.create()(DynamicForm);
+export default Form.create()(withTranslation()(DynamicForm));

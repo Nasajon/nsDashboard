@@ -96,7 +96,7 @@ function DesktopNavbar() {
         <Menu mode="horizontal" selectable={false}>
           {currentUser.isAdmin && (
             <Menu.Item key="settings">
-              <Tooltip title="Settings">
+              <Tooltip title={t("Settings")}>
                 <Button href="data_sources" className="menu-item-button">
                   <i className="fa fa-sliders" />
                 </Button>

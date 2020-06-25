@@ -13,7 +13,7 @@ import EmptyState from "@/components/items-list/components/EmptyState";
 import DynamicForm from "@/components/dynamic-form/DynamicForm";
 import helper from "@/components/dynamic-form/dynamicFormHelper";
 import HelpTrigger, { TYPES as HELP_TRIGGER_TYPES } from "@/components/HelpTrigger";
-
+import { withTranslation } from 'react-i18next';
 const { Step } = Steps;
 const { Search } = Input;
 
@@ -137,20 +137,20 @@ class CreateSourceDialog extends React.Component {
     return (
       <Modal
         {...dialog.props}
-        title={`Create a New ${sourceType}`}
+        title={this.props.t("Create a New", {context: sourceType == "Data Source" ? "female" : ""}) + " " + this.props.t(sourceType)}
         footer={
           currentStep === StepEnum.SELECT_TYPE
             ? [
                 <Button key="cancel" onClick={() => dialog.dismiss()}>
-                  Cancel
+                  {this.props.t("Cancel")}
                 </Button>,
                 <Button key="submit" type="primary" disabled>
-                  Create
+                  {this.props.t("Create")}
                 </Button>,
               ]
             : [
                 <Button key="previous" onClick={this.resetType}>
-                  Previous
+                  {this.props.t("Previous")}
                 </Button>,
                 <Button
                   key="submit"
@@ -159,7 +159,7 @@ class CreateSourceDialog extends React.Component {
                   type="primary"
                   loading={savingSource}
                   data-test="CreateSourceButton">
-                  Create
+                  {this.props.t("Create")}
                 </Button>,
               ]
         }>
@@ -168,10 +168,10 @@ class CreateSourceDialog extends React.Component {
             {currentStep === StepEnum.CONFIGURE_IT ? (
               <Step title={<a>Type Selection</a>} className="clickable" onClick={this.resetType} />
             ) : (
-              <Step title="Type Selection" />
+              <Step title={this.props.t("Type Selection")} />
             )}
-            <Step title="Configuration" />
-            <Step title="Done" />
+            <Step title={this.props.t("Configuration")} />
+            <Step title={this.props.t("Done")} />
           </Steps>
           {currentStep === StepEnum.SELECT_TYPE && this.renderTypeSelector()}
           {currentStep !== StepEnum.SELECT_TYPE && this.renderForm()}
@@ -181,4 +181,4 @@ class CreateSourceDialog extends React.Component {
   }
 }
 
-export default wrapDialog(CreateSourceDialog);
+export default wrapDialog(withTranslation()(CreateSourceDialog));

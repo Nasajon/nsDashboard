@@ -6,6 +6,7 @@ import CreateDashboardDialog from "@/components/dashboards/CreateDashboardDialog
 import { currentUser } from "@/services/auth";
 import organizationStatus from "@/services/organizationStatus";
 import "./empty-state.less";
+import { useTranslation } from 'react-i18next';
 
 function Step({ show, completed, text, url, urlText, onClick }) {
   if (!show) {
@@ -48,6 +49,7 @@ function EmptyState({
   showDashboardStep,
   showInviteStep,
 }) {
+  const { t } = useTranslation();
   const isAvailable = {
     dataSource: true,
     query: true,
@@ -90,57 +92,57 @@ function EmptyState({
         />
       </div>
       <div className="empty-state__steps">
-        <h4>Let&apos;s get started</h4>
+        <h4>{t("Let's get started")}</h4>
         <ol>
           {currentUser.isAdmin && (
             <Step
               show={isAvailable.dataSource}
               completed={isCompleted.dataSource}
               url="data_sources/new"
-              urlText="Connect"
-              text="a Data Source"
+              urlText={t("Connect")}
+              text={t("a Data Source")}
             />
           )}
           {!currentUser.isAdmin && (
             <Step
               show={isAvailable.dataSource}
               completed={isCompleted.dataSource}
-              text="Ask an account admin to connect a data source"
+              text={t("Ask an account admin to connect a data source")}
             />
           )}
           <Step
             show={isAvailable.query}
             completed={isCompleted.query}
             url="queries/new"
-            urlText="Create"
-            text="your first Query"
+            urlText={t("Create",{context: "present"})}
+            text={t("your first Query")}
           />
           <Step
             show={isAvailable.alert}
             completed={isCompleted.alert}
             url="alerts/new"
-            urlText="Create"
-            text="your first Alert"
+            urlText={t("Create",{context: "present"})}
+            text={t("your first Alert")}
           />
           <Step
             show={isAvailable.dashboard}
             completed={isCompleted.dashboard}
             onClick={showCreateDashboardDialog}
-            urlText="Create"
-            text="your first Dashboard"
+            urlText={t("Create",{context: "present"})}
+            text={t("your first Dashboard")}
           />
           <Step
             show={isAvailable.inviteUsers}
             completed={isCompleted.inviteUsers}
             url="users/new"
-            urlText="Invite"
-            text="your team members"
+            urlText={t("Invite")}
+            text={t("your team members")}
           />
         </ol>
         <p>
-          Need more support?{" "}
+          {t("Need more support?")}{" "}
           <a href={helpLink} target="_blank" rel="noopener noreferrer">
-            See our Help
+            {t("See our Help")}
             <i className="fa fa-external-link m-l-5" aria-hidden="true" />
           </a>
         </p>
