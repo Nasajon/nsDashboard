@@ -36,11 +36,11 @@ node('master') {
 				dir("${nasajonCIBaseDir}\\build\\erp") {
 					bat "sign_file.bat ${env.WORKSPACE}\\output\\bin\\${artifactId}.exe"
 
-					bat "deploy.bat ${artifactBuildPath} exe ${env.WORKSPACE}\\output\\bin\\${artifactId}.exe"
+					bat "deploy.bat ${artifactBuildPath} exe ${env.WORKSPACE}\\output\\bin\\${artifactId}.exe ${artifactId}"
 
 					bat "sign_file.bat ${env.WORKSPACE}\\output\\bin\\create_user.exe"
 
-					bat "deploy.bat ${artifactBuildPath} exe ${env.WORKSPACE}\\output\\bin\\create_user.exe"
+					bat "deploy.bat ${artifactBuildPath} exe ${env.WORKSPACE}\\output\\bin\\create_user.exe create_user"
 				}
 
 				def subFolders = currentBuild.displayName.replace(".", "/")
