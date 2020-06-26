@@ -140,7 +140,25 @@
             "Configuration": "Configuração",
             "Create a New": "Crie um Novo",
             "Create a New_female": "Crie uma Nova",
-            "Previous": "Voltar"
+            "Previous": "Voltar",
+            "User": "Usuário",
+            "Password": "Senha",
+            "Port": "Porta",
+            "Database Name": "Nome do Banco de Dados",
+            "SSL Mode": "Modo SSL",
+            "Test Connection": "Testar Conexão",
+            "Joined": "Juntou",
+            "Last Active At": "Ativo Última Vez Em",
+            "Enable": "Habilitar",
+            "Disable": "Desabilitar",
+            "Active Users": "Usuários Ativos",
+            "Pending Invitations": "Convites Pendentes",
+            "Disabled Users": "Usuários Desabilitados",
+            "New User": "Novo Usuário",
+            "Create a New User": "Criar um Novo Usuário",
+            "Search...": "Pesquisar...",
+            "Change Password": "Mudar Senha",
+            "Send Password Reset Email": "Mandar Email de Resete de Senha"
         }
     }
 }

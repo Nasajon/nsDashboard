@@ -267,7 +267,7 @@ class DynamicForm extends React.Component {
 
       return (
         <Button {...actionProps} data-action={action.name}>
-          {action.name}
+          {this.props.t(action.name)}
         </Button>
       );
     });
@@ -305,7 +305,7 @@ class DynamicForm extends React.Component {
             </Collapse>
           </div>
         )}
-        {saveButton && <Button {...submitProps}>{saveText}</Button>}
+        {saveButton && <Button {...submitProps}>{this.props.t(saveText)}</Button>}
         {this.renderActions()}
       </Form>
     );

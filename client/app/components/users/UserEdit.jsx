@@ -13,8 +13,8 @@ import { UserProfile } from "../proptypes";
 import DynamicForm from "../dynamic-form/DynamicForm";
 import ChangePasswordDialog from "./ChangePasswordDialog";
 import InputWithCopy from "../InputWithCopy";
-
-export default class UserEdit extends React.Component {
+import { withTranslation } from 'react-i18next';
+class UserEdit extends React.Component {
   static propTypes = {
     user: UserProfile.isRequired,
   };
@@ -240,7 +240,7 @@ export default class UserEdit extends React.Component {
     return (
       <Fragment>
         <Button className="w-100 m-t-10" onClick={this.sendPasswordReset} loading={sendingPasswordEmail}>
-          Send Password Reset Email
+          {this.props.t("Send Password Reset Email")}
         </Button>
       </Fragment>
     );
@@ -273,10 +273,10 @@ export default class UserEdit extends React.Component {
           <Fragment>
             {this.renderApiKey()}
             <hr />
-            <h5>Password</h5>
+            <h5>{this.props.t("Password")}</h5>
             {user.id === currentUser.id && (
               <Button className="w-100 m-t-10" onClick={this.changePassword} data-test="ChangePassword">
-                Change Password
+                {this.props.t("Change Password")}
               </Button>
             )}
             {currentUser.isAdmin && user.id !== currentUser.id && (
@@ -293,3 +293,5 @@ export default class UserEdit extends React.Component {
     );
   }
 }
+
+export default withTranslation()(UserEdit)
