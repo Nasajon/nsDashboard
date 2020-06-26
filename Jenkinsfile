@@ -37,6 +37,10 @@ node('master') {
 					bat "sign_file.bat ${env.WORKSPACE}\\output\\bin\\${artifactId}.exe"
 
 					bat "deploy.bat ${artifactBuildPath} exe ${env.WORKSPACE}\\output\\bin\\${artifactId}.exe"
+
+					bat "sign_file.bat ${env.WORKSPACE}\\output\\bin\\create_user.exe"
+
+					bat "deploy.bat ${artifactBuildPath} exe ${env.WORKSPACE}\\output\\bin\\create_user.exe"
 				}
 
 				def subFolders = currentBuild.displayName.replace(".", "/")
@@ -49,6 +53,12 @@ node('master') {
 						file: "${env.WORKSPACE}\\output\\bin\\${artifactId}.exe",
 						bucket:"${bucket}",
 						path:"erp-update/artifacts/${artifactId}/${subFolders}/${artifactId}.exe",
+						acl:'PublicRead')
+
+					s3Upload(
+						file: "${env.WORKSPACE}\\output\\bin\\create_user.exe",
+						bucket:"${bucket}",
+						path:"erp-update/artifacts/${artifactId}/${subFolders}/create_user.exe",
 						acl:'PublicRead')
 				}
 
@@ -101,11 +111,11 @@ node('master') {
     	notifyFailed()
     	throw e
 	} finally {
-		// stage('Clean') {
-		// 	dir("${env.WORKSPACE}\\output") {
-		// 		deleteDir()
-		// 	}
-		// }
+		stage('Clean') {
+			dir("${env.WORKSPACE}\\output") {
+				deleteDir()
+			}
+		}
 	}
 }
 
