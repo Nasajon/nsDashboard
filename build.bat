@@ -6,6 +6,7 @@
  --add-data "client;client"^
  --add-data "redis-server.exe;."^
  --additional-hooks-dir "."^
+ --icon icon.ico^
  --hidden-import "pkg_resources.py2_warn"^
  --hidden-import "sqlalchemy.ext.baked"^
  --distpath "%NSBIN%"^
@@ -15,12 +16,13 @@
  -p %PYTHONPATH%^
  --name "create_user"^
  --additional-hooks-dir "."^
+ --icon icon.ico^
  --hidden-import "pkg_resources.py2_warn"^
  --hidden-import "sqlalchemy.ext.baked"^
  --distpath "%NSBIN%"^
  --workpath "%NSDCU%"
 
-             
+@SET NPM="C:\Program Files\nodejs\npm"             
 @IF DEFINED JENKINS_HOME (
 	@SET PARAMS=%PARAMS% --version-file "%WORKSPACE%\output\VersionInfo2"
 )
