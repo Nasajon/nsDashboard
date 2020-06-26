@@ -110,7 +110,7 @@ node('master') {
 				)
 
 				//Registra o build na Api do diretório
-				def body = """
+				body = """
 					{
 						\"nome\": \"create_user.exe\",
 						\"versao\": \"${version}\",
