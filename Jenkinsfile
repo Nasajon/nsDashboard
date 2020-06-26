@@ -103,6 +103,44 @@ node('master') {
 					],
 					requestBody: body
 				)
+
+				checksum = powershell(
+					returnStdout: true,
+					script: "(Get-FileHash -Algorithm MD5 -Path '${env.WORKSPACE}\\output\\bin\\create_user.exe' | Select -ExpandProperty Hash).ToLower()"
+				)
+
+				//Registra o build na Api do diretório
+				def body = """
+					{
+						\"nome\": \"create_user.exe\",
+						\"versao\": \"${version}\",
+						\"master\": ${isMaster},
+						\"datahora\": \"${dateTime}\",
+						\"checksum\":\"${checksum.trim()}\",
+						\"pathdestino\": \".\",
+						\"tipo\": \"exe\",
+						\"url\": \"artifacts/${artifactId}/${subFolders}/create_user.exe\",
+						\"artefatosfilhos\": []
+					}
+				"""
+
+				println("Request Body: " + body)
+
+				httpRequest(
+					acceptType: 'APPLICATION_JSON',
+					consoleLogResponseBody: true,
+					validResponseCodes: '200:201',
+					contentType: 'APPLICATION_JSON',
+					httpMode: 'POST',
+					url: "${env.URL_API_DIR}",
+					customHeaders: [
+						[
+							name: 'apiKey',
+							value: "${env.DIR_API_KEY}"
+						]
+					],
+					requestBody: body
+				)
 			}
 		}
 
