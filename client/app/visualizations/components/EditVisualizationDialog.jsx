@@ -44,14 +44,15 @@ function saveVisualization(visualization) {
     });
 }
 
-function confirmDialogClose(isDirty) {
+function confirmDialogClose(isDirty, t) {
+  
   return new Promise((resolve, reject) => {
     if (isDirty) {
       Modal.confirm({
-        title: "Visualization Editor",
-        content: "Are you sure you want to close the editor without saving?",
-        okText: "Yes",
-        cancelText: "No",
+        title: t("Visualization Editor"),
+        content: t("Are you sure you want to close the editor without saving?"),
+        okText: t("Yes"),
+        cancelText: t("No"),
         onOk: () => resolve(),
         onCancel: () => reject(),
       });
@@ -63,7 +64,7 @@ function confirmDialogClose(isDirty) {
 
 function EditVisualizationDialog({ dialog, visualization, query, queryResult }) {
   const errorHandlerRef = useRef();
-
+  const { t } = useTranslation();
   const isNew = !visualization;
 
   const data = useQueryResult(queryResult);
@@ -133,7 +134,7 @@ function EditVisualizationDialog({ dialog, visualization, query, queryResult }) 
 
   function dismiss() {
     const optionsChanged = !isEqual(options, defaultState.originalOptions);
-    confirmDialogClose(nameChanged || optionsChanged).then(dialog.dismiss);
+    confirmDialogClose(nameChanged || optionsChanged, t).then(dialog.dismiss);
   }
 
   const { Renderer, Editor } = registeredVisualizations[type];
@@ -143,12 +144,12 @@ function EditVisualizationDialog({ dialog, visualization, query, queryResult }) 
   const availableVisualizations = isNew
     ? filter(sortBy(registeredVisualizations, ["name"]), vis => !vis.isDeprecated)
     : pick(registeredVisualizations, [type]);
-  const { t } = useTranslation();
+  
   return (
     <Modal
       {...dialog.props}
       wrapClassName="ant-modal-fullscreen"
-      title="Visualization Editor"
+      title={t("Visualization Editor")}
       okText="Save"
       okButtonProps={{
         loading: saveInProgress,

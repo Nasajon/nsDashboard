@@ -185,7 +185,11 @@
             "Map (Markers)": "Mapa (Marcadores)",
             "Pivot Table": "Tabela Pivô",
             "Word Cloud": "Nuvem de Palavras",
-            "Visualization Type": "Tipo de Visualização"
+            "Visualization Type": "Tipo de Visualização",
+            "Yes": "Sim",
+            "No": "Não",
+            "Visualization Editor": "Editor de Visualização",
+            "Are you sure you want to close the editor without saving?": "Você tem certeza que quer fechar o editor sem salvar ?"
         }
     }
 }
