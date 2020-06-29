@@ -2,6 +2,7 @@ node('master') {
 	def dirArtifactName = "nsDashboard"
 	def artifactUrl = "github.com/Nasajon/${dirArtifactName}.git"
 	def artifactId = "nsDash"
+	def artifactIdCreateUser = "nsDashCreateUser"
 	def artifactBuildPath = "${env.WORKSPACE}\\${dirArtifactName}\\"
 	def nasajonCIBaseDir = "${env.NASAJON_CI_BASE_DIR}"
 	def branchName = "${env.BRANCH_NAME}"
@@ -38,9 +39,9 @@ node('master') {
 
 					bat "deploy.bat ${artifactBuildPath} exe ${env.WORKSPACE}\\output\\bin\\${artifactId}.exe ${artifactId}"
 
-					bat "sign_file.bat ${env.WORKSPACE}\\output\\bin\\create_user.exe"
+					bat "sign_file.bat ${env.WORKSPACE}\\output\\bin\\${artifactIdCreateUser}.exe"
 
-					bat "deploy.bat ${artifactBuildPath} exe ${env.WORKSPACE}\\output\\bin\\create_user.exe create_user"
+					bat "deploy.bat ${artifactBuildPath} exe ${env.WORKSPACE}\\output\\bin\\${artifactIdCreateUser}.exe ${artifactIdCreateUser}"
 				}
 
 				def subFolders = currentBuild.displayName.replace(".", "/")
@@ -58,7 +59,7 @@ node('master') {
 					s3Upload(
 						file: "${env.WORKSPACE}\\output\\bin\\create_user.exe",
 						bucket:"${bucket}",
-						path:"erp-update/artifacts/${artifactId}/${subFolders}/create_user.exe",
+						path:"erp-update/artifacts/${artifactId}/${subFolders}/${artifactIdCreateUser}.exe",
 						acl:'PublicRead')
 				}
 
@@ -82,7 +83,7 @@ node('master') {
 						\"pathdestino\": \".\",
 						\"tipo\": \"exe\",
 						\"url\": \"artifacts/${artifactId}/${subFolders}/${artifactId}.exe\",
-						\"artefatosfilhos\": [\"create_user.exe\"]
+						\"artefatosfilhos\": [\"${artifactIdCreateUser}.exe\"]
 					}
 				"""
 			}
