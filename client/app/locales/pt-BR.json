@@ -189,7 +189,9 @@
             "Yes": "Sim",
             "No": "Não",
             "Visualization Editor": "Editor de Visualização",
-            "Are you sure you want to close the editor without saving?": "Você tem certeza que quer fechar o editor sem salvar ?"
+            "Are you sure you want to close the editor without saving?": "Você tem certeza que quer fechar o editor sem salvar ?",
+            "Sunburst Sequence": "Gráfico de Sunburst",
+            "Visualization Name": "Nome da Visualização"
         }
     }
 }

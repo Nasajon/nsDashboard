@@ -150,7 +150,8 @@ function EditVisualizationDialog({ dialog, visualization, query, queryResult }) 
       {...dialog.props}
       wrapClassName="ant-modal-fullscreen"
       title={t("Visualization Editor")}
-      okText="Save"
+      okText={t("Save")}
+      cancelText={t("Cancel")}
       okButtonProps={{
         loading: saveInProgress,
         disabled: saveInProgress,
@@ -177,7 +178,7 @@ function EditVisualizationDialog({ dialog, visualization, query, queryResult }) 
             </Select>
           </div>
           <div className="m-b-15">
-            <label htmlFor="visualization-name">Visualization Name</label>
+            <label htmlFor="visualization-name">{t("Visualization Name")}</label>
             <Input
               data-test="VisualizationName"
               id="visualization-name"
