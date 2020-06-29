@@ -6,7 +6,7 @@ import { EditorPropTypes } from "@/visualizations/prop-types";
 
 import ChartTypeSelect from "./ChartTypeSelect";
 import ColumnMappingSelect from "./ColumnMappingSelect";
-
+import { useTranslation } from 'react-i18next';
 function getAvailableColumnMappingTypes(options) {
   const result = ["x", "y"];
 
@@ -78,7 +78,7 @@ export default function GeneralSettings({ options, data, onOptionsChange }) {
     options,
     data.columns,
   ]);
-
+  const { t } = useTranslation();
   function handleGlobalSeriesTypeChange(globalSeriesType) {
     onOptionsChange({
       globalSeriesType,
@@ -102,7 +102,7 @@ export default function GeneralSettings({ options, data, onOptionsChange }) {
     <React.Fragment>
       <Section>
         <ChartTypeSelect
-          label="Chart Type"
+          label={t("Chart Type")}
           className="w-100"
           data-test="Chart.GlobalSeriesType"
           defaultValue={options.globalSeriesType}
@@ -124,7 +124,7 @@ export default function GeneralSettings({ options, data, onOptionsChange }) {
         <React.Fragment>
           <Section>
             <InputNumber
-              label="Bubble Size Coefficient"
+              label={t("Bubble Size Coefficient")}
               className="w-100"
               data-test="Chart.BubbleCoefficient"
               defaultValue={options.coefficient}
@@ -134,16 +134,16 @@ export default function GeneralSettings({ options, data, onOptionsChange }) {
 
           <Section>
             <Select
-              label="Bubble Size Proportional To"
+              label={t("Bubble Size Proportional To")}
               className="w-100"
               data-test="Chart.SizeMode"
               defaultValue={options.sizemode}
               onChange={mode => onOptionsChange({ sizemode: mode })}>
               <Select.Option value="area" data-test="Chart.SizeMode.Area">
-                Area
+                {t("Area")}
               </Select.Option>
               <Select.Option value="diameter" data-test="Chart.SizeMode.Diameter">
-                Diameter
+                {t("Diameter")}
               </Select.Option>
             </Select>
           </Section>
@@ -153,16 +153,16 @@ export default function GeneralSettings({ options, data, onOptionsChange }) {
       {includes(["pie"], options.globalSeriesType) && (
         <Section>
           <Select
-            label="Direction"
+            label={t("Direction")}
             className="w-100"
             data-test="Chart.PieDirection"
             defaultValue={options.direction.type}
             onChange={type => onOptionsChange({ direction: { type } })}>
             <Select.Option value="counterclockwise" data-test="Chart.PieDirection.Counterclockwise">
-              Counterclockwise
+              {t("Counterclockwise")}
             </Select.Option>
             <Select.Option value="clockwise" data-test="Chart.PieDirection.Clockwise">
-              Clockwise
+              {t("Clockwise")}
             </Select.Option>
           </Select>
         </Section>
@@ -174,7 +174,7 @@ export default function GeneralSettings({ options, data, onOptionsChange }) {
             data-test="Chart.ShowLegend"
             defaultChecked={options.legend.enabled}
             onChange={event => onOptionsChange({ legend: { enabled: event.target.checked } })}>
-            Show Legend
+            {t("Show Legend")}
           </Checkbox>
         </Section>
       )}
@@ -185,7 +185,7 @@ export default function GeneralSettings({ options, data, onOptionsChange }) {
             data-test="Chart.ShowPoints"
             defaultChecked={options.showpoints}
             onChange={event => onOptionsChange({ showpoints: event.target.checked })}>
-            Show All Points
+            {t("Show All Points")}
           </Checkbox>
         </Section>
       )}
@@ -193,17 +193,17 @@ export default function GeneralSettings({ options, data, onOptionsChange }) {
       {!includes(["custom", "heatmap"], options.globalSeriesType) && (
         <Section>
           <Select
-            label="Stacking"
+            label={t("Stacking")}
             className="w-100"
             data-test="Chart.Stacking"
             defaultValue={options.series.stacking}
             disabled={!includes(["line", "area", "column"], options.globalSeriesType)}
             onChange={stacking => onOptionsChange({ series: { stacking } })}>
             <Select.Option value={null} data-test="Chart.Stacking.Disabled">
-              Disabled
+              {t("Disabled")}
             </Select.Option>
             <Select.Option value="stack" data-test="Chart.Stacking.Stack">
-              Stack
+              {t("Stack")}
             </Select.Option>
           </Select>
         </Section>
@@ -215,7 +215,7 @@ export default function GeneralSettings({ options, data, onOptionsChange }) {
             data-test="Chart.NormalizeValues"
             defaultChecked={options.series.percentValues}
             onChange={event => onOptionsChange({ series: { percentValues: event.target.checked } })}>
-            Normalize values to percentage
+            {t("Normalize values to percentage")}
           </Checkbox>
         </Section>
       )}
@@ -223,16 +223,16 @@ export default function GeneralSettings({ options, data, onOptionsChange }) {
       {!includes(["custom", "heatmap", "bubble", "scatter"], options.globalSeriesType) && (
         <Section>
           <Select
-            label="Missing and NULL values"
+            label={t("Missing and NULL values")}
             className="w-100"
             data-test="Chart.MissingValues"
             defaultValue={options.missingValuesAsZero ? 1 : 0}
             onChange={value => onOptionsChange({ missingValuesAsZero: !!value })}>
             <Select.Option value={0} data-test="Chart.MissingValues.Keep">
-              Do not display in chart
+              {t("Do not display in chart")}
             </Select.Option>
             <Select.Option value={1} data-test="Chart.MissingValues.Zero">
-              Convert to 0 and display in chart
+              {t("Convert to 0 and display in chart")}
             </Select.Option>
           </Select>
         </Section>

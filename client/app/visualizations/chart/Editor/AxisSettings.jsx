@@ -4,7 +4,7 @@ import PropTypes from "prop-types";
 import { useDebouncedCallback } from "use-debounce";
 import * as Grid from "antd/lib/grid";
 import { Section, Select, Input, InputNumber } from "@/components/visualizations/editor";
-
+import { useTranslation } from 'react-i18next';
 function toNumber(value) {
   value = isNumber(value) ? value : parseFloat(value);
   return isFinite(value) ? value : null;
@@ -14,7 +14,7 @@ export default function AxisSettings({ id, options, features, onChange }) {
   function optionsChanged(newOptions) {
     onChange(merge({}, options, newOptions));
   }
-
+  const { t } = useTranslation();
   const [handleNameChange] = useDebouncedCallback(text => {
     const title = isString(text) && text !== "" ? { text } : null;
     optionsChanged({ title });
@@ -26,34 +26,34 @@ export default function AxisSettings({ id, options, features, onChange }) {
     <React.Fragment>
       <Section>
         <Select
-          label="Scale"
+          label={t("Scale")}
           className="w-100"
           data-test={`Chart.${id}.Type`}
           defaultValue={options.type}
           onChange={type => optionsChanged({ type })}>
           {features.autoDetectType && (
             <Select.Option value="-" data-test={`Chart.${id}.Type.Auto`}>
-              Auto Detect
+              {t("Auto Detect")}
             </Select.Option>
           )}
           <Select.Option value="datetime" data-test={`Chart.${id}.Type.DateTime`}>
-            Datetime
+            {t("Datetime")}
           </Select.Option>
           <Select.Option value="linear" data-test={`Chart.${id}.Type.Linear`}>
-            Linear
+            {t("Linear")}
           </Select.Option>
           <Select.Option value="logarithmic" data-test={`Chart.${id}.Type.Logarithmic`}>
-            Logarithmic
+            {t("Logarithmic")}
           </Select.Option>
           <Select.Option value="category" data-test={`Chart.${id}.Type.Category`}>
-            Category
+            {t("Category")}
           </Select.Option>
         </Select>
       </Section>
 
       <Section>
         <Input
-          label="Name"
+          label={t("Name")}
           data-test={`Chart.${id}.Name`}
           defaultValue={isObject(options.title) ? options.title.text : null}
           onChange={event => handleNameChange(event.target.value)}
@@ -65,7 +65,7 @@ export default function AxisSettings({ id, options, features, onChange }) {
           <Grid.Row gutter={15} type="flex" align="middle">
             <Grid.Col span={12}>
               <InputNumber
-                label="Min Value"
+                label={t("Min Value")}
                 className="w-100"
                 placeholder="Auto"
                 data-test={`Chart.${id}.RangeMin`}
@@ -75,7 +75,7 @@ export default function AxisSettings({ id, options, features, onChange }) {
             </Grid.Col>
             <Grid.Col span={12}>
               <InputNumber
-                label="Max Value"
+                label={t("Max Value")}
                 className="w-100"
                 placeholder="Auto"
                 data-test={`Chart.${id}.RangeMax`}
