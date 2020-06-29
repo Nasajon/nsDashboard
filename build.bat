@@ -14,7 +14,7 @@
 @SET PARAMS2=-y --clean^
  --onefile^
  -p %PYTHONPATH%^
- --name "create_user"^
+ --name "nsDashCreateUser"^
  --additional-hooks-dir "."^
  --icon icon.ico^
  --hidden-import "pkg_resources.py2_warn"^
