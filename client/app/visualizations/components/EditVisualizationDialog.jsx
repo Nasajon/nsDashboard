@@ -14,7 +14,7 @@ import recordEvent from "@/services/recordEvent";
 import useQueryResult from "@/lib/hooks/useQueryResult";
 import { VisualizationType } from "@/visualizations/prop-types";
 import registeredVisualizations, { getDefaultVisualization, newVisualization } from "@/visualizations";
-
+import { useTranslation } from 'react-i18next';
 function updateQueryVisualizations(query, visualization) {
   const index = findIndex(query.visualizations, v => v.id === visualization.id);
   if (index > -1) {
@@ -143,7 +143,7 @@ function EditVisualizationDialog({ dialog, visualization, query, queryResult }) 
   const availableVisualizations = isNew
     ? filter(sortBy(registeredVisualizations, ["name"]), vis => !vis.isDeprecated)
     : pick(registeredVisualizations, [type]);
-
+  const { t } = useTranslation();
   return (
     <Modal
       {...dialog.props}
@@ -160,7 +160,7 @@ function EditVisualizationDialog({ dialog, visualization, query, queryResult }) 
       <Grid.Row gutter={24}>
         <Grid.Col span={24} md={10}>
           <div className="m-b-15">
-            <label htmlFor="visualization-type">Visualization Type</label>
+            <label htmlFor="visualization-type">{t("Visualization Type")}</label>
             <Select
               data-test="VisualizationType"
               id="visualization-type"
@@ -170,7 +170,7 @@ function EditVisualizationDialog({ dialog, visualization, query, queryResult }) 
               onChange={onTypeChanged}>
               {map(availableVisualizations, vis => (
                 <Select.Option key={vis.type} data-test={"VisualizationType." + vis.type}>
-                  {vis.name}
+                  {t(vis.name)}
                 </Select.Option>
               ))}
             </Select>

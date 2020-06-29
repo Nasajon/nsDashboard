@@ -137,7 +137,7 @@ class CreateSourceDialog extends React.Component {
     return (
       <Modal
         {...dialog.props}
-        title={this.props.t("Create a New", {context: sourceType == "Data Source" ? "female" : ""}) + " " + this.props.t(sourceType)}
+        title={this.props.t("Create a New", {context: sourceType === "Data Source" ? "female" : ""}) + " " + this.props.t(sourceType)}
         footer={
           currentStep === StepEnum.SELECT_TYPE
             ? [
