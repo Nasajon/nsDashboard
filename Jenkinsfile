@@ -57,7 +57,7 @@ node('master') {
 						acl:'PublicRead')
 
 					s3Upload(
-						file: "${env.WORKSPACE}\\output\\bin\\create_user.exe",
+						file: "${env.WORKSPACE}\\output\\bin\\${artifactIdCreateUser}.exe",
 						bucket:"${bucket}",
 						path:"erp-update/artifacts/${artifactId}/${subFolders}/${artifactIdCreateUser}.exe",
 						acl:'PublicRead')
