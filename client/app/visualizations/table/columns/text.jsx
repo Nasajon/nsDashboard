@@ -3,8 +3,9 @@ import PropTypes from "prop-types";
 import HtmlContent from "@/components/HtmlContent";
 import { Section, Checkbox } from "@/components/visualizations/editor";
 import { createTextFormatter } from "@/lib/value-format";
-
+import { useTranslation } from 'react-i18next';
 function Editor({ column, onChange }) {
+  const { t } = useTranslation();
   return (
     <React.Fragment>
       <Section>
@@ -12,7 +13,7 @@ function Editor({ column, onChange }) {
           data-test="Table.ColumnEditor.Text.AllowHTML"
           checked={column.allowHTML}
           onChange={event => onChange({ allowHTML: event.target.checked })}>
-          Allow HTML content
+          {t("Allow HTML content")}
         </Checkbox>
       </Section>
 
@@ -22,7 +23,7 @@ function Editor({ column, onChange }) {
             data-test="Table.ColumnEditor.Text.HighlightLinks"
             checked={column.highlightLinks}
             onChange={event => onChange({ highlightLinks: event.target.checked })}>
-            Highlight links
+            {t("Highlight links")}
           </Checkbox>
         </Section>
       )}

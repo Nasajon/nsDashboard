@@ -83,11 +83,11 @@ function EditVisualizationDialog({ dialog, visualization, query, queryResult }) 
     const options = config.getOptions(isNew ? {} : visualization.options, data);
     return {
       type: config.type,
-      name: isNew ? config.name : visualization.name,
+      name: isNew ? t(config.name) : visualization.name,
       options,
       originalOptions: options,
     };
-  }, [data, isNew, visualization]);
+  }, [data, isNew, visualization, t]);
 
   const [type, setType] = useState(defaultState.type);
   const [name, setName] = useState(defaultState.name);
@@ -107,7 +107,7 @@ function EditVisualizationDialog({ dialog, visualization, query, queryResult }) 
 
     const config = registeredVisualizations[newType];
     if (!nameChanged) {
-      setName(config.name);
+      setName(t(config.name));
     }
 
     setOptions(config.getOptions(isNew ? {} : visualization.options, data));

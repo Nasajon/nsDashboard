@@ -2,7 +2,7 @@ import { map } from "lodash";
 import React from "react";
 import { Section, Select } from "@/components/visualizations/editor";
 import { EditorPropTypes } from "@/visualizations/prop-types";
-
+import { useTranslation } from 'react-i18next';
 const CohortTimeIntervals = {
   daily: "Daily",
   weekly: "Weekly",
@@ -15,18 +15,19 @@ const CohortModes = {
 };
 
 export default function OptionsSettings({ options, onOptionsChange }) {
+  const { t } = useTranslation()
   return (
     <React.Fragment>
       <Section>
         <Select
-          label="Time Interval"
+          label={t("Time Interval")}
           data-test="Cohort.TimeInterval"
           className="w-100"
           value={options.timeInterval}
           onChange={timeInterval => onOptionsChange({ timeInterval })}>
           {map(CohortTimeIntervals, (name, value) => (
             <Select.Option key={value} data-test={"Cohort.TimeInterval." + value}>
-              {name}
+              {t(name)}
             </Select.Option>
           ))}
         </Select>
@@ -34,14 +35,14 @@ export default function OptionsSettings({ options, onOptionsChange }) {
 
       <Section>
         <Select
-          label="Mode"
+          label={t("Mode")}
           data-test="Cohort.Mode"
           className="w-100"
           value={options.mode}
           onChange={mode => onOptionsChange({ mode })}>
           {map(CohortModes, (name, value) => (
             <Select.Option key={value} data-test={"Cohort.Mode." + value}>
-              {name}
+              {t(name)}
             </Select.Option>
           ))}
         </Select>

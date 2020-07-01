@@ -6,7 +6,8 @@ i18n.use(LanguageDetector).use(initReactI18next)
     .init({
         fallbackLng: "pt-BR",
         resources: pt,
-        keySeparator: false
+        keySeparator: false,
+        nsSeparator: false
     });
 
 export default i18n;

@@ -2,14 +2,15 @@ import { map } from "lodash";
 import React from "react";
 import { Section, Select, Input, InputNumber, Switch } from "@/components/visualizations/editor";
 import { EditorPropTypes } from "@/visualizations/prop-types";
-
+import { useTranslation } from 'react-i18next';
 export default function GeneralSettings({ options, data, visualizationName, onOptionsChange }) {
+  const { t } = useTranslation()
   return (
     <React.Fragment>
       <Section>
         <Input
           layout="horizontal"
-          label="Counter Label"
+          label={t("Counter Label")}
           className="w-100"
           data-test="Counter.General.Label"
           defaultValue={options.counterLabel}
@@ -21,7 +22,7 @@ export default function GeneralSettings({ options, data, visualizationName, onOp
       <Section>
         <Select
           layout="horizontal"
-          label="Counter Value Column Name"
+          label={t("Counter Value Column Name")}
           className="w-100"
           data-test="Counter.General.ValueColumn"
           defaultValue={options.counterColName}
@@ -38,7 +39,7 @@ export default function GeneralSettings({ options, data, visualizationName, onOp
       <Section>
         <InputNumber
           layout="horizontal"
-          label="Counter Value Row Number"
+          label={t("Counter Value Row Number")}
           className="w-100"
           data-test="Counter.General.ValueRowNumber"
           defaultValue={options.rowNumber}
@@ -50,7 +51,7 @@ export default function GeneralSettings({ options, data, visualizationName, onOp
       <Section>
         <Select
           layout="horizontal"
-          label="Target Value Column Name"
+          label={t("Target Value Column Name")}
           className="w-100"
           data-test="Counter.General.TargetValueColumn"
           defaultValue={options.targetColName}
@@ -67,7 +68,7 @@ export default function GeneralSettings({ options, data, visualizationName, onOp
       <Section>
         <InputNumber
           layout="horizontal"
-          label="Target Value Row Number"
+          label={t("Target Value Row Number")}
           className="w-100"
           data-test="Counter.General.TargetValueRowNumber"
           defaultValue={options.targetRowNumber}
@@ -80,7 +81,7 @@ export default function GeneralSettings({ options, data, visualizationName, onOp
           data-test="Counter.General.CountRows"
           defaultChecked={options.countRow}
           onChange={countRow => onOptionsChange({ countRow })}>
-          Count Rows
+          {t("Count Rows")}
         </Switch>
       </Section>
     </React.Fragment>

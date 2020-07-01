@@ -4,15 +4,15 @@ import PropTypes from "prop-types";
 import { useDebouncedCallback } from "use-debounce";
 import { Section, Input, Checkbox, ContextHelp } from "@/components/visualizations/editor";
 import { formatSimpleTemplate } from "@/lib/value-format";
-
+import { useTranslation } from 'react-i18next';
 function Editor({ column, onChange }) {
   const [onChangeDebounced] = useDebouncedCallback(onChange, 200);
-
+  const { t } = useTranslation();
   return (
     <React.Fragment>
       <Section>
         <Input
-          label="URL template"
+          label={t("URL template")}
           data-test="Table.ColumnEditor.Link.UrlTemplate"
           defaultValue={column.linkUrlTemplate}
           onChange={event => onChangeDebounced({ linkUrlTemplate: event.target.value })}
@@ -21,7 +21,7 @@ function Editor({ column, onChange }) {
 
       <Section>
         <Input
-          label="Text template"
+          label={t("Text template")}
           data-test="Table.ColumnEditor.Link.TextTemplate"
           defaultValue={column.linkTextTemplate}
           onChange={event => onChangeDebounced({ linkTextTemplate: event.target.value })}
@@ -30,7 +30,7 @@ function Editor({ column, onChange }) {
 
       <Section>
         <Input
-          label="Title template"
+          label={t("Title template")}
           data-test="Table.ColumnEditor.Link.TitleTemplate"
           defaultValue={column.linkTitleTemplate}
           onChange={event => onChangeDebounced({ linkTitleTemplate: event.target.value })}
@@ -42,7 +42,7 @@ function Editor({ column, onChange }) {
           data-test="Table.ColumnEditor.Link.OpenInNewTab"
           checked={column.linkOpenInNewTab}
           onChange={event => onChange({ linkOpenInNewTab: event.target.checked })}>
-          Open in new tab
+          {t("Open in new tab")}
         </Checkbox>
       </Section>
 
@@ -50,14 +50,14 @@ function Editor({ column, onChange }) {
         <ContextHelp
           placement="topLeft"
           arrowPointAtCenter
-          icon={<span style={{ cursor: "default" }}>Format specs {ContextHelp.defaultIcon}</span>}>
+          icon={<span style={{ cursor: "default" }}>{t("Format specs")} {ContextHelp.defaultIcon}</span>}>
           <div>
-            All columns can be referenced using <code>{"{{ column_name }}"}</code> syntax.
+            {t("All columns can be referenced using")} <code>{"{{ column_name }}"}</code> {t("syntax")}.
           </div>
           <div>
-            Use <code>{"{{ @ }}"}</code> to reference current (this) column.
+            {t("Use")} <code>{"{{ @ }}"}</code> {t("to reference current (this) column")}.
           </div>
-          <div>This syntax is applicable to URL, Text and Title options.</div>
+          <div>{t("This syntax is applicable to URL, Title and Size options")}.</div>
         </ContextHelp>
       </Section>
     </React.Fragment>

@@ -3,16 +3,16 @@ import PropTypes from "prop-types";
 import { useDebouncedCallback } from "use-debounce";
 import { Section, Input, ContextHelp } from "@/components/visualizations/editor";
 import { createNumberFormatter } from "@/lib/value-format";
-
+import { useTranslation } from 'react-i18next';
 function Editor({ column, onChange }) {
   const [onChangeDebounced] = useDebouncedCallback(onChange, 200);
-
+  const { t } = useTranslation();
   return (
     <Section>
       <Input
         label={
           <React.Fragment>
-            Number format
+            {t("Number format")}
             <ContextHelp.NumberFormatSpecs />
           </React.Fragment>
         }

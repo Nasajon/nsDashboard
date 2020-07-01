@@ -1,16 +1,16 @@
 import React, { useMemo } from "react";
 import PropTypes from "prop-types";
 import cx from "classnames";
-
+import { useTranslation } from 'react-i18next';
 import { validateColor, getColorName } from "./utils";
 import "./label.less";
 
 export default function Label({ className, color, presetColors, ...props }) {
   const name = useMemo(() => getColorName(validateColor(color), presetColors), [color, presetColors]);
-
+  const { t } = useTranslation()
   return (
     <span className={cx("color-label", className)} {...props}>
-      {name}
+      {t(name)}
     </span>
   );
 }
