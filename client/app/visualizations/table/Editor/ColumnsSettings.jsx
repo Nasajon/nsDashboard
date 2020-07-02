@@ -7,7 +7,7 @@ import Typography from "antd/lib/typography";
 import { sortableElement } from "react-sortable-hoc";
 import { SortableContainer, DragHandle } from "@/components/sortable";
 import { EditorPropTypes } from "@/visualizations/prop-types";
-
+import { useTranslation } from 'react-i18next';
 import ColumnEditor from "./ColumnEditor";
 
 const { Text } = Typography;
@@ -28,6 +28,7 @@ export default function ColumnsSettings({ options, onOptionsChange }) {
     columns.splice(newIndex, 0, ...columns.splice(oldIndex, 1));
     onOptionsChange({ columns });
   }
+  const { t } = useTranslation();
 
   return (
     <SortableContainer
@@ -59,7 +60,7 @@ export default function ColumnsSettings({ options, onOptionsChange }) {
               </React.Fragment>
             }
             extra={
-              <Tooltip title="Toggle visibility" mouseEnterDelay={0} mouseLeaveDelay={0}>
+              <Tooltip title={t("Toggle visibility")} mouseEnterDelay={0} mouseLeaveDelay={0}>
                 <Icon
                   data-test={`Table.Column.${column.name}.Visibility`}
                   type={column.visible ? "eye" : "eye-invisible"}

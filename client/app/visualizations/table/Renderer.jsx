@@ -3,7 +3,7 @@ import React, { useMemo, useState, useRef, useCallback, useEffect } from "react"
 import Table from "antd/lib/table";
 import Input from "antd/lib/input";
 import { RendererPropTypes } from "@/visualizations/prop-types";
-
+import { useTranslation } from 'react-i18next';
 import { prepareColumns, initRows, filterRows, sortRows } from "./utils";
 
 import "./renderer.less";
@@ -11,7 +11,7 @@ import "./renderer.less";
 export default function Renderer({ options, data, context }) {
   const [searchTerm, setSearchTerm] = useState("");
   const [orderBy, setOrderBy] = useState([]);
-
+  const { t } = useTranslation();
   const searchColumns = useMemo(() => filter(options.columns, "allowSearch"), [options.columns]);
 
   const searchInputRef = useRef();
@@ -20,7 +20,7 @@ export default function Renderer({ options, data, context }) {
   const tableColumns = useMemo(() => {
     const searchInput =
       searchColumns.length > 0 ? (
-        <Input.Search ref={searchInputRef} placeholder="Search..." onChange={onSearchInputChange} />
+        <Input.Search ref={searchInputRef} placeholder={t("Search...")} onChange={onSearchInputChange} />
       ) : null;
 
     return prepareColumns(options.columns, searchInput, orderBy, newOrderBy => {
@@ -28,7 +28,7 @@ export default function Renderer({ options, data, context }) {
       // Remove text selection - may occur accidentally
       document.getSelection().removeAllRanges();
     });
-  }, [options.columns, searchColumns, searchInputRef, onSearchInputChange, orderBy, setOrderBy]);
+  }, [options.columns, searchColumns, searchInputRef, onSearchInputChange, orderBy, setOrderBy, t]);
 
   const preparedRows = useMemo(() => sortRows(filterRows(initRows(data.rows), searchTerm, searchColumns), orderBy), [
     data.rows,

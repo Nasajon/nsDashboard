@@ -14,7 +14,7 @@ import recordEvent from "@/services/recordEvent";
 import useQueryResult from "@/lib/hooks/useQueryResult";
 import { VisualizationType } from "@/visualizations/prop-types";
 import registeredVisualizations, { getDefaultVisualization, newVisualization } from "@/visualizations";
-
+import { useTranslation } from 'react-i18next';
 function updateQueryVisualizations(query, visualization) {
   const index = findIndex(query.visualizations, v => v.id === visualization.id);
   if (index > -1) {
@@ -44,14 +44,15 @@ function saveVisualization(visualization) {
     });
 }
 
-function confirmDialogClose(isDirty) {
+function confirmDialogClose(isDirty, t) {
+  
   return new Promise((resolve, reject) => {
     if (isDirty) {
       Modal.confirm({
-        title: "Visualization Editor",
-        content: "Are you sure you want to close the editor without saving?",
-        okText: "Yes",
-        cancelText: "No",
+        title: t("Visualization Editor"),
+        content: t("Are you sure you want to close the editor without saving?"),
+        okText: t("Yes"),
+        cancelText: t("No"),
         onOk: () => resolve(),
         onCancel: () => reject(),
       });
@@ -63,7 +64,7 @@ function confirmDialogClose(isDirty) {
 
 function EditVisualizationDialog({ dialog, visualization, query, queryResult }) {
   const errorHandlerRef = useRef();
-
+  const { t } = useTranslation();
   const isNew = !visualization;
 
   const data = useQueryResult(queryResult);
@@ -82,11 +83,11 @@ function EditVisualizationDialog({ dialog, visualization, query, queryResult }) 
     const options = config.getOptions(isNew ? {} : visualization.options, data);
     return {
       type: config.type,
-      name: isNew ? config.name : visualization.name,
+      name: isNew ? t(config.name) : visualization.name,
       options,
       originalOptions: options,
     };
-  }, [data, isNew, visualization]);
+  }, [data, isNew, visualization, t]);
 
   const [type, setType] = useState(defaultState.type);
   const [name, setName] = useState(defaultState.name);
@@ -106,7 +107,7 @@ function EditVisualizationDialog({ dialog, visualization, query, queryResult }) 
 
     const config = registeredVisualizations[newType];
     if (!nameChanged) {
-      setName(config.name);
+      setName(t(config.name));
     }
 
     setOptions(config.getOptions(isNew ? {} : visualization.options, data));
@@ -133,7 +134,7 @@ function EditVisualizationDialog({ dialog, visualization, query, queryResult }) 
 
   function dismiss() {
     const optionsChanged = !isEqual(options, defaultState.originalOptions);
-    confirmDialogClose(nameChanged || optionsChanged).then(dialog.dismiss);
+    confirmDialogClose(nameChanged || optionsChanged, t).then(dialog.dismiss);
   }
 
   const { Renderer, Editor } = registeredVisualizations[type];
@@ -143,13 +144,14 @@ function EditVisualizationDialog({ dialog, visualization, query, queryResult }) 
   const availableVisualizations = isNew
     ? filter(sortBy(registeredVisualizations, ["name"]), vis => !vis.isDeprecated)
     : pick(registeredVisualizations, [type]);
-
+  
   return (
     <Modal
       {...dialog.props}
       wrapClassName="ant-modal-fullscreen"
-      title="Visualization Editor"
-      okText="Save"
+      title={t("Visualization Editor")}
+      okText={t("Save")}
+      cancelText={t("Cancel")}
       okButtonProps={{
         loading: saveInProgress,
         disabled: saveInProgress,
@@ -160,7 +162,7 @@ function EditVisualizationDialog({ dialog, visualization, query, queryResult }) 
       <Grid.Row gutter={24}>
         <Grid.Col span={24} md={10}>
           <div className="m-b-15">
-            <label htmlFor="visualization-type">Visualization Type</label>
+            <label htmlFor="visualization-type">{t("Visualization Type")}</label>
             <Select
               data-test="VisualizationType"
               id="visualization-type"
@@ -170,13 +172,13 @@ function EditVisualizationDialog({ dialog, visualization, query, queryResult }) 
               onChange={onTypeChanged}>
               {map(availableVisualizations, vis => (
                 <Select.Option key={vis.type} data-test={"VisualizationType." + vis.type}>
-                  {vis.name}
+                  {t(vis.name)}
                 </Select.Option>
               ))}
             </Select>
           </div>
           <div className="m-b-15">
-            <label htmlFor="visualization-name">Visualization Name</label>
+            <label htmlFor="visualization-name">{t("Visualization Name")}</label>
             <Input
               data-test="VisualizationName"
               id="visualization-name"

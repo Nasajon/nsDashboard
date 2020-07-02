@@ -2,10 +2,10 @@ import React from "react";
 import { useDebouncedCallback } from "use-debounce";
 import { Section, Input, InputNumber, ContextHelp } from "@/components/visualizations/editor";
 import { EditorPropTypes } from "@/visualizations/prop-types";
-
+import { useTranslation } from 'react-i18next';
 export default function AppearanceSettings({ options, onOptionsChange }) {
   const [onOptionsChangeDebounced] = useDebouncedCallback(onOptionsChange, 200);
-
+  const { t } = useTranslation()
   return (
     <React.Fragment>
       <Section>
@@ -13,7 +13,7 @@ export default function AppearanceSettings({ options, onOptionsChange }) {
           layout="horizontal"
           label={
             <React.Fragment>
-              Number Values Format
+              {t("Number Values Format")}
               <ContextHelp.NumberFormatSpecs />
             </React.Fragment>
           }
@@ -29,7 +29,7 @@ export default function AppearanceSettings({ options, onOptionsChange }) {
           layout="horizontal"
           label={
             <React.Fragment>
-              Percent Values Format
+              {t("Percent Values Format")}
               <ContextHelp.NumberFormatSpecs />
             </React.Fragment>
           }
@@ -43,7 +43,7 @@ export default function AppearanceSettings({ options, onOptionsChange }) {
       <Section>
         <InputNumber
           layout="horizontal"
-          label="Items Count Limit"
+          label={t("Items Count Limit")}
           className="w-100"
           data-test="Funnel.ItemsLimit"
           min={2}
@@ -55,7 +55,7 @@ export default function AppearanceSettings({ options, onOptionsChange }) {
       <Section>
         <InputNumber
           layout="horizontal"
-          label="Min Percent Value"
+          label={t("Min Percent Value")}
           className="w-100"
           data-test="Funnel.PercentRangeMin"
           min={0}
@@ -67,7 +67,7 @@ export default function AppearanceSettings({ options, onOptionsChange }) {
       <Section>
         <InputNumber
           layout="horizontal"
-          label="Max Percent Value"
+          label={t("Max Percent Value")}
           className="w-100"
           data-test="Funnel.PercentRangeMax"
           min={0}

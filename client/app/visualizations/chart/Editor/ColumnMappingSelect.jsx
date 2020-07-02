@@ -2,7 +2,7 @@ import { isString, map, uniq, flatten, filter, sortBy, keys } from "lodash";
 import React from "react";
 import PropTypes from "prop-types";
 import { Section, Select } from "@/components/visualizations/editor";
-
+import { useTranslation } from 'react-i18next';
 const MappingTypes = {
   x: { label: "X Column" },
   y: { label: "Y Columns", multiple: true },
@@ -15,16 +15,16 @@ const MappingTypes = {
 export default function ColumnMappingSelect({ value, availableColumns, type, onChange }) {
   const options = sortBy(filter(uniq(flatten([availableColumns, value])), v => isString(v) && v !== ""));
   const { label, multiple } = MappingTypes[type];
-
+  const { t } = useTranslation();
   return (
     <Section>
       <Select
-        label={label}
+        label={t(label)}
         className="w-100"
         data-test={`Chart.ColumnMapping.${type}`}
         mode={multiple ? "multiple" : "default"}
         allowClear
-        placeholder={multiple ? "Choose columns..." : "Choose column..."}
+        placeholder={t(multiple ? "Choose columns..." : "Choose column...")}
         value={value || undefined}
         onChange={column => onChange(column || null, type)}>
         {map(options, c => (

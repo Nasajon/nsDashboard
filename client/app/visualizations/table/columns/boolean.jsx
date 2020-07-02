@@ -3,7 +3,7 @@ import PropTypes from "prop-types";
 import { useDebouncedCallback } from "use-debounce";
 import { Section, Input } from "@/components/visualizations/editor";
 import { createBooleanFormatter } from "@/lib/value-format";
-
+import { useTranslation } from 'react-i18next';
 function Editor({ column, onChange }) {
   function handleChange(index, value) {
     const booleanValues = [...column.booleanValues];
@@ -12,18 +12,18 @@ function Editor({ column, onChange }) {
   }
 
   const [handleChangeDebounced] = useDebouncedCallback(handleChange, 200);
-
+  const { t } = useTranslation();
   return (
     <React.Fragment>
       <Section>
         <Input
           label={
             <React.Fragment>
-              Value for <code>false</code>
+              {t("Value for")} <code>{t("false")}</code>
             </React.Fragment>
           }
           data-test="Table.ColumnEditor.Boolean.False"
-          defaultValue={column.booleanValues[0]}
+          defaultValue={t(column.booleanValues[0])}
           onChange={event => handleChangeDebounced(0, event.target.value)}
         />
       </Section>
@@ -32,11 +32,11 @@ function Editor({ column, onChange }) {
         <Input
           label={
             <React.Fragment>
-              Value for <code>true</code>
+              {t("Value for")} <code>{t("true")}</code>
             </React.Fragment>
           }
           data-test="Table.ColumnEditor.Boolean.True"
-          defaultValue={column.booleanValues[1]}
+          defaultValue={t(column.booleanValues[1])}
           onChange={event => handleChangeDebounced(1, event.target.value)}
         />
       </Section>

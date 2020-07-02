@@ -96,7 +96,7 @@ function DesktopNavbar() {
         <Menu mode="horizontal" selectable={false}>
           {currentUser.isAdmin && (
             <Menu.Item key="settings">
-              <Tooltip title="Settings">
+              <Tooltip title={t("Settings")}>
                 <Button href="data_sources" className="menu-item-button">
                   <i className="fa fa-sliders" />
                 </Button>
@@ -111,47 +111,47 @@ function DesktopNavbar() {
               overlay={
                 <Menu>
                   <Menu.Item key="profile">
-                    <a href="users/me">Edit Profile</a>
+                    <a href="users/me">{t("Edit Profile")}</a>
                   </Menu.Item>
                   {currentUser.hasPermission("super_admin") && <Menu.Divider />}
                   {currentUser.isAdmin && (
                     <Menu.Item key="datasources">
-                      <a href="data_sources">Data Sources</a>
+                      <a href="data_sources">{t("Data Sources")}</a>
                     </Menu.Item>
                   )}
                   {currentUser.hasPermission("list_users") && (
                     <Menu.Item key="groups">
-                      <a href="groups">Groups</a>
+                      <a href="groups">{t("Groups")}</a>
                     </Menu.Item>
                   )}
                   {currentUser.hasPermission("list_users") && (
                     <Menu.Item key="users">
-                      <a href="users">Users</a>
+                      <a href="users">{t("Users")}</a>
                     </Menu.Item>
                   )}
                   {currentUser.hasPermission("create_query") && (
                     <Menu.Item key="snippets">
-                      <a href="query_snippets">Query Snippets</a>
+                      <a href="query_snippets">{t("Query Snippets")}</a>
                     </Menu.Item>
                   )}
                   {currentUser.isAdmin && (
                     <Menu.Item key="destinations">
-                      <a href="destinations">Alert Destinations</a>
+                      <a href="destinations">{t("Alert Destinations")}</a>
                     </Menu.Item>
                   )}
                   {currentUser.hasPermission("super_admin") && <Menu.Divider />}
                   {currentUser.hasPermission("super_admin") && (
                     <Menu.Item key="status">
-                      <a href="admin/status">System Status</a>
+                      <a href="admin/status">{t("System Status")}</a>
                     </Menu.Item>
                   )}
                   <Menu.Divider />
                   <Menu.Item key="logout" onClick={() => Auth.logout()}>
-                    Log out
+                    {t("Log out")}
                   </Menu.Item>
                   <Menu.Divider />
                   <Menu.Item key="version" disabled>
-                    Version: {clientConfig.version}
+                    {t("Version")}: {clientConfig.version}
                     {frontendVersion !== clientConfig.version && ` (${frontendVersion.substring(0, 8)})`}
                     {clientConfig.newVersionAvailable && currentUser.hasPermission("super_admin") && (
                       <Tooltip title="Update Available" placement="rightTop">

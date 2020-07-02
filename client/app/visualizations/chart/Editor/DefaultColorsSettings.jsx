@@ -5,7 +5,8 @@ import ColorPicker from "@/components/ColorPicker";
 import { EditorPropTypes } from "@/visualizations/prop-types";
 import ColorPalette from "@/visualizations/ColorPalette";
 import getChartData from "../getChartData";
-
+import { useTranslation } from 'react-i18next';
+import Empty from "antd/lib/empty";
 export default function DefaultColorsSettings({ options, data, onOptionsChange }) {
   const colors = useMemo(
     () => ({
@@ -14,7 +15,7 @@ export default function DefaultColorsSettings({ options, data, onOptionsChange }
     }),
     []
   );
-
+  const { t } = useTranslation()
   const series = useMemo(
     () =>
       map(getChartData(data.rows, options), ({ name }) => ({
@@ -61,7 +62,7 @@ export default function DefaultColorsSettings({ options, data, onOptionsChange }
     },
   ];
 
-  return <Table showHeader={false} dataSource={series} columns={columns} pagination={false} />;
+  return <Table showHeader={false} dataSource={series} columns={columns} pagination={false} locale = {{emptyText: <Empty image={Empty.PRESENTED_IMAGE_SIMPLE} description={t("No Data")} />}} />;
 }
 
 DefaultColorsSettings.propTypes = EditorPropTypes;

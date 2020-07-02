@@ -1,10 +1,11 @@
 import React from "react";
 import { Section, Switch } from "@/components/visualizations/editor";
 import { EditorPropTypes } from "@/visualizations/prop-types";
-
+import { useTranslation } from 'react-i18next';
 import AxisSettings from "./AxisSettings";
 
 export default function XAxisSettings({ options, onOptionsChange }) {
+  const { t } = useTranslation();
   return (
     <React.Fragment>
       <AxisSettings
@@ -19,7 +20,7 @@ export default function XAxisSettings({ options, onOptionsChange }) {
           data-test="Chart.XAxis.Sort"
           defaultChecked={options.sortX}
           onChange={sortX => onOptionsChange({ sortX })}>
-          Sort Values
+          {t("Sort Values")}
         </Switch>
       </Section>
 
@@ -28,7 +29,7 @@ export default function XAxisSettings({ options, onOptionsChange }) {
           data-test="Chart.XAxis.Reverse"
           defaultChecked={options.reverseX}
           onChange={reverseX => onOptionsChange({ reverseX })}>
-          Reverse Order
+          {t("Reverse Order")}
         </Switch>
       </Section>
 
@@ -37,7 +38,7 @@ export default function XAxisSettings({ options, onOptionsChange }) {
           data-test="Chart.XAxis.ShowLabels"
           defaultChecked={options.xAxis.labels.enabled}
           onChange={enabled => onOptionsChange({ xAxis: { labels: { enabled } } })}>
-          Show Labels
+          {t("Show Labels")}
         </Switch>
       </Section>
     </React.Fragment>

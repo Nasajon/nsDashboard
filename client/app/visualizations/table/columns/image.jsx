@@ -4,15 +4,16 @@ import PropTypes from "prop-types";
 import { useDebouncedCallback } from "use-debounce";
 import { Section, Input, ControlLabel, ContextHelp } from "@/components/visualizations/editor";
 import { formatSimpleTemplate } from "@/lib/value-format";
+import { useTranslation } from 'react-i18next';
 
 function Editor({ column, onChange }) {
   const [onChangeDebounced] = useDebouncedCallback(onChange, 200);
-
+  const { t } = useTranslation();
   return (
     <React.Fragment>
       <Section>
         <Input
-          label="URL template"
+          label={t("URL template")}
           data-test="Table.ColumnEditor.Image.UrlTemplate"
           defaultValue={column.imageUrlTemplate}
           onChange={event => onChangeDebounced({ imageUrlTemplate: event.target.value })}
@@ -23,24 +24,24 @@ function Editor({ column, onChange }) {
         <ControlLabel
           label={
             <React.Fragment>
-              Size
+              {t("Size")}
               <ContextHelp placement="topLeft" arrowPointAtCenter>
-                <div className="m-b-5">Any positive integer value that specifies size in pixels.</div>
-                <div>Leave empty to use default value.</div>
+                <div className="m-b-5">{t("Any positive integer value that specifies size in pixels.")}</div>
+                <div>{t("Leave empty to use default value.")}</div>
               </ContextHelp>
             </React.Fragment>
           }>
           <div className="d-flex align-items-center">
             <Input
               data-test="Table.ColumnEditor.Image.Width"
-              placeholder="Width"
+              placeholder={t("Width")}
               defaultValue={column.imageWidth}
               onChange={event => onChangeDebounced({ imageWidth: event.target.value })}
             />
             <span className="p-l-5 p-r-5">&times;</span>
             <Input
               data-test="Table.ColumnEditor.Image.Height"
-              placeholder="Height"
+              placeholder={t("Height")}
               defaultValue={column.imageHeight}
               onChange={event => onChangeDebounced({ imageHeight: event.target.value })}
             />
@@ -50,7 +51,7 @@ function Editor({ column, onChange }) {
 
       <Section>
         <Input
-          label="Title template"
+          label={t("Title template")}
           data-test="Table.ColumnEditor.Image.TitleTemplate"
           defaultValue={column.imageTitleTemplate}
           onChange={event => onChangeDebounced({ imageTitleTemplate: event.target.value })}
@@ -61,14 +62,14 @@ function Editor({ column, onChange }) {
         <ContextHelp
           placement="topLeft"
           arrowPointAtCenter
-          icon={<span style={{ cursor: "default" }}>Format specs {ContextHelp.defaultIcon}</span>}>
+          icon={<span style={{ cursor: "default" }}>{t("Format specs")} {ContextHelp.defaultIcon}</span>}>
           <div>
-            All columns can be referenced using <code>{"{{ column_name }}"}</code> syntax.
+            {t("All columns can be referenced using")} <code>{"{{ column_name }}"}</code> {t("syntax")}.
           </div>
           <div>
-            Use <code>{"{{ @ }}"}</code> to reference current (this) column.
+            {t("Use")} <code>{"{{ @ }}"}</code> {t("to reference current (this) column")}.
           </div>
-          <div>This syntax is applicable to URL, Title and Size options.</div>
+          <div>{t("This syntax is applicable to URL, Title and Size options")}.</div>
         </ContextHelp>
       </Section>
     </React.Fragment>
