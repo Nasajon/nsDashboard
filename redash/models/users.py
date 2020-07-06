@@ -202,6 +202,10 @@ class User(
         return cls.get_by_org(org).filter(cls.email == email).one()
 
     @classmethod
+    def get_by_email_or_name_and_org(cls, user, org):
+        return cls.get_by_org(org).filter(or_(cls.email == user,cls.name == user)).one()
+
+    @classmethod
     def get_by_api_key_and_org(cls, api_key, org):
         return cls.get_by_org(org).filter(cls.api_key == api_key).one()
 
@@ -350,6 +354,49 @@ class Configuracao(db.Model):
     @classmethod
     def find_by_campo_aplicacao(cls, campo, aplicacao):
         return cls.query.filter(cls.campo == campo).filter(cls.aplicacao==aplicacao).one()
+
+@generic_repr("acessoperfilusuario", "sistema", "modulo","acesso","ativado")
+class AcessoUsuario(db.Model):
+    NSDASH_SISTEMA=0
+    NSDASH_MODULO=1
+    NSDASH_ACESSO=0
+
+    acessoperfilusuario = Column(db.String, primary_key=True)
+    sistema = Column(db.Integer)
+    modulo = Column(db.Integer)
+    acesso = Column(db.String)
+    ativado = Column(db.Boolean)
+    perfilusuario = Column(db.String)
+
+    __tablename__ = "acessosperfisusuarios"
+    __table_args__= {"schema":"ns"}
+
+    def __str__(self):
+        return self.acessoperfilusuario
+
+    @classmethod
+    def find_by_perfilusuario(cls, perfilusuario):
+        return cls.query.filter(cls.sistema==AcessoUsuario.NSDASH_SISTEMA).filter(cls.modulo==AcessoUsuario.NSDASH_MODULO).filter(cls.acesso==AcessoUsuario.NSDASH_ACESSO).filter(cls.perfilusuario == perfilusuario).one()
+
+
+@generic_repr("usuario", "login", "email")
+class Usuario(db.Model):
+
+    usuario = Column(db.String, primary_key=True)
+    login = Column(db.String)
+    email = Column(db.String)
+    senha = Column(db.String)
+    perfilusuario = Column(db.String)
+
+    __tablename__ = "usuarios"
+    __table_args__= {"schema":"ns"}
+
+    def __str__(self):
+        return self.usuario
+
+    @classmethod
+    def find_by_login(cls, login):
+        return cls.query.filter(cls.login == login).one()
 
 @generic_repr(
     "id", "object_type", "object_id", "access_type", "grantor_id", "grantee_id"
