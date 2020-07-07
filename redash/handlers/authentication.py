@@ -245,8 +245,8 @@ def login(org_slug=None):
                 
                 if licenciamento_aprovado:
                     usuario = models.Usuario.find_by_login(user.name)
-                    acesso = models.AcessoUsuario.find_by_perfilusuario(usuario.perfilusuario)
-                    if acesso.ativado:
+                    acesso = models.PerfisSistemas.find_by_perfilusuario(usuario.perfilusuario)
+                    if acesso.nsdash:
                         login_user(user)
                         return redirect(next_path)
                     else:
@@ -330,8 +330,8 @@ def create_user_erp(request):
     try:
         usuario = models.Usuario.find_by_login(name)
         if usuario.senha == CriptografiaSenha.codificar(password):
-            acesso = models.AcessoUsuario.find_by_perfilusuario(usuario.perfilusuario)
-            if acesso.ativado:
+            acesso = models.PerfisSistemas.find_by_perfilusuario(usuario.perfilusuario)
+            if acesso.nsdash:
                 org = models.Organization.get_by_slug("default")
                 user = models.User(
                     org=current_org,
