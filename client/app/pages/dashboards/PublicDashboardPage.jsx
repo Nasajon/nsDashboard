@@ -8,7 +8,7 @@ import Parameters from "@/components/Parameters";
 import DashboardGrid from "@/components/dashboards/DashboardGrid";
 import Filters from "@/components/Filters";
 import { Dashboard } from "@/services/dashboard";
-import logoUrl from "@/assets/images/redash_icon_small.png";
+import logoUrl from "@/assets/images/nsdash_icon_small.png";
 import useDashboard from "./hooks/useDashboard";
 
 import "./PublicDashboardPage.less";
