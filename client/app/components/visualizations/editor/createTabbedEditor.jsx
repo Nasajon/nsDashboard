@@ -3,7 +3,7 @@ import React from "react";
 import PropTypes from "prop-types";
 import Tabs from "antd/lib/tabs";
 import { EditorPropTypes } from "@/visualizations/prop-types";
-
+import { useTranslation } from 'react-i18next';
 export const UpdateOptionsStrategy = {
   replace: (existingOptions, newOptions) => merge({}, newOptions),
   shallowMerge: (existingOptions, newOptions) => extend({}, existingOptions, newOptions),
@@ -14,13 +14,13 @@ export function TabbedEditor({ tabs, options, data, onOptionsChange, ...restProp
   const optionsChanged = (newOptions, updateStrategy = UpdateOptionsStrategy.deepMerge) => {
     onOptionsChange(updateStrategy(options, newOptions));
   };
-
+  const { t } = useTranslation();
   tabs = filter(tabs, tab => (isFunction(tab.isAvailable) ? tab.isAvailable(options, data) : true));
 
   return (
     <Tabs animated={false} tabBarGutter={0}>
       {map(tabs, ({ key, title, component: Component }) => (
-        <Tabs.TabPane key={key} tab={<span data-test={`VisualizationEditor.Tabs.${key}`}>{title}</span>}>
+        <Tabs.TabPane key={key} tab={<span data-test={`VisualizationEditor.Tabs.${key}`}>{t(title)}</span>}>
           <Component options={options} data={data} onOptionsChange={optionsChanged} {...restProps} />
         </Tabs.TabPane>
       ))}

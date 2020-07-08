@@ -2,7 +2,7 @@ import { map } from "lodash";
 import React, { useMemo } from "react";
 import { Select } from "@/components/visualizations/editor";
 import { clientConfig } from "@/services/auth";
-
+import { useTranslation } from 'react-i18next';
 export default function ChartTypeSelect(props) {
   const chartTypes = useMemo(() => {
     const result = [
@@ -22,13 +22,13 @@ export default function ChartTypeSelect(props) {
 
     return result;
   }, []);
-
+  const { t } = useTranslation();
   return (
     <Select {...props}>
       {map(chartTypes, ({ type, name, icon }) => (
         <Select.Option key={type} value={type} data-test={`Chart.ChartType.${type}`}>
           <i className={`m-r-5 fa fa-${icon}`} />
-          {name}
+          {t(name)}
         </Select.Option>
       ))}
     </Select>

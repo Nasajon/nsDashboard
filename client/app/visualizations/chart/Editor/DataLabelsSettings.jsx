@@ -3,7 +3,7 @@ import React from "react";
 import { useDebouncedCallback } from "use-debounce";
 import { Section, Input, Checkbox, ContextHelp } from "@/components/visualizations/editor";
 import { EditorPropTypes } from "@/visualizations/prop-types";
-
+import { useTranslation } from 'react-i18next';
 export default function DataLabelsSettings({ options, onOptionsChange }) {
   const isShowDataLabelsAvailable = includes(
     ["line", "area", "column", "scatter", "pie", "heatmap"],
@@ -11,7 +11,7 @@ export default function DataLabelsSettings({ options, onOptionsChange }) {
   );
 
   const [debouncedOnOptionsChange] = useDebouncedCallback(onOptionsChange, 200);
-
+  const { t } = useTranslation();
   return (
     <React.Fragment>
       {isShowDataLabelsAvailable && (
@@ -20,7 +20,7 @@ export default function DataLabelsSettings({ options, onOptionsChange }) {
             data-test="Chart.DataLabels.ShowDataLabels"
             defaultChecked={options.showDataLabels}
             onChange={event => onOptionsChange({ showDataLabels: event.target.checked })}>
-            Show Data Labels
+            {t("Show Data Labels")}
           </Checkbox>
         </Section>
       )}
@@ -29,7 +29,7 @@ export default function DataLabelsSettings({ options, onOptionsChange }) {
         <Input
           label={
             <React.Fragment>
-              Number Values Format
+              {t("Number Values Format")}
               <ContextHelp.NumberFormatSpecs />
             </React.Fragment>
           }
@@ -43,7 +43,7 @@ export default function DataLabelsSettings({ options, onOptionsChange }) {
         <Input
           label={
             <React.Fragment>
-              Percent Values Format
+              {t("Percent Values Format")}
               <ContextHelp.NumberFormatSpecs />
             </React.Fragment>
           }
@@ -57,7 +57,7 @@ export default function DataLabelsSettings({ options, onOptionsChange }) {
         <Input
           label={
             <React.Fragment>
-              Date/Time Values Format
+              {t("Date/Time Values Format")}
               <ContextHelp.DateTimeFormatSpecs />
             </React.Fragment>
           }
@@ -71,32 +71,32 @@ export default function DataLabelsSettings({ options, onOptionsChange }) {
         <Input
           label={
             <React.Fragment>
-              Data Labels
+              {t("Data Labels")}
               <ContextHelp placement="topRight" arrowPointAtCenter>
-                <div className="p-b-5">Use special names to access additional properties:</div>
+                <div className="p-b-5">{t("Use special names to access additional properties:")}</div>
                 <div>
-                  <code>{"{{ @@name }}"}</code> series name;
+                  <code>{"{{ @@name }}"}</code> {t("series name")};
                 </div>
                 <div>
-                  <code>{"{{ @@x }}"}</code> x-value;
+                  <code>{"{{ @@x }}"}</code> {t("x-value")};
                 </div>
                 <div>
-                  <code>{"{{ @@y }}"}</code> y-value;
+                  <code>{"{{ @@y }}"}</code> {t("y-value")};
                 </div>
                 <div>
-                  <code>{"{{ @@yPercent }}"}</code> relative y-value;
+                  <code>{"{{ @@yPercent }}"}</code> {t("relative y-value")};
                 </div>
                 <div>
-                  <code>{"{{ @@yError }}"}</code> y deviation;
+                  <code>{"{{ @@yError }}"}</code> {t("y deviation")};
                 </div>
                 <div>
-                  <code>{"{{ @@size }}"}</code> bubble size;
+                  <code>{"{{ @@size }}"}</code> {t("bubble size")};
                 </div>
                 <div className="p-t-5">
-                  Also, all query result columns can be referenced
+                  {t("Also, all query result columns can be referenced")}
                   <br />
-                  using
-                  <code className="text-nowrap">{"{{ column_name }}"}</code> syntax.
+                  {t("using")}
+                  <code className="text-nowrap">{"{{ column_name }}"}</code> {t("syntax")}.
                 </div>
               </ContextHelp>
             </React.Fragment>

@@ -7,7 +7,6 @@ import Icon from "antd/lib/icon";
 import routeWithUserSession from "@/components/ApplicationArea/routeWithUserSession";
 import EmptyState from "@/components/empty-state/EmptyState";
 import DynamicComponent from "@/components/DynamicComponent";
-import BeaconConsent from "@/components/BeaconConsent";
 import recordEvent from "@/services/recordEvent";
 import { messages } from "@/services/auth";
 import notification from "@/services/notification";
@@ -155,6 +154,7 @@ function DashboardAndQueryFavoritesList() {
 }
 
 function Home() {
+  const { t } = useTranslation();
   useEffect(() => {
     recordEvent("view", "page", "personal_homepage");
   }, []);
@@ -164,8 +164,8 @@ function Home() {
         {includes(messages, "using-deprecated-embed-feature") && <DeprecatedEmbedFeatureAlert />}
         {includes(messages, "email-not-verified") && <EmailNotVerifiedAlert />}
         <EmptyState
-          header="Welcome to Redash 👋"
-          description="Connect to any data source, easily visualize and share your data"
+          header={t("Welcome to Redash") + "👋"}  
+          description={t("Connect to any data source, easily visualize and share your data")}
           illustration="dashboard"
           helpLink="https://redash.io/help/user-guide/getting-started"
           showDashboardStep
@@ -174,7 +174,6 @@ function Home() {
         />
         <DynamicComponent name="HomeExtra" />
         <DashboardAndQueryFavoritesList />
-        <BeaconConsent />
       </div>
     </div>
   );

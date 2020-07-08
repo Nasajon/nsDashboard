@@ -18,9 +18,31 @@ Por fim, importa destacar que o fork tem por objetivo (ao menos inicialmente) de
 
 *Obs. 2: A saber, foi realizado um [estudo prévio](https://drive.google.com/open?id=1m7sSPUbGNAnSw18DBCB_SXfYpzTP7XnDRTFt9_epXsQ) antes da decisão por realizar um fork do Redash.*
 
-## Montando ambiente de desenvolvimento
+## Montando ambiente de desenvolvimento (Com Docker)
 
 Para preparar o ambiente de desenvolvimento, basta seguir a [documentação oficial do redash](https://redash.io/help/open-source/dev-guide/docker).
+
+## Montando ambiente de desenvolvimento (Sem Docker)
+
+* Tenha previamente instalado:
+  * [PostgreSQL](https://www.postgresql.org/download/) .
+  * [Npm](https://nodejs.org/en/download/) .
+  * [Python](https://www.python.org/downloads/) .
+* Clone o projeto do repositório para sua máquina.
+* Navegue para dentro da pasta do projeto e execute os seguintes comandos.
+```shell
+# Instalando as dependências do front
+> npm i
+
+# Instalando as dependências do serviço
+> py -m pip install -r requirements.txt
+
+# Buildando o Front
+> npm run build_windows
+
+# Levantando o serviço. Troque os valores entre '<' e '>' para atender as suas configurações de banco.
+> py main.py -u <usuario_banco> -s <senha_banco> -i <localhost> -p <porta_banco> -b <nome_banco>
+```
 
 ## Suporte Multi-Tenant
 

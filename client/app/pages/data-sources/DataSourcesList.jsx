@@ -13,7 +13,7 @@ import DynamicComponent from "@/components/DynamicComponent";
 import helper from "@/components/dynamic-form/dynamicFormHelper";
 import wrapSettingsTab from "@/components/SettingsWrapper";
 import recordEvent from "@/services/recordEvent";
-
+import { withTranslation } from 'react-i18next';
 class DataSourcesList extends React.Component {
   static propTypes = {
     isNewDataSourcePage: PropTypes.bool,
@@ -111,9 +111,9 @@ class DataSourcesList extends React.Component {
         {policy.isCreateDataSourceEnabled() && (
           <div className="m-t-5">
             <a className="clickable" onClick={this.showCreateSourceDialog}>
-              Click here
+              {this.props.t("Click here")}
             </a>{" "}
-            to add one.
+            {this.props.t("to add one.")}
           </div>
         )}
       </div>
@@ -134,7 +134,7 @@ class DataSourcesList extends React.Component {
         <div className="m-b-15">
           <Button {...newDataSourceProps}>
             <i className="fa fa-plus m-r-5" />
-            New Data Source
+            {this.props.t("New Data Source")}
           </Button>
           <DynamicComponent name="DataSourcesListExtra" />
         </div>
@@ -151,7 +151,7 @@ const DataSourcesListPage = wrapSettingsTab(
     path: "data_sources",
     order: 1,
   },
-  DataSourcesList
+  withTranslation()(DataSourcesList)
 );
 
 export default [

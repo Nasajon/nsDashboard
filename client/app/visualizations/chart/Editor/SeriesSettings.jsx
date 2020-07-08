@@ -4,18 +4,20 @@ import { useDebouncedCallback } from "use-debounce";
 import Table from "antd/lib/table";
 import Input from "antd/lib/input";
 import Radio from "antd/lib/radio";
+import Empty from "antd/lib/empty";
 import { sortableElement } from "react-sortable-hoc";
 import { SortableContainer, DragHandle } from "@/components/sortable";
 import { EditorPropTypes } from "@/visualizations/prop-types";
 import ChartTypeSelect from "./ChartTypeSelect";
 import getChartData from "../getChartData";
-
+import { useTranslation } from 'react-i18next';
 const SortableBodyRow = sortableElement(props => <tr {...props} />);
 
-function getTableColumns(options, updateSeriesOption, debouncedUpdateSeriesOption) {
+function getTableColumns(options, updateSeriesOption, debouncedUpdateSeriesOption, t) {
+  
   const result = [
     {
-      title: "Order",
+      title: t("Order"),
       dataIndex: "zIndex",
       className: "text-nowrap",
       render: (unused, item) => (
@@ -26,7 +28,7 @@ function getTableColumns(options, updateSeriesOption, debouncedUpdateSeriesOptio
       ),
     },
     {
-      title: "Label",
+      title: t("Label"),
       dataIndex: "name",
       className: "text-nowrap",
       render: (unused, item) => (
@@ -42,7 +44,7 @@ function getTableColumns(options, updateSeriesOption, debouncedUpdateSeriesOptio
 
   if (!includes(["pie", "heatmap"], options.globalSeriesType)) {
     result.push({
-      title: "Y Axis",
+      title: t("Y Axis"),
       dataIndex: "yAxis",
       className: "text-nowrap",
       render: (unused, item) => (
@@ -51,16 +53,16 @@ function getTableColumns(options, updateSeriesOption, debouncedUpdateSeriesOptio
           value={item.yAxis === 1 ? 1 : 0}
           onChange={event => updateSeriesOption(item.key, "yAxis", event.target.value)}>
           <Radio value={0} data-test={`Chart.Series.${item.key}.UseLeftAxis`}>
-            left
+            {t("left")}
           </Radio>
           <Radio value={1} data-test={`Chart.Series.${item.key}.UseRightAxis`}>
-            right
+            {t("right")}
           </Radio>
         </Radio.Group>
       ),
     });
     result.push({
-      title: "Type",
+      title: t("Type"),
       dataIndex: "type",
       className: "text-nowrap",
       render: (unused, item) => (
@@ -111,11 +113,12 @@ export default function SeriesSettings({ options, data, onOptionsChange }) {
     [onOptionsChange]
   );
   const [debouncedUpdateSeriesOption] = useDebouncedCallback(updateSeriesOption, 200);
-
-  const columns = useMemo(() => getTableColumns(options, updateSeriesOption, debouncedUpdateSeriesOption), [
+  const { t } = useTranslation()
+  const columns = useMemo(() => getTableColumns(options, updateSeriesOption, debouncedUpdateSeriesOption, t), [
     options,
     updateSeriesOption,
     debouncedUpdateSeriesOption,
+    t
   ]);
 
   return (
@@ -140,6 +143,7 @@ export default function SeriesSettings({ options, data, onOptionsChange }) {
         }}
         onRow={item => ({ index: item.zIndex })}
         pagination={false}
+        locale = {{emptyText: <Empty image={Empty.PRESENTED_IMAGE_SIMPLE} description={t("No Data")} />}}
       />
     </SortableContainer>
   );

@@ -19,7 +19,7 @@ import wrapSettingsTab from "@/components/SettingsWrapper";
 
 import Group from "@/services/group";
 import { currentUser } from "@/services/auth";
-
+import { withTranslation } from 'react-i18next';
 class GroupsList extends React.Component {
   static propTypes = {
     controller: ControllerType.isRequired,
@@ -30,7 +30,7 @@ class GroupsList extends React.Component {
       (text, group) => (
         <div>
           <a href={"groups/" + group.id}>{group.name}</a>
-          {group.type === "builtin" && <span className="label label-default m-l-10">built-in</span>}
+          {group.type === "builtin" && <span className="label label-default m-l-10">{this.props.t("built-in")}</span>}
         </div>
       ),
       {
@@ -41,8 +41,8 @@ class GroupsList extends React.Component {
     Columns.custom(
       (text, group) => (
         <Button.Group>
-          <Button href={`groups/${group.id}`}>Members</Button>
-          {currentUser.isAdmin && <Button href={`groups/${group.id}/data_sources`}>Data Sources</Button>}
+          <Button href={`groups/${group.id}`}>{this.props.t("Members")}</Button>
+          {currentUser.isAdmin && <Button href={`groups/${group.id}/data_sources`}>{this.props.t("Data Sources")}</Button>}
         </Button.Group>
       ),
       {
@@ -60,7 +60,7 @@ class GroupsList extends React.Component {
             group={group}
             title={canRemove ? null : "Cannot delete built-in group"}
             onClick={() => this.onGroupDeleted()}>
-            Delete
+            {this.props("Delete")}
           </DeleteGroupButton>
         );
       },
@@ -94,7 +94,7 @@ class GroupsList extends React.Component {
           <div className="m-b-15">
             <Button type="primary" onClick={this.createGroup}>
               <i className="fa fa-plus m-r-5" />
-              New Group
+              {this.props.t("New Group")}
             </Button>
           </div>
         )}
@@ -133,7 +133,7 @@ const GroupsListPage = wrapSettingsTab(
     order: 3,
   },
   itemsList(
-    GroupsList,
+    withTranslation()(GroupsList),
     () =>
       new ResourceItemsSource({
         isPlainList: true,

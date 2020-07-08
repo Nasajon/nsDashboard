@@ -13,8 +13,8 @@ import { UserProfile } from "../proptypes";
 import DynamicForm from "../dynamic-form/DynamicForm";
 import ChangePasswordDialog from "./ChangePasswordDialog";
 import InputWithCopy from "../InputWithCopy";
-
-export default class UserEdit extends React.Component {
+import { withTranslation } from 'react-i18next';
+class UserEdit extends React.Component {
   static propTypes = {
     user: UserProfile.isRequired,
   };
@@ -85,9 +85,10 @@ export default class UserEdit extends React.Component {
     };
 
     Modal.confirm({
-      title: "Regenerate API Key",
-      content: "Are you sure you want to regenerate?",
-      okText: "Regenerate",
+      title: this.props.t("Regenerate API Key"),
+      content: this.props.t("Are you sure you want to regenerate?"),
+      okText: this.props.t("Regenerate"),
+      cancelText: this.props.t("Cancel"),
       onOk: doRegenerate,
       maskClosable: true,
       autoFocusButton: null,
@@ -188,7 +189,7 @@ export default class UserEdit extends React.Component {
     return (
       <Form layout="vertical">
         <hr />
-        <Form.Item label="API Key" className="m-b-10">
+        <Form.Item label={this.props.t("API Key")} className="m-b-10">
           <InputWithCopy id="apiKey" className="hide-in-percy" value={user.apiKey} data-test="ApiKey" readOnly />
         </Form.Item>
         <Button
@@ -196,7 +197,7 @@ export default class UserEdit extends React.Component {
           onClick={this.regenerateApiKey}
           loading={regeneratingApiKey}
           data-test="RegenerateApiKey">
-          Regenerate
+          {this.props.t("Regenerate")}
         </Button>
       </Form>
     );
@@ -240,7 +241,7 @@ export default class UserEdit extends React.Component {
     return (
       <Fragment>
         <Button className="w-100 m-t-10" onClick={this.sendPasswordReset} loading={sendingPasswordEmail}>
-          Send Password Reset Email
+          {this.props.t("Send Password Reset Email")}
         </Button>
       </Fragment>
     );
@@ -251,11 +252,11 @@ export default class UserEdit extends React.Component {
 
     return user.isDisabled ? (
       <Button className="w-100 m-t-10" type="primary" onClick={this.toggleUser} loading={togglingUser}>
-        Enable User
+        {this.props.t("Enable User")}
       </Button>
     ) : (
       <Button className="w-100 m-t-10" type="danger" onClick={this.toggleUser} loading={togglingUser}>
-        Disable User
+        {this.props.t("Disable User")}
       </Button>
     );
   }
@@ -273,10 +274,10 @@ export default class UserEdit extends React.Component {
           <Fragment>
             {this.renderApiKey()}
             <hr />
-            <h5>Password</h5>
+            <h5>{this.props.t("Password")}</h5>
             {user.id === currentUser.id && (
               <Button className="w-100 m-t-10" onClick={this.changePassword} data-test="ChangePassword">
-                Change Password
+                {this.props.t("Change Password")}
               </Button>
             )}
             {currentUser.isAdmin && user.id !== currentUser.id && (
@@ -293,3 +294,5 @@ export default class UserEdit extends React.Component {
     );
   }
 }
+
+export default withTranslation()(UserEdit)

@@ -4,7 +4,7 @@ import Popover from "antd/lib/popover";
 import Tooltip from "antd/lib/tooltip";
 import Icon from "antd/lib/icon";
 import HelpTrigger from "@/components/HelpTrigger";
-
+import { useTranslation } from 'react-i18next';
 import "./context-help.less";
 
 export default function ContextHelp({ icon, children, ...props }) {
@@ -36,11 +36,12 @@ function NumberFormatSpecs() {
 }
 
 function DateTimeFormatSpecs() {
+  const { t } = useTranslation();
   return (
     <Tooltip
       title={
         <React.Fragment>
-          Formatting Dates and Times
+          {t("Formatting Dates and Times")}
           <i className="fa fa-external-link m-l-5" />
         </React.Fragment>
       }>

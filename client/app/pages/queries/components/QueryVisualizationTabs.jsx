@@ -108,7 +108,7 @@ export default function QueryVisualizationTabs({
             <TabWithDeleteButton
               data-test={`QueryPageVisualizationTab${visualization.id}`}
               canDelete={!isMobile && canDeleteVisualizations && !isFirstVisualization(visualization.id)}
-              visualizationName={visualization.name}
+              visualizationName={t(visualization.name)}
               onDelete={() => onDeleteVisualization(visualization.id)}
             />
           }>

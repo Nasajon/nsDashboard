@@ -3,6 +3,7 @@ import Menu from "antd/lib/menu";
 import PageHeader from "@/components/PageHeader";
 import location from "@/services/location";
 import settingsMenu from "@/services/settingsMenu";
+import { useTranslation } from 'react-i18next';
 
 function wrapSettingsTab(options, WrappedComponent) {
   if (options) {
@@ -11,6 +12,7 @@ function wrapSettingsTab(options, WrappedComponent) {
 
   return function SettingsTab(props) {
     const activeItem = settingsMenu.getActiveItem(location.path);
+    const { t } = useTranslation();
     return (
       <div className="settings-screen">
         <div className="container">
@@ -22,7 +24,7 @@ function wrapSettingsTab(options, WrappedComponent) {
                 .map(item => (
                   <Menu.Item key={item.title}>
                     <a href={item.path} data-test="SettingsScreenItem">
-                      {item.title}
+                      {t(item.title)}
                     </a>
                   </Menu.Item>
                 ))}

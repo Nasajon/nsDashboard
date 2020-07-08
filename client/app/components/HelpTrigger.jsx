@@ -7,7 +7,7 @@ import Drawer from "antd/lib/drawer";
 import Icon from "antd/lib/icon";
 import BigMessage from "@/components/BigMessage";
 import DynamicComponent from "@/components/DynamicComponent";
-
+import { withTranslation } from 'react-i18next';
 import "./HelpTrigger.less";
 
 const DOMAIN = "https://redash.io";
@@ -40,7 +40,7 @@ export const TYPES = {
   NUMBER_FORMAT_SPECS: ["/user-guide/visualizations/formatting-numbers", "Formatting Numbers"],
 };
 
-export default class HelpTrigger extends React.Component {
+class HelpTrigger extends React.Component {
   static propTypes = {
     type: PropTypes.oneOf(Object.keys(TYPES)).isRequired,
     className: PropTypes.string,
@@ -126,7 +126,7 @@ export default class HelpTrigger extends React.Component {
 
     return (
       <React.Fragment>
-        <Tooltip title={this.props.showTooltip ? tooltip : null}>
+        <Tooltip title={this.props.showTooltip ? this.props.t(tooltip) : null}>
           <a onClick={this.openDrawer} className={className}>
             {this.props.children}
           </a>
@@ -193,3 +193,5 @@ export default class HelpTrigger extends React.Component {
     );
   }
 }
+
+export default withTranslation()(HelpTrigger)

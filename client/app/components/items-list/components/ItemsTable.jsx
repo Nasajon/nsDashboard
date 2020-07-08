@@ -126,7 +126,6 @@ class ItemsTable extends React.Component {
   prepareColumns() {
     const { orderByField, orderByReverse, toggleSorting, t } = this.props;
     const orderByDirection = orderByReverse ? "descend" : "ascend";
-    // const { t } = useTranslation();
     return map(
       map(
         filter(this.props.columns, column => (isFunction(column.isAvailable) ? column.isAvailable() : true)),

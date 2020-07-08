@@ -1,17 +1,18 @@
 import React from "react";
 import { Section, Input, InputNumber, Switch } from "@/components/visualizations/editor";
 import { EditorPropTypes } from "@/visualizations/prop-types";
-
+import { useTranslation } from 'react-i18next';
 import { isValueNumber } from "../utils";
 
 export default function FormatSettings({ options, data, onOptionsChange }) {
   const inputsEnabled = isValueNumber(data.rows, options);
+  const { t } = useTranslation()
   return (
     <React.Fragment>
       <Section>
         <InputNumber
           layout="horizontal"
-          label="Formatting Decimal Place"
+          label={t("Formatting Decimal Place")}
           className="w-100"
           data-test="Counter.Formatting.DecimalPlace"
           defaultValue={options.stringDecimal}
@@ -23,7 +24,7 @@ export default function FormatSettings({ options, data, onOptionsChange }) {
       <Section>
         <Input
           layout="horizontal"
-          label="Formatting Decimal Character"
+          label={t("Formatting Decimal Character")}
           className="w-100"
           data-test="Counter.Formatting.DecimalCharacter"
           defaultValue={options.stringDecChar}
@@ -35,7 +36,7 @@ export default function FormatSettings({ options, data, onOptionsChange }) {
       <Section>
         <Input
           layout="horizontal"
-          label="Formatting Thousands Separator"
+          label={t("Formatting Thousands Separator")}
           className="w-100"
           data-test="Counter.Formatting.ThousandsSeparator"
           defaultValue={options.stringThouSep}
@@ -47,7 +48,7 @@ export default function FormatSettings({ options, data, onOptionsChange }) {
       <Section>
         <Input
           layout="horizontal"
-          label="Formatting String Prefix"
+          label={t("Formatting String Prefix")}
           className="w-100"
           data-test="Counter.Formatting.StringPrefix"
           defaultValue={options.stringPrefix}
@@ -59,7 +60,7 @@ export default function FormatSettings({ options, data, onOptionsChange }) {
       <Section>
         <Input
           layout="horizontal"
-          label="Formatting String Suffix"
+          label={t("Formatting String Suffix")}
           className="w-100"
           data-test="Counter.Formatting.StringSuffix"
           defaultValue={options.stringSuffix}
@@ -73,7 +74,7 @@ export default function FormatSettings({ options, data, onOptionsChange }) {
           data-test="Counter.Formatting.FormatTargetValue"
           defaultChecked={options.formatTargetValue}
           onChange={formatTargetValue => onOptionsChange({ formatTargetValue })}>
-          Format Target Value
+          {t("Format Target Value")}
         </Switch>
       </Section>
     </React.Fragment>

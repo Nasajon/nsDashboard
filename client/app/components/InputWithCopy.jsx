@@ -2,8 +2,8 @@ import React from "react";
 import Input from "antd/lib/input";
 import Icon from "antd/lib/icon";
 import Tooltip from "antd/lib/tooltip";
-
-export default class InputWithCopy extends React.Component {
+import { withTranslation } from 'react-i18next';
+class InputWithCopy extends React.Component {
   constructor(props) {
     super(props);
     this.state = { copied: null };
@@ -41,7 +41,7 @@ export default class InputWithCopy extends React.Component {
 
   render() {
     const copyButton = (
-      <Tooltip title={this.state.copied || "Copy"}>
+      <Tooltip title={this.props.t(this.state.copied || "Copy")}>
         <Icon type="copy" style={{ cursor: "pointer" }} onClick={this.copy} />
       </Tooltip>
     );
@@ -49,3 +49,5 @@ export default class InputWithCopy extends React.Component {
     return <Input {...this.props} ref={this.ref} addonAfter={this.copyFeatureSupported && copyButton} />;
   }
 }
+
+export default withTranslation()(InputWithCopy)

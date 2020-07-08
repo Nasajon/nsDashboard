@@ -5,7 +5,9 @@ import pt from '@/locales/pt-BR.json'
 i18n.use(LanguageDetector).use(initReactI18next)
     .init({
         fallbackLng: "pt-BR",
-        resources: pt
+        resources: pt,
+        keySeparator: false,
+        nsSeparator: false
     });
 
 export default i18n;

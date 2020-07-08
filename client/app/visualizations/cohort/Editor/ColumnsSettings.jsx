@@ -2,13 +2,14 @@ import { map } from "lodash";
 import React from "react";
 import { Section, Select } from "@/components/visualizations/editor";
 import { EditorPropTypes } from "@/visualizations/prop-types";
-
+import { useTranslation } from 'react-i18next';
 export default function ColumnsSettings({ options, data, onOptionsChange }) {
+  const { t } = useTranslation()
   return (
     <React.Fragment>
       <Section>
         <Select
-          label="Date (Bucket)"
+          label={t("Date (Bucket)")}
           data-test="Cohort.DateColumn"
           className="w-100"
           value={options.dateColumn}
@@ -23,7 +24,7 @@ export default function ColumnsSettings({ options, data, onOptionsChange }) {
 
       <Section>
         <Select
-          label="Stage"
+          label={t("Stage")}
           data-test="Cohort.StageColumn"
           className="w-100"
           value={options.stageColumn}
@@ -38,7 +39,7 @@ export default function ColumnsSettings({ options, data, onOptionsChange }) {
 
       <Section>
         <Select
-          label="Bucket Population Size"
+          label={t("Bucket Population Size")}
           data-test="Cohort.TotalColumn"
           className="w-100"
           value={options.totalColumn}
@@ -53,7 +54,7 @@ export default function ColumnsSettings({ options, data, onOptionsChange }) {
 
       <Section>
         <Select
-          label="Stage Value"
+          label={t("Stage Value")}
           data-test="Cohort.ValueColumn"
           className="w-100"
           value={options.valueColumn}

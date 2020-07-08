@@ -4,7 +4,7 @@ import { useDebouncedCallback } from "use-debounce";
 import PropTypes from "prop-types";
 import * as Grid from "antd/lib/grid";
 import { Section, Select, Input, Checkbox, TextAlignmentSelect } from "@/components/visualizations/editor";
-
+import { useTranslation } from 'react-i18next';
 import ColumnTypes from "../columns";
 
 export default function ColumnEditor({ column, onChange }) {
@@ -15,7 +15,7 @@ export default function ColumnEditor({ column, onChange }) {
   const [handleChangeDebounced] = useDebouncedCallback(handleChange, 200);
 
   const AdditionalOptions = ColumnTypes[column.displayAs].Editor || null;
-
+  const { t } = useTranslation();
   return (
     <div className="table-visualization-editor-column">
       <Section>
@@ -42,20 +42,20 @@ export default function ColumnEditor({ column, onChange }) {
           data-test={`Table.Column.${column.name}.UseForSearch`}
           defaultChecked={column.allowSearch}
           onChange={event => handleChange({ allowSearch: event.target.checked })}>
-          Use for search
+          {t("Use for search")}
         </Checkbox>
       </Section>
 
       <Section>
         <Select
-          label="Display as:"
+          label={t("Display as:")}
           data-test={`Table.Column.${column.name}.DisplayAs`}
           className="w-100"
           defaultValue={column.displayAs}
           onChange={displayAs => handleChange({ displayAs })}>
           {map(ColumnTypes, ({ friendlyName }, key) => (
             <Select.Option key={key} data-test={`Table.Column.${column.name}.DisplayAs.${key}`}>
-              {friendlyName}
+              {t(friendlyName)}
             </Select.Option>
           ))}
         </Select>

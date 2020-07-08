@@ -3,7 +3,7 @@ import React from "react";
 import { Section, Select, ColorPicker } from "@/components/visualizations/editor";
 import { EditorPropTypes } from "@/visualizations/prop-types";
 import ColorPalette from "@/visualizations/ColorPalette";
-
+import { useTranslation } from 'react-i18next';
 const ColorSchemes = [
   "Blackbody",
   "Bluered",
@@ -26,20 +26,21 @@ const ColorSchemes = [
 ];
 
 export default function HeatmapColorsSettings({ options, onOptionsChange }) {
+  const { t } = useTranslation()
   return (
     <React.Fragment>
       <Section>
         <Select
-          label="Color Scheme"
+          label={t("Color Scheme")}
           className="w-100"
           data-test="Chart.Colors.Heatmap.ColorScheme"
-          placeholder="Choose Color Scheme..."
+          placeholder={t("Choose Color Scheme...")}
           allowClear
           value={options.colorScheme || undefined}
           onChange={value => onOptionsChange({ colorScheme: value || null })}>
           {map(ColorSchemes, scheme => (
             <Select.Option key={scheme} value={scheme} data-test={`Chart.Colors.Heatmap.ColorScheme.${scheme}`}>
-              {scheme}
+              {t(scheme)}
             </Select.Option>
           ))}
         </Select>
@@ -50,7 +51,7 @@ export default function HeatmapColorsSettings({ options, onOptionsChange }) {
           <Section>
             <ColorPicker
               layout="horizontal"
-              label="Min Color:"
+              label={t("Min Color:")}
               data-test="Chart.Colors.Heatmap.MinColor"
               interactive
               placement="topLeft"
@@ -63,7 +64,7 @@ export default function HeatmapColorsSettings({ options, onOptionsChange }) {
           <Section>
             <ColorPicker
               layout="horizontal"
-              label="Max Color:"
+              label={t("Max Color:")}
               data-test="Chart.Colors.Heatmap.MaxColor"
               interactive
               placement="topRight"

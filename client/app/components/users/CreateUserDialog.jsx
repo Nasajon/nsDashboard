@@ -5,7 +5,7 @@ import Alert from "antd/lib/alert";
 import DynamicForm from "@/components/dynamic-form/DynamicForm";
 import { wrap as wrapDialog, DialogPropType } from "@/components/DialogWrapper";
 import recordEvent from "@/services/recordEvent";
-
+import { withTranslation } from 'react-i18next';
 class CreateUserDialog extends React.Component {
   static propTypes = {
     dialog: DialogPropType.isRequired,
@@ -49,8 +49,9 @@ class CreateUserDialog extends React.Component {
     return (
       <Modal
         {...this.props.dialog.props}
-        title="Create a New User"
-        okText="Create"
+        title={this.props.t("Create a New User")}
+        okText={this.props.t("Create")}
+        cancelText={this.props.t("Cancel")}
         okButtonProps={{ loading: savingUser }}
         onOk={() => this.createUser()}>
         <DynamicForm fields={formFields} ref={this.form} hideSubmitButton />
@@ -60,4 +61,4 @@ class CreateUserDialog extends React.Component {
   }
 }
 
-export default wrapDialog(CreateUserDialog);
+export default wrapDialog(withTranslation()(CreateUserDialog));

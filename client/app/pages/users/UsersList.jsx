@@ -29,25 +29,26 @@ import User from "@/services/user";
 import navigateTo from "@/components/ApplicationArea/navigateTo";
 import notification from "@/services/notification";
 import { absoluteUrl } from "@/services/utils";
-
+import { useTranslation, withTranslation } from 'react-i18next';
 function UsersListActions({ user, enableUser, disableUser, deleteUser }) {
+  const { t } = useTranslation();
   if (user.id === currentUser.id) {
     return null;
   }
   if (user.is_invitation_pending) {
     return (
       <Button type="danger" className="w-100" onClick={event => deleteUser(event, user)}>
-        Delete
+        {t("Delete")}
       </Button>
     );
   }
   return user.is_disabled ? (
     <Button type="primary" className="w-100" onClick={event => enableUser(event, user)}>
-      Enable
+      {t("Enable")}
     </Button>
   ) : (
     <Button className="w-100" onClick={event => disableUser(event, user)}>
-      Disable
+      {t("Disable")}
     </Button>
   );
 }
@@ -190,7 +191,7 @@ class UsersList extends React.Component {
       <div className="m-b-15">
         <Button type="primary" disabled={!policy.isCreateUserEnabled()} onClick={this.showCreateUserDialog}>
           <i className="fa fa-plus m-r-5" />
-          New User
+          {this.props.t("New User")}
         </Button>
         <DynamicComponent name="UsersListExtra" />
       </div>
@@ -250,7 +251,7 @@ const UsersListPage = wrapSettingsTab(
     order: 2,
   },
   itemsList(
-    UsersList,
+    withTranslation()(UsersList),
     () =>
       new ResourceItemsSource({
         getRequest(request, { params: { currentPage } }) {
