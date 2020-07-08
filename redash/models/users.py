@@ -359,7 +359,7 @@ class Configuracao(db.Model):
 class PerfisSistemas(db.Model):
     # Matheus Santos - 07/07/2020
     #   na tabela ns.perfissistemas ficam registrados os acessos que cada perfilusuario
-    #   tem para cada sistema, logo a coluna nsdash informa se o perfil possui acesso
+    #   tem para cada sistema, logo a coluna nsdash informa se o perfil possui, ou não, acesso ao nsdash
 
     perfilsistema = Column(db.String, primary_key=True)
     nsdash = Column(db.Boolean)
