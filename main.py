@@ -1,5 +1,5 @@
 from redash.app import create_app
-from redash.utils import rq, data_sources
+from redash.utils import rq, data_sources, events
 from multiprocessing import Pool, freeze_support
 import os
 import webbrowser
@@ -9,18 +9,23 @@ import getopt
 import dotenv
 from functools import partial
 import requests
+import subprocess
 app = create_app()
 
 def run_process(process, ds_options, user, password):
     try:
         if process == 0:
-            app.run()
+            with app.app_context():
+                events.record("iniciando_app","log",None)
+                app.run()
         elif process == 1:
             with app.app_context():
                 rq.worker()
         elif process == 2:
             rq.scheduler()
         elif process == 3:
+            with app.app_context():
+                events.record("abrindo_browser","log",None)
             if user is not None and password is not None:
                 webbrowser.open('http://localhost:5000/login?user={}&password={}'.format(user, password))
             else:
@@ -29,7 +34,8 @@ def run_process(process, ds_options, user, password):
             with app.app_context():
                 data_sources.new("Padrão", "pg_multi_tenant",ds_options)
     except Exception as e:
-        print(str(e))
+        with app.app_context():
+            events.record("erro_process","log",{"process":process,"erro": str(e)})
         return 0
 
     return 1
@@ -63,6 +69,10 @@ if __name__ == '__main__':
             banco = arg
         elif opt == '--user':
             user = arg
+
+    with app.app_context():
+        params = {"parametros": opts}
+        events.record("parametros_entrada","log",params)
             
     if not program_up:
         if usuario != None and senha != None and porta != None and ip != None and banco != None:
@@ -77,12 +87,25 @@ if __name__ == '__main__':
             else:
                 print("Arquivo env nao encontrado")
 
+        with app.app_context():
+            events.record("conexao_banco","log",ds_options)
+
         bundle_dir = getattr(sys, '_MEIPASS', os.path.abspath(os.path.dirname(__file__)))
         path_to_redis = os.path.join(bundle_dir, 'redis-server.exe')
-        os.system('powershell -executionPolicy bypass "Start-Process -WindowStyle hidden -FilePath {}"'.format(path_to_redis))
-        pool = Pool(5)
-        pool.map(partial(run_process, ds_options=ds_options, user=user, password=senha), range(5))
+        with app.app_context():
+            events.record("iniciando_redis","log",{"path_redis":path_to_redis})
+            try:
+                output = subprocess.check_output('powershell -executionPolicy bypass "Start-Process -WindowStyle hidden -FilePath {}"'.format(path_to_redis))
+                events.record("funcionando_redis","log",None)
+                pool = Pool(5)
+                pool.map(partial(run_process, ds_options=ds_options, user=user, password=senha), range(5))
+            except subprocess.CalledProcessError as e:
+                events.record("erro_redis","log",{"erro":str(e.output)})
+            except Exception as e:
+                events.record("erro_main","log",{"erro":str(e)})
     else:
+        with app.app_context():
+            events.record("abrindo_browser","log",None)
         if user is not None and senha is not None:
             webbrowser.open('http://localhost:5000/login?user={}&password={}'.format(user, senha))
         else:
