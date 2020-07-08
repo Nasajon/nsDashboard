@@ -355,28 +355,25 @@ class Configuracao(db.Model):
     def find_by_campo_aplicacao(cls, campo, aplicacao):
         return cls.query.filter(cls.campo == campo).filter(cls.aplicacao==aplicacao).one()
 
-@generic_repr("acessoperfilusuario", "sistema", "modulo","acesso","ativado")
-class AcessoUsuario(db.Model):
-    NSDASH_SISTEMA=0
-    NSDASH_MODULO=1
-    NSDASH_ACESSO=0
+@generic_repr("perfilsistema", "perfilusuario","nsdash")
+class PerfisSistemas(db.Model):
+    # Matheus Santos - 07/07/2020
+    #   na tabela ns.perfissistemas ficam registrados os acessos que cada perfilusuario
+    #   tem para cada sistema, logo a coluna nsdash informa se o perfil possui, ou não, acesso ao nsdash
 
-    acessoperfilusuario = Column(db.String, primary_key=True)
-    sistema = Column(db.Integer)
-    modulo = Column(db.Integer)
-    acesso = Column(db.String)
-    ativado = Column(db.Boolean)
+    perfilsistema = Column(db.String, primary_key=True)
+    nsdash = Column(db.Boolean)
     perfilusuario = Column(db.String)
 
-    __tablename__ = "acessosperfisusuarios"
+    __tablename__ = "perfissistemas"
     __table_args__= {"schema":"ns"}
 
     def __str__(self):
-        return self.acessoperfilusuario
+        return self.perfilsistema
 
     @classmethod
     def find_by_perfilusuario(cls, perfilusuario):
-        return cls.query.filter(cls.sistema==AcessoUsuario.NSDASH_SISTEMA).filter(cls.modulo==AcessoUsuario.NSDASH_MODULO).filter(cls.acesso==AcessoUsuario.NSDASH_ACESSO).filter(cls.perfilusuario == perfilusuario).one()
+        return cls.query.filter(cls.perfilusuario == perfilusuario).one()
 
 
 @generic_repr("usuario", "login", "email")
