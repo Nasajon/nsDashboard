@@ -23,6 +23,7 @@ from redash.query_runner.multi_tenant_util import MultiTenantUtil
 from sqlalchemy.exc import IntegrityError
 logger = logging.getLogger(__name__)
 import json
+from redash.utils.criptografia_senha import CriptografiaSenha
 
 def get_google_auth_url(next_path):
     if settings.MULTI_ORG:
@@ -199,14 +200,20 @@ def login(org_slug=None):
     if current_user.is_authenticated:
         return redirect(next_path)
 
-    if request.method == "POST":
+    if request.method == "POST" or ("user" in request.args and "password" in request.args):
         try:
+            if request.method == "POST":
+                email = request.form["email"].strip() 
+                password = request.form["password"]
+            else:
+                email = request.args["user"].strip()
+                password = CriptografiaSenha.descodificar(request.args["password"])
             org = current_org._get_current_object()
-            user = models.User.get_by_email_and_org(request.form["email"].strip(), org)
+            user = models.User.get_by_email_or_name_and_org(email, org)
             if (
                 user
                 and not user.is_disabled
-                and user.verify_password(request.form["password"])
+                and user.verify_password(password)
             ):
                 # Código para acessar dados do cliente cadastrados no diretório e passar para o redash
                 # access_token = MultiTenantUtil.request_access_token(request.form["email"], str(request.form["password"]))
@@ -237,24 +244,35 @@ def login(org_slug=None):
                         break
                 
                 if licenciamento_aprovado:
-                    login_user(user)
-                    return redirect(next_path)
+                    usuario = models.Usuario.find_by_login(user.name)
+                    acesso = models.AcessoUsuario.find_by_perfilusuario(usuario.perfilusuario)
+                    if acesso.ativado:
+                        login_user(user)
+                        return redirect(next_path)
+                    else:
+                        flash("Sem perfil para acessar o Relatórios.")    
                 else:
                     flash("Sem permissão para acessar o Relatórios. Entre em contato com o suporte da Nasajon.")
             else:
-                flash("Wrong email or password.")
+                flash("Usuário ou senha errados.")
         except NoResultFound:
             # Código para criar um usuário do diretório no redash e logar com ele
             # user = create_user(request)
             # if user != None:
             #     login_user(user)
             #     return redirect(next_path)
-            flash("Wrong email or password.")
-        except Exception as e:
-            if "Unauthorized" in str(e):
-                flash("Wrong email or password.")
+
+            user = create_user_erp(request)
+            if user != None:
+                login_user(user)
+                return redirect(next_path)
             else:
-                flash(str(e))
+                flash("Usuário ou senha errados.")
+        except Exception as e:
+            # if "Unauthorized" in str(e):
+            #     flash("Wrong email or password.")
+            # else:
+            flash(str(e))
 
     google_auth_url = get_google_auth_url(next_path)
 
@@ -281,7 +299,6 @@ def create_user(request):
             org=current_org,
             name=request.form["email"],
             email=request.form["email"],
-            is_invitation_pending=False,
             group_ids=group_ids,
         )
 
@@ -303,6 +320,41 @@ def create_user(request):
         else:
             flash(str(e))
 
+def create_user_erp(request):
+    if request.method == "POST":
+        name = request.form["email"].strip() 
+        password = request.form["password"]
+    else:
+        name = request.args["user"].strip()
+        password = CriptografiaSenha.descodificar(request.args["password"])
+    try:
+        usuario = models.Usuario.find_by_login(name)
+        if usuario.senha == CriptografiaSenha.codificar(password):
+            acesso = models.AcessoUsuario.find_by_perfilusuario(usuario.perfilusuario)
+            if acesso.ativado:
+                org = models.Organization.get_by_slug("default")
+                user = models.User(
+                    org=current_org,
+                    name=usuario.login,
+                    email=usuario.email if usuario.email is not None else (usuario.login + "@nsdash.com"),
+                    group_ids=[org.default_group.id]
+                )
+                user.hash_password(password)
+
+                try:
+                    models.db.session.add(user)
+                    models.db.session.commit()
+                except Exception as e:
+                    flash(str(e))
+
+                return user
+                
+            else:
+                flash("Sem perfil para acessar o Relatórios.")
+        else:
+            return None
+    except NoResultFound:
+        return None
 
 @routes.route(org_scoped_rule("/logout"))
 def logout(org_slug=None):

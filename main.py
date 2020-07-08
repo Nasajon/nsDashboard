@@ -8,9 +8,10 @@ import sys
 import getopt
 import dotenv
 from functools import partial
+import requests
 app = create_app()
 
-def run_process(process, ds_options):
+def run_process(process, ds_options, user, password):
     try:
         if process == 0:
             app.run()
@@ -20,7 +21,10 @@ def run_process(process, ds_options):
         elif process == 2:
             rq.scheduler()
         elif process == 3:
-            webbrowser.open('http://localhost:5000')
+            if user is not None and password is not None:
+                webbrowser.open('http://localhost:5000/login?user={}&password={}'.format(user, password))
+            else:
+                webbrowser.open('http://localhost:5000/login')
         elif process == 4:
             with app.app_context():
                 data_sources.new("Padrão", "pg_multi_tenant",ds_options)
@@ -39,25 +43,28 @@ if __name__ == '__main__':
             program_up = True
             break
 
+    opts, args = getopt.getopt(sys.argv[1:], "u:s:p:i:b:", ["multiprocessing-fork","user=","password="])
+    usuario = None
+    senha = None
+    porta = None
+    ip = None
+    banco = None
+    user = None
+    for opt, arg in opts:
+        if opt == '-u':
+            usuario = arg
+        elif opt == '-s':
+            senha = arg
+        elif opt == '-p':
+            porta = arg
+        elif opt == '-i':
+            ip = arg
+        elif opt == '-b':
+            banco = arg
+        elif opt == '--user':
+            user = arg
+            
     if not program_up:
-        opts, args = getopt.getopt(sys.argv[1:], "u:s:p:i:b:", ["multiprocessing-fork"])
-        usuario = None
-        senha = None
-        porta = None
-        ip = None
-        banco = None
-        for opt, arg in opts:
-            if opt == '-u':
-                usuario = arg
-            elif opt == '-s':
-                senha = arg
-            elif opt == '-p':
-                porta = arg
-            elif opt == '-i':
-                ip = arg
-            elif opt == '-b':
-                banco = arg
-
         if usuario != None and senha != None and porta != None and ip != None and banco != None:
             os.environ['REDASH_DATABASE_URL'] = "postgresql://{}:{}@{}:{}/{}".format(usuario, senha, ip, porta, banco)
             ds_options = {"host":ip,"port":int(porta),"user":usuario,"password":senha,"dbname": banco}
@@ -74,6 +81,9 @@ if __name__ == '__main__':
         path_to_redis = os.path.join(bundle_dir, 'redis-server.exe')
         os.system('powershell -executionPolicy bypass "Start-Process -WindowStyle hidden -FilePath {}"'.format(path_to_redis))
         pool = Pool(5)
-        pool.map(partial(run_process, ds_options=ds_options), range(5))
+        pool.map(partial(run_process, ds_options=ds_options, user=user, password=senha), range(5))
     else:
-        webbrowser.open('http://localhost:5000')
+        if user is not None and senha is not None:
+            webbrowser.open('http://localhost:5000/login?user={}&password={}'.format(user, senha))
+        else:
+            webbrowser.open('http://localhost:5000/login')

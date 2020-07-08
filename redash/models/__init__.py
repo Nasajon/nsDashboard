@@ -51,7 +51,7 @@ from .types import (
     MutableList,
     PseudoJSON,
 )
-from .users import AccessPermission, AnonymousUser, ApiUser, Group, User, TenantGroup, Configuracao  # noqa
+from .users import *  # noqa
 
 logger = logging.getLogger(__name__)
 
@@ -822,10 +822,10 @@ class Query(ChangeTrackingMixin, TimestampMixin, BelongsToOrgMixin, db.Model):
     @property
     def dashboard_api_keys(self):
         query = """SELECT api_keys.api_key
-                   FROM api_keys
-                   JOIN dashboards ON object_id = dashboards.id
-                   JOIN widgets ON dashboards.id = widgets.dashboard_id
-                   JOIN visualizations ON widgets.visualization_id = visualizations.id
+                   FROM nsdash.api_keys
+                   JOIN nsdash.dashboards ON object_id = dashboards.id
+                   JOIN nsdash.widgets ON dashboards.id = widgets.dashboard_id
+                   JOIN nsdash.visualizations ON widgets.visualization_id = visualizations.id
                    WHERE object_type='dashboards'
                      AND active=true
                      AND visualizations.query_id = :id"""
