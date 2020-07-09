@@ -69,14 +69,11 @@ if __name__ == '__main__':
             banco = arg
         elif opt == '--user':
             user = arg
-
-    with app.app_context():
-        params = {"parametros": opts}
-        events.record("parametros_entrada","log",params)
-            
+           
     if not program_up:
         if usuario != None and senha != None and porta != None and ip != None and banco != None:
             os.environ['REDASH_DATABASE_URL'] = "postgresql://{}:{}@{}:{}/{}".format(usuario, senha, ip, porta, banco)
+            app.config['SQLALCHEMY_DATABASE_URI'] = "postgresql://{}:{}@{}:{}/{}".format(usuario, senha, ip, porta, banco)
             ds_options = {"host":ip,"port":int(porta),"user":usuario,"password":senha,"dbname": banco}
         else:
             path = dotenv.find_dotenv('.env', usecwd=True)
@@ -88,6 +85,7 @@ if __name__ == '__main__':
                 print("Arquivo env nao encontrado")
 
         with app.app_context():
+            events.record("parametros_entrada","log",{"parametros": opts})
             events.record("conexao_banco","log",ds_options)
 
         bundle_dir = getattr(sys, '_MEIPASS', os.path.abspath(os.path.dirname(__file__)))
