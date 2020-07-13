@@ -235,24 +235,26 @@ def login(org_slug=None):
                 # if user.group_ids != group_ids:
                 #     user.group_ids = group_ids
                 #     models.db.session.commit()
-                licenciamento = models.Configuracao.find_by_campo_aplicacao(43, 0)
-                modulos = json.loads(licenciamento.valor)["Modulos"]
-                licenciamento_aprovado = False
-                for modulo in modulos:
-                    if modulo["Codigo"] == "nsDash":
-                        licenciamento_aprovado = True
-                        break
+
+                # Tratar licenciamento, se necessário no futuro
+                # licenciamento = models.Configuracao.find_by_campo_aplicacao(43, 0)
+                # modulos = json.loads(licenciamento.valor)["Modulos"]
+                # licenciamento_aprovado = False
+                # for modulo in modulos:
+                #     if modulo["Codigo"] == "nsDash":
+                #         licenciamento_aprovado = True
+                #         break
                 
-                if licenciamento_aprovado:
-                    usuario = models.Usuario.find_by_login(user.name)
-                    acesso = models.PerfisSistemas.find_by_perfilusuario(usuario.perfilusuario)
-                    if acesso.nsdash:
-                        login_user(user)
-                        return redirect(next_path)
-                    else:
-                        flash("Sem perfil para acessar o Relatórios.")    
+                # if licenciamento_aprovado:
+                
+                usuario = models.Usuario.find_by_login(user.name)
+                acesso = models.PerfisSistemas.find_by_perfilusuario(usuario.perfilusuario)
+                if acesso.nsdash:
+                    login_user(user)
+                    return redirect(next_path)
                 else:
-                    flash("Sem permissão para acessar o Relatórios. Entre em contato com o suporte da Nasajon.")
+                    flash("Sem perfil para acessar o Relatórios.")    
+                
             else:
                 flash("Usuário ou senha errados.")
         except NoResultFound:
