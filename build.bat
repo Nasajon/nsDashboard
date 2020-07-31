@@ -6,7 +6,7 @@
  --add-data "client;client"^
  --add-data "redis-server.exe;."^
  --additional-hooks-dir "."^
- --icon icon.ico^
+ --icon nsDash.ico^
  --hidden-import "pkg_resources.py2_warn"^
  --hidden-import "sqlalchemy.ext.baked"^
  --distpath "%NSBIN%"^
@@ -16,7 +16,7 @@
  -p %PYTHONPATH%^
  --name "nsDashCreateUser"^
  --additional-hooks-dir "."^
- --icon icon.ico^
+ --icon nsDash.ico^
  --hidden-import "pkg_resources.py2_warn"^
  --hidden-import "sqlalchemy.ext.baked"^
  --distpath "%NSBIN%"^
