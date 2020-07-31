@@ -2,13 +2,14 @@ from redash.app import create_app
 from redash.utils import rq, data_sources
 from multiprocessing import Pool, freeze_support
 import os
-import webbrowser
 import psutil
 import sys
 import getopt
 import dotenv
 from functools import partial
 import requests
+import webview
+import time
 app = create_app()
 
 def run_process(process, ds_options, user, password):
@@ -21,10 +22,13 @@ def run_process(process, ds_options, user, password):
         elif process == 2:
             rq.scheduler()
         elif process == 3:
+            time.sleep(25)
             if user is not None and password is not None:
-                webbrowser.open('http://localhost:5000/login?user={}&password={}'.format(user, password))
+                webview.create_window('NsDash', 'http://localhost:5000/login?user={}&password={}'.format(user, password))
+                webview.start()                
             else:
-                webbrowser.open('http://localhost:5000/login')
+                webview.create_window('NsDash', 'http://localhost:5000/login')
+                webview.start()
         elif process == 4:
             with app.app_context():
                 data_sources.new("Padrão", "pg_multi_tenant",ds_options)
@@ -79,11 +83,15 @@ if __name__ == '__main__':
 
         bundle_dir = getattr(sys, '_MEIPASS', os.path.abspath(os.path.dirname(__file__)))
         path_to_redis = os.path.join(bundle_dir, 'redis-server.exe')
-        os.system('powershell -executionPolicy bypass "Start-Process -WindowStyle hidden -FilePath {}"'.format(path_to_redis))
+        os.system('powershell -executionPolicy bypass "Start-Process -FilePath {}"'.format(path_to_redis))            
+
         pool = Pool(5)
         pool.map(partial(run_process, ds_options=ds_options, user=user, password=senha), range(5))
     else:
         if user is not None and senha is not None:
-            webbrowser.open('http://localhost:5000/login?user={}&password={}'.format(user, senha))
+            webview.create_window('NsDash', 'http://localhost:5000/login?user={}&password={}'.format(user, senha))
+            webview.start()
         else:
-            webbrowser.open('http://localhost:5000/login')
+            webview.create_window('NsDash', 'http://localhost:5000/login')
+            webview.start()
+            
