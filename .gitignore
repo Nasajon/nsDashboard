@@ -27,3 +27,7 @@ npm-debug.log
 client/cypress/screenshots
 client/cypress/videos
 debug.log
+nsDash.spec
+nsDashCreateUser.spec
+saida.txt
+client/dist.zip

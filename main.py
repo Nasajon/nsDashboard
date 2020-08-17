@@ -86,17 +86,17 @@ if __name__ == '__main__':
         os.system('powershell -executionPolicy bypass "Start-Process -FilePath {}"'.format(path_to_redis))            
 
         processos = [Process(target=run_process, args=(numero, ds_options,user,senha)) for numero in range(5)]
+        print("Entrada:")
+        print(sys.argv)
         for p in processos:
             p.name = str(processos.index(p))
             p.start()
 
         time.sleep(60)
         if user is not None and senha is not None:
-            webview.create_window('NsDash', 'http://localhost:5000/login?user={}&password={}'.format(user, senha))            
-            webview.start()
+            os.system('explorer "http://localhost:5000/login?user={}&password={}'.format(user, senha)+'"')            
         else:
-            webview.create_window('NsDash', 'http://localhost:5000/login')
-            webview.start()
+            os.system('explorer "http://localhost:5000"')            
 
         for p in processos:
             if p.is_alive():
@@ -105,9 +105,7 @@ if __name__ == '__main__':
         #pool.map(partial(run_process, ds_options=ds_options, user=user, password=senha), range(5))
     else:
         if user is not None and senha is not None:
-            webview.create_window('NsDash', 'http://localhost:5000/login?user={}&password={}'.format(user, senha))
-            webview.start()
+            os.system('explorer "http://localhost:5000/login?user={}&password={}'.format(user, senha)+'"')
         else:
-            webview.create_window('NsDash', 'http://localhost:5000/login')
-            webview.start()
+            os.system('explorer "http://localhost:5000"')
             
