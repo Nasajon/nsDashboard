@@ -85,7 +85,7 @@ class User(
     org = db.relationship("Organization", backref=db.backref("users", lazy="dynamic"))
     name = Column(db.String(320))
     email = Column(EmailType)
-    tenant = Column(db.Integer, nullable=True)
+    tenant = Column(db.Integer, nullable=True, default=0)
     _profile_image_url = Column("profile_image_url", db.String(320), nullable=True)
     password_hash = Column(db.String(128), nullable=True)
     group_ids = Column(
@@ -383,7 +383,8 @@ class Usuario(db.Model):
     login = Column(db.String)
     email = Column(db.String)
     senha = Column(db.String)
-    perfilusuario = Column(db.String)
+    perfilusuario = Column(db.String, db.ForeignKey("ns.perfissistemas.perfilusuario"))
+    perfilsistema = db.relationship("PerfisSistemas")
 
     __tablename__ = "usuarios"
     __table_args__= {"schema":"ns"}
@@ -394,6 +395,14 @@ class Usuario(db.Model):
     @classmethod
     def find_by_login(cls, login):
         return cls.query.filter(cls.login == login).one()
+
+    @classmethod
+    def usuarios_acesso_nsdash(cls):
+        return cls.query.filter(cls.perfilsistema.has(nsdash=True)).all()
+
+    @classmethod
+    def usuarios_sem_acesso_nsdash(cls):
+        return cls.query.filter(cls.perfilsistema.has(nsdash=False)).all()
 
 @generic_repr(
     "id", "object_type", "object_id", "access_type", "grantor_id", "grantee_id"

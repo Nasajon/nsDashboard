@@ -210,43 +210,9 @@ def login(org_slug=None):
                 password = CriptografiaSenha.descodificar(request.args["password"])
             org = current_org._get_current_object()
             user = models.User.get_by_email_or_name_and_org(email, org)
-            if (
-                user
-                and not user.is_disabled
-                and user.verify_password(password)
-            ):
-                # Código para acessar dados do cliente cadastrados no diretório e passar para o redash
-                # access_token = MultiTenantUtil.request_access_token(request.form["email"], str(request.form["password"]))
-
-                # tenant = MultiTenantUtil.request_tenant(access_token)
-                # if user.tenant != int(tenant):
-                #     user.tenant = tenant
-                #     models.db.session.commit()
-
-                # tenant_groups = models.TenantGroup.find_by_tenant(tenant)
-                # group_ids = [tenant_group.group_id for tenant_group in tenant_groups]
-
-                # # O grupo 1 é o grupo dos admins e o grupo 2 é o grupo default criado pelo redash
-                # if 1 in user.group_ids:
-                #     group_ids += [1]
-                # if 2 in user.group_ids:
-                #     group_ids += [2]
-
-                # if user.group_ids != group_ids:
-                #     user.group_ids = group_ids
-                #     models.db.session.commit()
-
-                # Tratar licenciamento, se necessário no futuro
-                # licenciamento = models.Configuracao.find_by_campo_aplicacao(43, 0)
-                # modulos = json.loads(licenciamento.valor)["Modulos"]
-                # licenciamento_aprovado = False
-                # for modulo in modulos:
-                #     if modulo["Codigo"] == "nsDash":
-                #         licenciamento_aprovado = True
-                #         break
-                
-                # if licenciamento_aprovado:
-                
+            if user.is_disabled:
+                flash("Usuário desabilitado.")    
+            elif user.verify_password(password):                
                 usuario = models.Usuario.find_by_login(user.name)
                 acesso = models.PerfisSistemas.find_by_perfilusuario(usuario.perfilusuario)
                 if acesso.nsdash:
@@ -254,26 +220,11 @@ def login(org_slug=None):
                     return redirect(next_path)
                 else:
                     flash("Sem perfil para acessar o Relatórios.")    
-                
             else:
-                flash("Usuário ou senha errados.")
+                flash("Senha errada.")
         except NoResultFound:
-            # Código para criar um usuário do diretório no redash e logar com ele
-            # user = create_user(request)
-            # if user != None:
-            #     login_user(user)
-            #     return redirect(next_path)
-
-            user = create_user_erp(request)
-            if user != None:
-                login_user(user)
-                return redirect(next_path)
-            else:
-                flash("Usuário ou senha errados.")
+            flash("Usuário não existente.")
         except Exception as e:
-            # if "Unauthorized" in str(e):
-            #     flash("Wrong email or password.")
-            # else:
             flash(str(e))
 
     google_auth_url = get_google_auth_url(next_path)
@@ -289,74 +240,6 @@ def login(org_slug=None):
         show_remote_user_login=settings.REMOTE_USER_LOGIN_ENABLED,
         show_ldap_login=settings.LDAP_LOGIN_ENABLED,
     )
-
-
-def create_user(request):
-    try:
-        access_token = MultiTenantUtil.request_access_token(request.form["email"], str(request.form["password"]))
-        tenant = MultiTenantUtil.request_tenant(access_token)
-        tenant_groups = models.TenantGroup.find_by_tenant(tenant)
-        group_ids = [tenant_group.group_id for tenant_group in tenant_groups]
-        user = models.User(
-            org=current_org,
-            name=request.form["email"],
-            email=request.form["email"],
-            group_ids=group_ids,
-        )
-
-        user.hash_password(request.form["password"])
-        user.tenant = tenant
-        try:
-            models.db.session.add(user)
-            models.db.session.commit()
-        except IntegrityError as e:
-            if "email" in str(e):
-                flash("Email already taken.")
-            else:
-                flash(str(e))
-
-        return user
-    except Exception as e:
-        if "Unauthorized" in str(e):
-            flash("Wrong email or password.")
-        else:
-            flash(str(e))
-
-def create_user_erp(request):
-    if request.method == "POST":
-        name = request.form["email"].strip() 
-        password = request.form["password"]
-    else:
-        name = request.args["user"].strip()
-        password = CriptografiaSenha.descodificar(request.args["password"])
-    try:
-        usuario = models.Usuario.find_by_login(name)
-        if usuario.senha == CriptografiaSenha.codificar(password):
-            acesso = models.PerfisSistemas.find_by_perfilusuario(usuario.perfilusuario)
-            if acesso.nsdash:
-                org = models.Organization.get_by_slug("default")
-                user = models.User(
-                    org=current_org,
-                    name=usuario.login,
-                    email=usuario.email if usuario.email is not None else (usuario.login + "@nsdash.com"),
-                    group_ids=[org.default_group.id]
-                )
-                user.hash_password(password)
-
-                try:
-                    models.db.session.add(user)
-                    models.db.session.commit()
-                except Exception as e:
-                    flash(str(e))
-
-                return user
-                
-            else:
-                flash("Sem perfil para acessar o Relatórios.")
-        else:
-            return None
-    except NoResultFound:
-        return None
 
 @routes.route(org_scoped_rule("/logout"))
 def logout(org_slug=None):
