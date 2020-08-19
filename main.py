@@ -1,5 +1,5 @@
 from redash.app import create_app
-from redash.utils import rq, data_sources
+from redash.utils import rq, data_sources, users
 from multiprocessing import Pool, freeze_support, Process,current_process
 import os
 import psutil
@@ -8,13 +8,12 @@ import getopt
 import dotenv
 from functools import partial
 import requests
-import webview
 import time
 app = create_app()
 
 def run_process(process, ds_options, user, password):
     try:
-        if process == 0:
+        if process == 0:                
             app.run()
         elif process == 1:
             with app.app_context():
@@ -22,16 +21,9 @@ def run_process(process, ds_options, user, password):
         elif process == 2:
             rq.scheduler()
         elif process == 3:
-            """time.sleep(25)
-            if user is not None and password is not None:
-                webview.create_window('NsDash', 'http://localhost:5000/login?user={}&password={}'.format(user, password))
-                webview.start()                
-            else:
-                webview.create_window('NsDash', 'http://localhost:5000/login')
-                webview.start()"""
-        elif process == 4:
             with app.app_context():
                 data_sources.new("Padrão", "pg_multi_tenant",ds_options)
+                users.create_user_erp()
     except Exception as e:
         print(str(e))
         return 0
@@ -83,9 +75,9 @@ if __name__ == '__main__':
 
         bundle_dir = getattr(sys, '_MEIPASS', os.path.abspath(os.path.dirname(__file__)))
         path_to_redis = os.path.join(bundle_dir, 'redis-server.exe')
-        os.system('powershell -executionPolicy bypass "Start-Process -FilePath {}"'.format(path_to_redis))            
+        os.system('powershell -executionPolicy bypass "Start-Process -WindowStyle hidden -FilePath {}"'.format(path_to_redis))            
 
-        processos = [Process(target=run_process, args=(numero, ds_options,user,senha)) for numero in range(5)]
+        processos = [Process(target=run_process, args=(numero, ds_options,user,senha)) for numero in range(4)]
         print("Entrada:")
         print(sys.argv)
         for p in processos:
@@ -100,9 +92,7 @@ if __name__ == '__main__':
 
         for p in processos:
             if p.is_alive():
-                p.terminate()
-        #pool = Pool(5)
-        #pool.map(partial(run_process, ds_options=ds_options, user=user, password=senha), range(5))
+                p.join()
     else:
         if user is not None and senha is not None:
             os.system('explorer "http://localhost:5000/login?user={}&password={}'.format(user, senha)+'"')
