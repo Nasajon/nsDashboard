@@ -12,7 +12,7 @@ node('master') {
 		stage('Checkout') {
 			dir("${dirArtifactName}") {
                 	checkout scm
-			    timeout(time: 300, unit: 'SECONDS') {
+			    timeout(time: 3600, unit: 'SECONDS') {
           		}
 			}
 		}
