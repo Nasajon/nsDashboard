@@ -46,7 +46,7 @@ node('master') {
 
 				def subFolders = currentBuild.displayName.replace(".", "/")
 
-				withAWS(credentials: 'JENKINS_AWS_CREDENTIALS') {
+				/*withAWS(credentials: 'JENKINS_AWS_CREDENTIALS') {
 					def bucket = env.ERP_BUCKET
 
 					//Upload do artefato
@@ -61,7 +61,7 @@ node('master') {
 						bucket:"${bucket}",
 						path:"erp-update/artifacts/${artifactId}/${subFolders}/${artifactIdCreateUser}.exe",
 						acl:'PublicRead')
-				}
+				}*/
 
 				def checksum = powershell(
 					returnStdout: true,
