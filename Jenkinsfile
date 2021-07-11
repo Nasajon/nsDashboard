@@ -61,7 +61,7 @@ node('master') {
 						bucket:"${bucket}",
 						path:"erp-update/artifacts/${artifactId}/${subFolders}/${artifactIdCreateUser}.exe",
 						acl:'PublicRead')
-				}*/
+				}
 
 				def checksum = powershell(
 					returnStdout: true,
@@ -85,7 +85,7 @@ node('master') {
 						\"url\": \"artifacts/${artifactId}/${subFolders}/${artifactId}.exe\",
 						\"artefatosfilhos\": [\"${artifactIdCreateUser}.exe\"]
 					}
-				"""
+				"""*/
 			}
 		}
 
